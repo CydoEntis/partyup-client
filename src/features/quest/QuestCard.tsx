@@ -23,18 +23,10 @@ type QuestCardProps = {
 
 function QuestCard({ index, onClick }: QuestCardProps) {
 	const { isLightMode } = useGetColorTheme();
-	const [opened, { open, close }] = useDisclosure(false);
 
 	return (
 		<>
-			<Drawer
-				opened={opened}
-				onClose={close}
-				title="Authentication"
-				position="right"
-			>
-				This bitch open
-			</Drawer>
+
 			<Card
 				key={index}
 				className="transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
@@ -122,6 +114,7 @@ function QuestCard({ index, onClick }: QuestCardProps) {
 							{ name: "Bilbo Baggins", avatar: 2 },
 						]}
 						totalMembers={3}
+						numOfMembersToShow={3}
 					/>
 					<Flex
 						gap={4}

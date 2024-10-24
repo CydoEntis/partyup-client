@@ -15,6 +15,7 @@ function AuthenticatedLayout() {
 				toggle={toggle}
 			/>
 			<Sidenav />
+
 			<AppShell.Main>
 				<Outlet />
 			</AppShell.Main>

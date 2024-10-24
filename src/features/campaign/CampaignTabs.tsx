@@ -5,10 +5,17 @@ import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
 
-type Props = {};
+type CampaignTabsProps = {
+	onOpenQuestHandler: () => void;
+};
 
-function CampaignTabs({}: Props) {
+function CampaignTabs({ onOpenQuestHandler }: CampaignTabsProps) {
 	const { isLightMode } = useGetColorTheme();
+
+	const viewQuestHandler = (index: number) => {
+		onOpenQuestHandler();
+	};
+
 	return (
 		<Tabs
 			defaultValue="grid"
@@ -43,8 +50,9 @@ function CampaignTabs({}: Props) {
 				<SimpleGridLayout cols={6}>
 					{Array.from({ length: 8 }).map((_, index) => (
 						<QuestCard
+							key={index}
 							index={index}
-							onClick={() => console.log("Clicked")}
+							onClick={() => viewQuestHandler(index)}
 						/>
 					))}
 				</SimpleGridLayout>

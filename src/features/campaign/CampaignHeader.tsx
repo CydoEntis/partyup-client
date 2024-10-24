@@ -11,10 +11,15 @@ import {
 import { Edit, Users2, Plus } from "lucide-react";
 import Members from "../../components/avatar/Members";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
+import InviteCampaignMember from "./InviteCampaignMember";
+import CampaignTabs from "./CampaignTabs";
+import { ReactNode } from "react";
 
-type Props = {};
+type CampaignHeaderProps = {
+	children: ReactNode;
+};
 
-function CampaignHeader({}: Props) {
+function CampaignHeader({children}: CampaignHeaderProps) {
 	const { isLightMode } = useGetColorTheme();
 	return (
 		<Box
@@ -35,7 +40,7 @@ function CampaignHeader({}: Props) {
 							<Edit size={20} />
 						</ActionIcon>
 					</Group>
-
+						{children}
 				</Stack>
 			</Flex>
 		</Box>
