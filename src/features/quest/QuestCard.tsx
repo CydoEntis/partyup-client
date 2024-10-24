@@ -11,10 +11,10 @@ import {
 	Drawer,
 } from "@mantine/core";
 
-import Members from "../../assets/components/avatar/Members";
 import { Calendar, ListChecks, MessageCircle } from "lucide-react";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import { useDisclosure } from "@mantine/hooks";
+import Members from "../../components/avatar/Members";
 
 type QuestCardProps = {
 	index: number;

@@ -1,5 +1,5 @@
 import { AppShell, Burger, Group } from "@mantine/core";
-import useGetColorTheme from "../../../hooks/useGetColorTheme";
+import useGetColorTheme from "../../hooks/useGetColorTheme";
 
 type TopBarHeaderProps = {
 	opened: boolean;

@@ -11,16 +11,14 @@ import {
 } from "@mantine/core";
 import { ChevronRight, LayoutGrid, Moon, PlusCircle, Sun } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
-import useGetColorTheme from "../../../hooks/useGetColorTheme";
 import { useDisclosure } from "@mantine/hooks";
+import useGetColorTheme from "../../hooks/useGetColorTheme";
+import ThemeToggle from "../../features/theme/ThemeToggle";
 
 type Props = {};
 
 function Sidenav({}: Props) {
-	const { setColorScheme } = useMantineColorScheme();
-	const computedColorScheme = useComputedColorScheme("light", {
-		getInitialValueInEffect: true,
-	});
+
 	const { isLightMode } = useGetColorTheme();
 
 	return (
@@ -70,20 +68,7 @@ function Sidenav({}: Props) {
 					</MantineNavLink>
 				</Stack>
 				<Stack mt="auto">
-					<ActionIcon
-						onClick={() =>
-							setColorScheme(computedColorScheme === "light" ? "dark" : "light")
-						}
-						variant="default"
-						size="xl"
-						aria-label="Toggle color scheme"
-					>
-						{computedColorScheme === "light" ? (
-							<Moon size={20} />
-						) : (
-							<Sun size={20} />
-						)}
-					</ActionIcon>
+						<ThemeToggle />
 				</Stack>
 			</Stack>
 		</AppShell.Navbar>

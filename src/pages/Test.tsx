@@ -1,32 +1,15 @@
 import {
-	Badge,
 	Card,
-	Center,
-	Container,
-	Drawer,
-	Flex,
 	Group,
-	Indicator,
-	Progress,
 	SimpleGrid,
-	Stack,
 	Text,
 	Title,
 } from "@mantine/core";
-import useGetColorTheme from "../../hooks/useGetColorTheme";
-import QuestOptions from "../../features/quest/QuestOptions";
 import {
-	Calendar,
-	CheckCheck,
 	Edit,
-	ListChecks,
-	MessageCircle,
 	Trash2,
 } from "lucide-react";
-import Members from "../components/avatar/Members";
-import { Link } from "react-router-dom";
-import QuestCard from "../../features/quest/QuestCard";
-import { useDisclosure } from "@mantine/hooks";
+import useGetColorTheme from "../hooks/useGetColorTheme";
 
 type Props = {};
 

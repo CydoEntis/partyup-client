@@ -1,6 +1,6 @@
 import { AppShell } from "@mantine/core";
 import  { ReactNode } from "react";
-import useGetColorTheme from "../../../hooks/useGetColorTheme";
+import useGetColorTheme from "../../hooks/useGetColorTheme";
 
 type AppWrapperProps = {
 	opened: boolean;
@@ -17,7 +17,6 @@ function AppWrapper({ opened, children }: AppWrapperProps) {
 				breakpoint: "sm",
 				collapsed: { mobile: !opened },
 			}}
-			padding="md"
 			bg={isLightMode ? "lightMode.9" : "darkMode.9"}
 
 		>

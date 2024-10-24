@@ -1,8 +1,9 @@
 
 import { createBrowserRouter } from "react-router-dom";
-import AuthenticatedLayout from "../assets/components/layout/AuthenticatedLayout";
-import Test from "../assets/pages/Test";
-import CampaignPage from "../assets/pages/CampaignListPage";
+import AuthenticatedLayout from "../components/layout/AuthenticatedLayout";
+import Test from "../pages/Test";
+import CampaignPage from "../pages/campaign/CampaignPage";
+
 
 const router = createBrowserRouter([
 	{
