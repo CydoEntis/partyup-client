@@ -39,7 +39,7 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 				<Group>
 					<Button
 						component={NavLink}
-						to="/auth/login"
+						to="/login"
 						variant="outline"
 						color="violet"
 					>
@@ -47,7 +47,7 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 					</Button>
 					<Button
 						component={NavLink}
-						to="/auth/register"
+						to="/register"
 						color="violet"
 					>
 						Register

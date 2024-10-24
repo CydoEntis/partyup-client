@@ -5,7 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router-dom";
 
-function AuthenticatedLayout() {
+function AppLayout() {
 	const [opened, { toggle }] = useDisclosure();
 
 	return (
@@ -23,4 +23,4 @@ function AuthenticatedLayout() {
 	);
 }
 
-export default AuthenticatedLayout;
+export default AppLayout;
