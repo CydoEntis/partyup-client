@@ -7,13 +7,10 @@ import {
 	Text,
 	ActionIcon,
 	Button,
-	Tabs,
-	SimpleGrid,
 } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import Members from "../../components/avatar/Members";
-import { Edit, LayoutGrid, LayoutList, Plus, Users2 } from "lucide-react";
-import QuestCard from "../../features/quest/QuestCard";
+import { Edit, Plus, Users2 } from "lucide-react";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 
 type Props = {};
@@ -24,7 +21,10 @@ function CampaignPage({}: Props) {
 
 	return (
 		<>
-			<Box bg={isLightMode ? "lightMode.7" : "darkMode.8"} p={16}>
+			<Box
+				bg={isLightMode ? "lightMode.7" : "darkMode.8"}
+				p={16}
+			>
 				<Flex
 					justify="space-between"
 					align="center"
@@ -32,7 +32,10 @@ function CampaignPage({}: Props) {
 					<Stack>
 						<Group align="center">
 							<Title size="2.5rem">Product Development</Title>
-							<ActionIcon variant="transparent" color="violet">
+							<ActionIcon
+								variant="transparent"
+								color="violet"
+							>
 								<Edit size={20} />
 							</ActionIcon>
 						</Group>
@@ -60,7 +63,6 @@ function CampaignPage({}: Props) {
 					</Stack>
 				</Flex>
 			</Box>
-
 		</>
 	);
 }
