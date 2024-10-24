@@ -2,6 +2,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import AuthenticatedLayout from "../assets/components/layout/AuthenticatedLayout";
 import Test from "../assets/pages/Test";
+import CampaignPage from "../assets/pages/CampaignListPage";
 
 const router = createBrowserRouter([
 	{
@@ -16,7 +17,10 @@ const router = createBrowserRouter([
 				path: "dashboard",
 				element: <Test />,
 			},
-			
+			{
+				path: "/campaings/:campaignId",
+				element: <CampaignPage />
+			}
 		],
 	},
 	// {

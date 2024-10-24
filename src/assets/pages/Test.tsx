@@ -3,6 +3,7 @@ import {
 	Card,
 	Center,
 	Container,
+	Drawer,
 	Flex,
 	Group,
 	Indicator,
@@ -23,6 +24,9 @@ import {
 	Trash2,
 } from "lucide-react";
 import Members from "../components/avatar/Members";
+import { Link } from "react-router-dom";
+import QuestCard from "../../features/quest/QuestCard";
+import { useDisclosure } from "@mantine/hooks";
 
 type Props = {};
 
@@ -42,109 +46,30 @@ function Test({}: Props) {
 		},
 	];
 
+	const [opened, { open, close }] = useDisclosure(false);
+
 	return (
-		<Container fluid>
-			<SimpleGrid cols={6}>
-				{Array.from({ length: 10 }).map((_, index) => (
-					<Card
-						bg={isLightMode ? "lightMode.7" : "darkMode.7"}
-						shadow="sm"
-						padding="lg"
-						radius="md"
-						withBorder
-					>
-						<Group
-							pb={12}
-							justify="space-between"
-						>
-							<Group>
-								<Indicator
-									inline
-									processing
-									color="yellow"
-									size={8}
-								></Indicator>
-								<Text size="xs">In Progress</Text>
-							</Group>
-							<QuestOptions options={options} />
-						</Group>
+		<>
+			<Drawer
+				opened={opened}
+				onClose={close}
+				title="Authentication"
+				position="right"
+			>
+				This bitch open
+			</Drawer>
 
-						<Group>
-							<Badge
-								variant="light"
-								color="yellow"
-							>
-								Urgent
-							</Badge>
-						</Group>
-						<Stack
-							mt="md"
-							mb="xs"
-						>
-							<Title
-								size="1.5rem"
-								fw={600}
-							>
-								Norway Fjord Adventures
-							</Title>
-							<Text
-								size="sm"
-								c="dimmed"
-							>
-								With Fjord Tours you can explore more of the magical fjord
-								landscapes with tours and activities on and around the fjords of
-								Norway
-							</Text>
-
-							<Flex
-								align="center"
-								gap={8}
-							>
-								<Calendar size={20} />
-								<Text>Nov 22</Text>
-							</Flex>
-						</Stack>
-
-						<Flex
-							gap={4}
-							align="center"
-						>
-							<Progress
-								w="90%"
-								color="yellow"
-								radius="xl"
-								size="md"
-								value={66}
-								striped
-								animated
-							/>
-							<ListChecks size={20} />
-							<Text>2/3</Text>
-						</Flex>
-
-						<Group
-							justify="space-between"
-							pt={8}
-						>
-							<Members
-								members={[
-									{ name: "Gandalf", avatar: 1 },
-									{ name: "Bilbo Baggins", avatar: 2 },
-								]}
-								totalMembers={3}
-							/>
-							<Flex
-								gap={4}
-								align="center"
-							>
-								<MessageCircle size={20} />
-								<Text>3</Text>
-							</Flex>
-						</Group>
-					</Card>
-				))}
-			</SimpleGrid>
-		</Container>
+			<Container
+				fluid
+				h="100vh"
+			>
+				<SimpleGrid cols={6}>
+					{Array.from({ length: 10 }).map((_, index) => (
+						<QuestCard index={index} onClick={open}/>
+					))}
+				</SimpleGrid>
+			</Container>
+		</>
 	);
 }
 
