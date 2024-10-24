@@ -46,29 +46,25 @@ function Test({}: Props) {
 		},
 	];
 
-	const [opened, { open, close }] = useDisclosure(false);
-
 	return (
 		<>
-			<Drawer
-				opened={opened}
-				onClose={close}
-				title="Authentication"
-				position="right"
-			>
-				This bitch open
-			</Drawer>
+			<SimpleGrid cols={6}>
+				<Card bg={isLightMode ? "lightMode.7" : "darkMode.7"} withBorder>
+					<Card.Section
+						className="border-b border-gray-400"
+						p={16}
+					>
+						<Title size="xl">Some - Branding</Title>
+					</Card.Section>
 
-			<Container
-				fluid
-				h="100vh"
-			>
-				<SimpleGrid cols={6}>
-					{Array.from({ length: 10 }).map((_, index) => (
-						<QuestCard index={index} onClick={open}/>
-					))}
-				</SimpleGrid>
-			</Container>
+					<Group>
+						<Text>HELLO WORLD</Text>
+						<Text>HELLO WORLD</Text>
+						<Text>HELLO WORLD</Text>
+						<Text>HELLO WORLD</Text>
+					</Group>
+				</Card>
+			</SimpleGrid>
 		</>
 	);
 }
