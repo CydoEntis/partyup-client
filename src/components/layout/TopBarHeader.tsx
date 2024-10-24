@@ -1,5 +1,6 @@
-import { AppShell, Burger, Group } from "@mantine/core";
+import { AppShell, Burger, Button, Flex, Group } from "@mantine/core";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
+import { NavLink } from "react-router-dom";
 
 type TopBarHeaderProps = {
 	opened: boolean;
@@ -17,17 +18,42 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 				},
 			}}
 		>
-			<Group
+			<Flex
+				align="center"
+				justify="space-between"
 				h="100%"
-				px="md"
+				px={16}
 			>
-				<Burger
-					opened={opened}
-					onClick={toggle}
-					hiddenFrom="sm"
-					size="sm"
-				/>
-			</Group>
+				<Group
+					h="100%"
+					px="md"
+				>
+					<Burger
+						opened={opened}
+						onClick={toggle}
+						hiddenFrom="sm"
+						size="sm"
+					/>
+				</Group>
+
+				<Group>
+					<Button
+						component={NavLink}
+						to="/auth/login"
+						variant="outline"
+						color="violet"
+					>
+						Login
+					</Button>
+					<Button
+						component={NavLink}
+						to="/auth/register"
+						color="violet"
+					>
+						Register
+					</Button>
+				</Group>
+			</Flex>
 		</AppShell.Header>
 	);
 }

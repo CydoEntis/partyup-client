@@ -11,7 +11,7 @@ function AppWrapper({ opened, children }: AppWrapperProps) {
 	const { isLightMode } = useGetColorTheme();
 	return (
 		<AppShell
-			header={{ height: { base: 60, md: 70, lg: 80 } }}
+			header={{ height: { base: 60, md: 70 } }}
 			navbar={{
 				width: { base: 200, md: 300 },
 				breakpoint: "sm",

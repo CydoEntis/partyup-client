@@ -8,8 +8,9 @@ function CommentList({}: Props) {
 		<Stack>
 			<Title size="xl">Comments</Title>
 			<ScrollArea
-				h={250}
-				type="scroll"
+				h={350}
+				type="always"
+				
 			>
 				<Comment />
 				<Comment />
