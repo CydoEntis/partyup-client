@@ -13,6 +13,8 @@ import {
 	Collapse,
 	Tooltip,
 	ScrollArea,
+	Checkbox,
+	Avatar,
 } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import Members from "../../components/avatar/Members";
@@ -22,6 +24,7 @@ import CampaignHeader from "../../features/campaign/CampaignHeader";
 import CampaignTabs from "../../features/campaign/CampaignTabs";
 import { useDisclosure } from "@mantine/hooks";
 import InviteCampaignMember from "../../features/campaign/InviteCampaignMember";
+import CommentList from "../../components/comments/CommentList";
 
 type Props = {};
 
@@ -89,14 +92,19 @@ function CampaignPage({}: Props) {
 							h={250}
 							type="scroll"
 						>
-							<Text>Task 1</Text>
-							<Text>Task 2</Text>
-							<Text>Task 3</Text>
-							<Text>Task 4</Text>
-							<Text>Task 5</Text>
-							<Text>Task 6</Text>
-							<Text>Task 7</Text>
+							<Checkbox.Group>
+								<Stack>
+									<Checkbox
+										color="violet"
+										size="md"
+										value="react"
+										label="React"
+									/>
+								</Stack>
+							</Checkbox.Group>
 						</ScrollArea>
+
+						<CommentList />
 					</Stack>
 				</Box>
 			</Drawer>
