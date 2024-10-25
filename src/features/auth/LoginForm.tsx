@@ -45,63 +45,55 @@ function LoginForm({}: Props) {
 	}
 
 	return (
-		<Paper
-			withBorder
-			shadow="md"
-			p={30}
-			mt={30}
-			radius="md"
-		>
-			<form onSubmit={form.onSubmit(onSubmit)}>
-				<TextInput
-					label="Email"
-					placeholder="you@example.com"
-					classNames={{
-						input: classes.input,
-					}}
-					leftSection={<AtSign size={20} />}
-					{...form.getInputProps("email")} // Register email input
-				/>
-				<PasswordInput
-					label="Password"
-					placeholder="Your password"
-					withAsterisk
-					required
-					mt="md"
-					classNames={{
-						input: classes.input,
-					}}
-					leftSection={<Lock size={20} />}
-					{...form.getInputProps("password")}
-					onChange={(event) => {
-						form.setFieldValue("password", event.currentTarget.value);
-					}}
-				/>
-				<Group
-					justify="space-between"
-					mt="lg"
+		<form onSubmit={form.onSubmit(onSubmit)}>
+			<TextInput
+				label="Email"
+				placeholder="you@example.com"
+				classNames={{
+					input: classes.input,
+				}}
+				leftSection={<AtSign size={20} />}
+				{...form.getInputProps("email")} // Register email input
+			/>
+			<PasswordInput
+				label="Password"
+				placeholder="Your password"
+				withAsterisk
+				required
+				mt="md"
+				classNames={{
+					input: classes.input,
+				}}
+				leftSection={<Lock size={20} />}
+				{...form.getInputProps("password")}
+				onChange={(event) => {
+					form.setFieldValue("password", event.currentTarget.value);
+				}}
+			/>
+			<Group
+				justify="space-between"
+				mt="lg"
+			>
+				<Checkbox label="Remember me" />
+				<Anchor
+					component={NavLink}
+					size="sm"
+					c="violet"
+					to={"/forgot-password"}
 				>
-					<Checkbox label="Remember me" />
-					<Anchor
-						component={NavLink}
-						size="sm"
-						c="violet"
-						to={"/forgot-password"}
-					>
-						Forgot password?
-					</Anchor>
-				</Group>
-				<Button
-					fullWidth
-					mt="xl"
-					color="violet"
-					variant="light"
-					type="submit"
-				>
-					Sign in
-				</Button>
-			</form>
-		</Paper>
+					Forgot password?
+				</Anchor>
+			</Group>
+			<Button
+				fullWidth
+				mt="xl"
+				color="violet"
+				variant="light"
+				type="submit"
+			>
+				Sign in
+			</Button>
+		</form>
 	);
 }
 

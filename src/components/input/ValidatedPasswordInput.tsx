@@ -43,8 +43,6 @@ function ValidatedPasswordInput({form}: ValidatedPasswordInputProps) {
 					<PasswordInput
 						label="Password"
 						placeholder="Your password"
-						withAsterisk
-						required
 						mt="md"
 						classNames={{
 							input: classes.input,

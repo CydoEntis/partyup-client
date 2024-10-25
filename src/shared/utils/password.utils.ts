@@ -1,8 +1,9 @@
 export const passwordRequirements = [
-	{ re: /[0-9]/, label: "Includes number" },
-	{ re: /[a-z]/, label: "Includes lowercase letter" },
 	{ re: /[A-Z]/, label: "Includes uppercase letter" },
-	{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
+	{ re: /[a-z]/, label: "Includes lowercase letter" },
+	{ re: /\d/, label: "Includes number" },
+	{ re: /[\W_]/, label: "Includes special character" },
+	{ re: /.{8,}/, label: "At least 8 characters long" },
 ];
 
 export function testPasswordStrength(password: string) {

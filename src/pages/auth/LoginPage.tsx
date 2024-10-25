@@ -1,51 +1,42 @@
-import React from "react";
 import LoginForm from "../../features/auth/LoginForm";
-import {
-	Button,
-	Checkbox,
-	Container,
-	Paper,
-	PasswordInput,
-	TextInput,
-	Title,
-	Text,
-	Group,
-	Anchor,
-	Center,
-	Box,
-} from "@mantine/core";
+import { Container, Paper, Title, Text, Anchor, Box } from "@mantine/core";
 import { NavLink } from "react-router-dom";
 
 type Props = {};
 
 function LoginPage({}: Props) {
 	return (
-		<Box
-			className="min-h-[75vh] flex justify-center items-center"
-		>
+		<Box mt={250}>
 			<Container
 				w="100%"
 				maw={520}
 			>
-				<Title ta="center">Welcome back!</Title>
-				<Text
-					c="dimmed"
-					size="sm"
-					ta="center"
-					mt={5}
+				<Paper
+					withBorder
+					shadow="md"
+					p={30}
+					mt={30}
+					radius="md"
 				>
-					Don't have an account yet?{" "}
-					<Anchor
-						component={NavLink}
-						to="/register"
+					<Title ta="center">Welcome back!</Title>
+					<Text
+						c="dimmed"
 						size="sm"
-						c="violet"
+						ta="center"
+						mt={5}
 					>
-						Create account
-					</Anchor>
-				</Text>
-
-				<LoginForm />
+						Don't have an account yet?{" "}
+						<Anchor
+							component={NavLink}
+							to="/register"
+							size="sm"
+							c="violet"
+						>
+							Create account
+						</Anchor>
+					</Text>
+					<LoginForm />
+				</Paper>
 			</Container>
 		</Box>
 	);
