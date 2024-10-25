@@ -5,20 +5,22 @@ import {
 	Stack,
 } from "@mantine/core";
 import { LayoutGrid, LogOut, PlusCircle } from "lucide-react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
 import NewCampaignDrawer from "../../features/campaign/NewCampaignDrawer";
 import useCampaignStore from "../../stores/useCampaignStore";
 import { useEffect } from "react";
+import useAuthStore from "../../stores/useAuthStore";
 
 type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
 	const [searchParams] = useSearchParams();
-
+	const { logout } = useAuthStore();
+	const navigate = useNavigate();
 	const [
 		openedNewCampaign,
 		{ open: openNewCampaign, close: closeNewCampaign },
@@ -32,7 +34,7 @@ function Sidenav({}: Props) {
 			searchParams.forEach((value, key) => {
 				queryParams[key] = value;
 			});
-			await getCampaigns(queryParams);
+			const campaigns = await getCampaigns(queryParams);
 		} catch (error) {
 			console.error("Failed to fetch campaigns:", error);
 		}
@@ -43,7 +45,10 @@ function Sidenav({}: Props) {
 	}, [searchParams, getCampaigns]);
 
 	console.log("Campaigns: ", campaigns);
-
+	const logoutHandler = () => {
+		logout();
+		navigate("/login");
+	};
 	return (
 		<>
 			<NewCampaignDrawer
@@ -105,6 +110,7 @@ function Sidenav({}: Props) {
 							variant="light"
 							color="violet"
 							h={40}
+							onClick={logoutHandler}
 						>
 							Log out
 						</Button>

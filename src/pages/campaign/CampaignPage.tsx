@@ -31,11 +31,14 @@ function CampaignPage({}: Props) {
 			if (campaignId) {
 				const campaignData = await getCampaign(Number(campaignId));
 				setCampaign(campaignData);
+				getQuests(Number(campaignId));
 			}
 		};
 
 		fetchCampaign();
 	}, [campaignId]);
+
+	console.log("Campaign: ", campaign);
 
 	return (
 		<>
