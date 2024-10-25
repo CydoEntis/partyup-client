@@ -1,5 +1,5 @@
 import { Drawer } from "@mantine/core";
-import { DrawerProps } from "../../shared/drawer/drawer.types";
+import { DrawerProps } from "../../shared/types/drawer.types";
 
 function NewCampaignDrawer({ isOpened, onClose }: DrawerProps) {
 	return (

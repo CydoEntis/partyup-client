@@ -11,7 +11,7 @@ import {
 import CommentList from "../../components/comments/CommentList";
 import TaskList from "../../components/tasks/TaskList";
 import { Check, Clock, X } from "lucide-react";
-import { DrawerProps } from "../../shared/drawer/drawer.types";
+import { DrawerProps } from "../../shared/types/drawer.types";
 
 function ViewQuestDrawer({ isOpened, onClose }: DrawerProps) {
 	return (
