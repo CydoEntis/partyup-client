@@ -8,13 +8,15 @@ import {
 	TextInput,
 } from "@mantine/core";
 import { AtSign, Lock } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import classes from "./auth.module.css";
 
 import { z } from "zod";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useForm } from "@mantine/form";
+import useAuthStore from "../../stores/useAuthStore";
+import { AxiosError } from "axios";
 
 const loginFormSchema = z.object({
 	email: z
@@ -28,6 +30,9 @@ type LoginFormData = z.infer<typeof loginFormSchema>;
 type Props = {};
 
 function LoginForm({}: Props) {
+	const { login: loginUser, loading } = useAuthStore();
+	const navigate = useNavigate();
+
 	const form = useForm<LoginFormData>({
 		validate: zodResolver(loginFormSchema),
 		initialValues: {
@@ -36,13 +41,30 @@ function LoginForm({}: Props) {
 		},
 	});
 
-	async function onSubmit(data: LoginFormData) {
-		try {
-			console.log(data);
-		} catch (error) {
-			console.error(error);
+async function onSubmit(data: LoginFormData) {
+	try {
+		console.log(data);
+		await loginUser(data);
+
+		form.reset();
+		navigate("/dashboard");
+	} catch (error) {
+		console.error(error);
+		if (error instanceof AxiosError && error.response?.data?.errors) {
+
+			const errors = error.response.data.errors as Record<string, string[]>;
+			const fieldErrors: Record<string, string> = {};
+
+			for (const [key, messages] of Object.entries(errors)) {
+				if (Array.isArray(messages) && messages.length > 0) {
+					fieldErrors[key] = messages[0];
+				}
+			}
+
+			form.setErrors(fieldErrors);
 		}
 	}
+}
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
