@@ -30,7 +30,7 @@ function QuestCard({ index, onClick }: QuestCardProps) {
 			<Card
 				key={index}
 				className="transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
-				bg={isLightMode ? "lightMode.7" : "darkMode.7"}
+				bg={"card"}
 				shadow="sm"
 				padding="lg"
 				radius="md"

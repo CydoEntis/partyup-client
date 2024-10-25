@@ -6,7 +6,7 @@ type UserLevelProps = {
 	user: User;
 };
 
-function UserLevel({ user }: UserLevelProps) {
+function UserLevel({user}: UserLevelProps) {
 	const percentage = getPercentage(user.currentExp, user.expToNextLevel);
 
 	return (

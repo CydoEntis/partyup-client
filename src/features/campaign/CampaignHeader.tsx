@@ -1,29 +1,16 @@
-import {
-	ActionIcon,
-	Box,
-	Button,
-	Flex,
-	Group,
-	Stack,
-	Title,
-	Text,
-} from "@mantine/core";
-import { Edit, Users2, Plus } from "lucide-react";
-import Members from "../../components/avatar/Members";
-import useGetColorTheme from "../../hooks/useGetColorTheme";
-import InviteCampaignMember from "./InviteCampaignMember";
-import CampaignTabs from "./CampaignTabs";
+import { ActionIcon, Box, Flex, Group, Stack, Title } from "@mantine/core";
+import { Edit } from "lucide-react";
+
 import { ReactNode } from "react";
 
 type CampaignHeaderProps = {
 	children: ReactNode;
 };
 
-function CampaignHeader({children}: CampaignHeaderProps) {
-	const { isLightMode } = useGetColorTheme();
+function CampaignHeader({ children }: CampaignHeaderProps) {
 	return (
 		<Box
-			bg={isLightMode ? "lightMode.7" : "darkMode.8"}
+			bg="secondary"
 			p={16}
 		>
 			<Flex
@@ -40,7 +27,7 @@ function CampaignHeader({children}: CampaignHeaderProps) {
 							<Edit size={20} />
 						</ActionIcon>
 					</Group>
-						{children}
+					{children}
 				</Stack>
 			</Flex>
 		</Box>

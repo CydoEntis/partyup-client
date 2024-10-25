@@ -34,7 +34,7 @@ function Sidenav({}: Props) {
 			</Drawer>
 			<AppShell.Navbar
 				p="md"
-				bg={isLightMode ? "lightMode.7" : "darkMode.8"}
+				bg="secondary"
 				style={{
 					navbar: {
 						borderColor: `${isLightMode ? "#DCDEE0" : "#3A3A3A"}`,

@@ -10,7 +10,6 @@ type CampaignTabsProps = {
 };
 
 function CampaignTabs({ onOpenQuestHandler }: CampaignTabsProps) {
-	const { isLightMode } = useGetColorTheme();
 
 	const viewQuestHandler = (index: number) => {
 		onOpenQuestHandler();
@@ -22,7 +21,7 @@ function CampaignTabs({ onOpenQuestHandler }: CampaignTabsProps) {
 			color="violet"
 		>
 			<Tabs.List
-				bg={isLightMode ? "lightMode.7" : "darkMode.8"}
+				bg="secondary"
 				justify="space-between"
 			>
 				<Group>

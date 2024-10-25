@@ -17,7 +17,7 @@ function AppWrapper({ opened, children }: AppWrapperProps) {
 				breakpoint: "sm",
 				collapsed: { mobile: !opened },
 			}}
-			bg={isLightMode ? "lightMode.9" : "darkMode.9"}
+			bg={"primary"}
 
 		>
 			{children}

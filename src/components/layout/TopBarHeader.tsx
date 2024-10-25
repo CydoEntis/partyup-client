@@ -1,10 +1,4 @@
-import {
-	AppShell,
-	Burger,
-	Button,
-	Flex,
-	Group,
-} from "@mantine/core";
+import { AppShell, Burger, Button, Flex, Group } from "@mantine/core";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import { NavLink } from "react-router-dom";
 import useAuthStore from "../../stores/useAuthStore";
@@ -21,7 +15,7 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 
 	return (
 		<AppShell.Header
-			bg={isLightMode ? "lightMode.7" : "darkMode.8"}
+			bg="secondary"
 			styles={{
 				header: {
 					borderColor: `${isLightMode ? "#DCDEE0" : "#3A3A3A"}`,
