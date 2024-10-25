@@ -5,20 +5,13 @@ import {
 	Group,
 	Paper,
 	PasswordInput,
-	Popover,
-	Progress,
 	TextInput,
 } from "@mantine/core";
 import { AtSign, Lock } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import classes from "./auth.module.css";
-import { useState } from "react";
-import PasswordRequirement from "../../components/input/PasswordRequirement";
-import {
-	passwordRequirements,
-	testPasswordStrength,
-} from "../../shared/utils/password.utils";
+
 import { z } from "zod";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useForm } from "@mantine/form";
@@ -35,19 +28,6 @@ type LoginFormData = z.infer<typeof loginFormSchema>;
 type Props = {};
 
 function LoginForm({}: Props) {
-	const [popoverOpened, setPopoverOpened] = useState(false);
-	const [passwordValue, setPasswordValue] = useState("");
-	const checks = passwordRequirements.map((requirement, index) => (
-		<PasswordRequirement
-			key={index}
-			label={requirement.label}
-			meets={requirement.re.test(passwordValue)}
-		/>
-	));
-
-	const strength = testPasswordStrength(passwordValue);
-	const color = strength === 100 ? "teal" : strength > 50 ? "yellow" : "red";
-
 	const form = useForm<LoginFormData>({
 		validate: zodResolver(loginFormSchema),
 		initialValues: {
@@ -82,50 +62,21 @@ function LoginForm({}: Props) {
 					leftSection={<AtSign size={20} />}
 					{...form.getInputProps("email")} // Register email input
 				/>
-				<Popover
-					opened={popoverOpened}
-					position="bottom"
-					width="target"
-					transitionProps={{ transition: "pop" }}
-				>
-					<Popover.Target>
-						<div
-							onFocusCapture={() => setPopoverOpened(true)}
-							onBlurCapture={() => setPopoverOpened(false)}
-						>
-							<PasswordInput
-								label="Password"
-								placeholder="Your password"
-								withAsterisk
-								required
-								mt="md"
-								classNames={{
-									input: classes.input,
-								}}
-								leftSection={<Lock size={20} />}
-								{...form.getInputProps("password")} // Register password input
-								onChange={(event) => {
-									setPasswordValue(event.currentTarget.value); // Update local password state
-									form.setFieldValue("password", event.currentTarget.value); // Update form state
-								}}
-							/>
-						</div>
-					</Popover.Target>
-					<Popover.Dropdown>
-						<Progress
-							color={color}
-							value={strength}
-							size={5}
-							mb="xs"
-						/>
-						<PasswordRequirement
-							label="Includes at least 6 characters"
-							meets={passwordValue.length > 5}
-						/>
-						{checks}
-					</Popover.Dropdown>
-				</Popover>
-
+				<PasswordInput
+					label="Password"
+					placeholder="Your password"
+					withAsterisk
+					required
+					mt="md"
+					classNames={{
+						input: classes.input,
+					}}
+					leftSection={<Lock size={20} />}
+					{...form.getInputProps("password")}
+					onChange={(event) => {
+						form.setFieldValue("password", event.currentTarget.value);
+					}}
+				/>
 				<Group
 					justify="space-between"
 					mt="lg"
@@ -145,7 +96,7 @@ function LoginForm({}: Props) {
 					mt="xl"
 					color="violet"
 					variant="light"
-					type="submit" // Ensure button type is submit
+					type="submit"
 				>
 					Sign in
 				</Button>
