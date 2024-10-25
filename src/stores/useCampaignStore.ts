@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import {
-	PaginatedCampaigns,
 	Campaign,
 	CreateCampaign,
+	PaginatedCampaigns,
 	UpdateCampaignDetails,
 	UpdateCampaignLeader,
 } from "../shared/types/campaign.types";
@@ -10,12 +10,11 @@ import campaignService from "../services/campaignService";
 import { QueryParams } from "../shared/types/query-paramts.types";
 
 type CampaignState = {
-	paginatedCampaigns: PaginatedCampaigns | null;
-	campaign: Campaign | null;
+	campaigns: PaginatedCampaigns | null;
 	loading: boolean;
 	error: string | null;
-	getCampaigns: (params?: QueryParams) => Promise<void>;
-	getCampaign: (id: number) => Promise<void>;
+	getCampaigns: (params?: QueryParams) => Promise<PaginatedCampaigns>;
+	getCampaign: (id: number) => Promise<Campaign>;
 	createCampaign: (campaign: CreateCampaign) => Promise<Campaign>;
 	updateCampaignDetails: (
 		id: number,
@@ -28,47 +27,61 @@ type CampaignState = {
 	deleteCampaign: (id: number) => Promise<void>;
 };
 
-export const useCampaignStore = create<CampaignState>((set) => ({
-	paginatedCampaigns: null,
-	campaign: null,
+export const useCampaignStore = create<CampaignState>((set, get) => ({
+	campaigns: null,
 	loading: false,
 	error: null,
 
 	getCampaigns: async (params?: QueryParams) => {
 		set({ loading: true, error: null });
 		try {
-			const paginatedCampaigns = await campaignService.getAllCampaigns(params);
+			const campaigns = await campaignService.getAllCampaigns(params);
 
-			console.log("Paginated Campaigns: ", paginatedCampaigns);
+			console.log("Paginated Campaigns: ", campaigns);
 
-			set({ paginatedCampaigns, loading: false });
+			set({ campaigns, loading: false });
+
+			return campaigns;
 		} catch (error) {
 			set({ error: "Failed to fetch campaigns", loading: false });
 			throw error;
 		}
 	},
 
-	getCampaign: async (campaignId: number) => {
-		set({ loading: true, error: null });
-		try {
-			const campaign = await campaignService.getCampaignById(campaignId);
-			set({ campaign, loading: false });
-		} catch (error) {
-			set({ error: "Failed to fetch campaign", loading: false });
-			throw error;
+getCampaign: async (campaignId: number) => {
+	const campaigns: Campaign[] | undefined = get().campaigns?.items;
+
+	if (campaigns) {
+		const existingCampaign = campaigns.find(
+			(campaign) => campaign.id === campaignId,
+		);
+
+		if (existingCampaign) {
+			return existingCampaign;
 		}
-	},
+	}
+
+	set({ loading: true, error: null });
+
+	try {
+		const campaign = await campaignService.getCampaignById(campaignId);
+		return campaign;
+	} catch (error) {
+		set({ error: "Failed to fetch campaign", loading: false });
+		throw error;
+	}
+},
 
 	createCampaign: async (campaign: CreateCampaign): Promise<Campaign> => {
 		set({ loading: true, error: null });
 		try {
 			const newCampaign = await campaignService.createCampaign(campaign);
 			set((state) => ({
-				paginatedCampaigns: state.paginatedCampaigns
+				campaigns: state.campaigns
 					? {
-							...state.paginatedCampaigns,
-							items: [newCampaign, ...state.paginatedCampaigns.items],
-							totalCount: state.paginatedCampaigns.totalCount + 1,
+							...state.campaigns,
+							items: [newCampaign, ...state.campaigns.items],
+							totalCount: state.campaigns.totalCount + 1,
 					  }
 					: {
 							items: [newCampaign],
@@ -100,13 +113,13 @@ export const useCampaignStore = create<CampaignState>((set) => ({
 			);
 			set((state) => {
 				const updatedCampaigns =
-					state.paginatedCampaigns?.items.map((campaign) =>
+					state.campaigns?.items.map((campaign) =>
 						campaign.id === id ? { ...campaign, ...updatedCampaign } : campaign,
 					) || [];
 
 				return {
-					paginatedCampaigns: {
-						...state.paginatedCampaigns!,
+					campaigns: {
+						...state.campaigns!,
 						items: updatedCampaigns,
 					},
 					campaign:
@@ -131,15 +144,15 @@ export const useCampaignStore = create<CampaignState>((set) => ({
 			);
 			set((state) => {
 				const updatedCampaigns =
-					state.paginatedCampaigns?.items.map((campaign) =>
+					state.campaigns?.items.map((campaign) =>
 						campaign.id === id
 							? { ...campaign, campaignLeaderId: userId }
 							: campaign,
 					) || [];
 
 				return {
-					paginatedCampaigns: {
-						...state.paginatedCampaigns!,
+					campaigns: {
+						...state.campaigns!,
 						items: updatedCampaigns,
 					},
 					campaign:
@@ -160,13 +173,13 @@ export const useCampaignStore = create<CampaignState>((set) => ({
 		try {
 			await campaignService.deleteCampaign(campaignId);
 			set((state) => ({
-				paginatedCampaigns: {
-					...state.paginatedCampaigns!,
+				campaigns: {
+					...state.campaigns!,
 					items:
-						state.paginatedCampaigns?.items.filter(
+						state.campaigns?.items.filter(
 							(campaign) => campaign.id !== campaignId,
 						) || [],
-					totalCount: (state.paginatedCampaigns?.totalCount || 0) - 1,
+					totalCount: (state.campaigns?.totalCount || 0) - 1,
 				},
 				loading: false,
 			}));

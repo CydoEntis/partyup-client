@@ -4,21 +4,45 @@ import {
 	NavLink as MantineNavLink,
 	Stack,
 } from "@mantine/core";
-import { LayoutGrid, PlusCircle } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { LayoutGrid, LogOut, PlusCircle } from "lucide-react";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
 import NewCampaignDrawer from "../../features/campaign/NewCampaignDrawer";
+import useCampaignStore from "../../stores/useCampaignStore";
+import { useEffect } from "react";
 
 type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
+	const [searchParams] = useSearchParams();
+
 	const [
 		openedNewCampaign,
 		{ open: openNewCampaign, close: closeNewCampaign },
 	] = useDisclosure(false);
+
+	const { getCampaigns, campaigns, loading } = useCampaignStore();
+
+	const fetchCampaigns = async () => {
+		try {
+			const queryParams: { [key: string]: string | undefined } = {};
+			searchParams.forEach((value, key) => {
+				queryParams[key] = value;
+			});
+			await getCampaigns(queryParams);
+		} catch (error) {
+			console.error("Failed to fetch campaigns:", error);
+		}
+	};
+
+	useEffect(() => {
+		fetchCampaigns();
+	}, [searchParams, getCampaigns]);
+
+	console.log("Campaigns: ", campaigns);
 
 	return (
 		<>
@@ -59,20 +83,31 @@ function Sidenav({}: Props) {
 							label="Campaigns"
 							className="rounded-md"
 						>
-							{Array.from({ length: 8 }).map((_, index) => (
-								<MantineNavLink
-									key={index}
-									component={NavLink}
-									to={`/campaigns/${index}`}
-									label={`Campaign ${index + 1}`}
-									color="violet"
-									className="rounded-md"
-									mt={8}
-								/>
-							))}
+							{campaigns && campaigns.items
+								? campaigns.items.map((campaign) => (
+										<MantineNavLink
+											key={campaign.id}
+											component={NavLink}
+											to={`/campaigns/${campaign.id}`}
+											label={campaign.name}
+											color="violet"
+											className="rounded-md"
+											mt={8}
+										/>
+								  ))
+								: null}
 						</MantineNavLink>
 					</Stack>
 					<Stack mt="auto">
+						<Button
+							justify="start"
+							leftSection={<LogOut size={20} />}
+							variant="light"
+							color="violet"
+							h={40}
+						>
+							Log out
+						</Button>
 						<ThemeToggle />
 					</Stack>
 				</Stack>

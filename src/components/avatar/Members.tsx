@@ -1,7 +1,8 @@
 import { Tooltip, Avatar } from "@mantine/core";
+import { Member } from "../../shared/types/member.types";
 
 type MemberProps = {
-	members: { name: string; avatar: number }[];
+	members: Member[];
 	totalMembers: number;
 	numOfMembersToShow: number;
 };
@@ -14,11 +15,11 @@ function Members({ members, totalMembers, numOfMembersToShow }: MemberProps) {
 			closeDelay={100}
 		>
 			<Avatar.Group spacing="sm">
-				{showableMembers.map((member, index) => (
+				{showableMembers.map((member) => (
 					<Tooltip
-						label={member.name}
+						label={member.displayName}
 						withArrow
-						key={index}
+						key={member.id}
 					>
 						<Avatar
 							src="image.png"

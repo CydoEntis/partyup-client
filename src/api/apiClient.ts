@@ -41,7 +41,7 @@ apiClient.interceptors.response.use(
 				console.log("Refresh error?");
 				if (user) {
 					logout();
-					window.location.href = "/auth/login";
+					window.location.href = "/login";
 				}
 
 				return Promise.reject(refreshError);

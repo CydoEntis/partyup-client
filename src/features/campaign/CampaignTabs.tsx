@@ -1,19 +1,20 @@
 import { Group, Tabs } from "@mantine/core";
-import React from "react";
-import useGetColorTheme from "../../hooks/useGetColorTheme";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
+import { Quest } from "../../shared/types/quest.types";
+import { useParams } from "react-router-dom";
+import useCampaignStore from "../../stores/useCampaignStore";
 
 type CampaignTabsProps = {
+	quests: Quest[];
 	onOpenQuestHandler: () => void;
 };
 
-function CampaignTabs({ onOpenQuestHandler }: CampaignTabsProps) {
+function CampaignTabs({ quests, onOpenQuestHandler }: CampaignTabsProps) {
+	const { campaignId } = useParams();
 
-	const viewQuestHandler = (index: number) => {
-		onOpenQuestHandler();
-	};
+
 
 	return (
 		<Tabs
@@ -47,11 +48,11 @@ function CampaignTabs({ onOpenQuestHandler }: CampaignTabsProps) {
 				p={16}
 			>
 				<SimpleGridLayout cols={6}>
-					{Array.from({ length: 8 }).map((_, index) => (
+					{quests.map((quest) => (
 						<QuestCard
-							key={index}
-							index={index}
-							onClick={() => viewQuestHandler(index)}
+							key={quest.id}
+							quest={quest}
+							onClick={onOpenQuestHandler}
 						/>
 					))}
 				</SimpleGridLayout>

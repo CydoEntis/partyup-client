@@ -4,10 +4,11 @@ import { Edit } from "lucide-react";
 import { ReactNode } from "react";
 
 type CampaignHeaderProps = {
+	title: string;
 	children: ReactNode;
 };
 
-function CampaignHeader({ children }: CampaignHeaderProps) {
+function CampaignHeader({ title, children }: CampaignHeaderProps) {
 	return (
 		<Box
 			bg="secondary"
@@ -19,7 +20,7 @@ function CampaignHeader({ children }: CampaignHeaderProps) {
 			>
 				<Stack>
 					<Group align="center">
-						<Title size="2.5rem">Product Development</Title>
+						<Title size="2.5rem">{title}</Title>
 						<ActionIcon
 							variant="transparent"
 							color="violet"

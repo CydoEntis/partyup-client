@@ -10,15 +10,16 @@ function CommentList({}: Props) {
 			<ScrollArea
 				h={350}
 				type="always"
-				
 			>
-				<Comment />
-				<Comment />
-				<Comment />
-				<Comment />
-				<Comment />
-				<Comment />
-				<Comment />
+				<Stack gap={16}>
+					<Comment />
+					<Comment />
+					<Comment />
+					<Comment />
+					<Comment />
+					<Comment />
+					<Comment />
+				</Stack>
 			</ScrollArea>
 		</Stack>
 	);

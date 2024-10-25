@@ -11,9 +11,9 @@ export type Quest = {
 	campaignId: number;
 	assignedMembers: Member[];
 	totalMembers: number;
-	subquests: Subquest[];
-	completedSubquests: number;
-	totalSubquests: number;
+	tasks: Subquest[];
+	completedTasks: number;
+	totalTasks: number;
 };
 
 export type PaginatedQuests = {

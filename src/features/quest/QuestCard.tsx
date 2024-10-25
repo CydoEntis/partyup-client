@@ -8,27 +8,28 @@ import {
 	Group,
 	Text,
 	Badge,
-	Drawer,
 } from "@mantine/core";
 
 import { Calendar, ListChecks, MessageCircle } from "lucide-react";
-import useGetColorTheme from "../../hooks/useGetColorTheme";
-import { useDisclosure } from "@mantine/hooks";
+
 import Members from "../../components/avatar/Members";
+import { Quest } from "../../shared/types/quest.types";
+import { formatDate } from "../../shared/utils/date.utils";
+import { getPercentage } from "../../shared/utils/progress-bar.utils";
 
 type QuestCardProps = {
-	index: number;
+	quest: Quest;
 	onClick: () => void;
 };
 
-function QuestCard({ index, onClick }: QuestCardProps) {
-	const { isLightMode } = useGetColorTheme();
+function QuestCard({ quest, onClick }: QuestCardProps) {
+	const percent = getPercentage(quest.completedTasks, quest.totalTasks);
+
 
 	return (
 		<>
-
 			<Card
-				key={index}
+				key={quest.id}
 				className="transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
 				bg={"card"}
 				shadow="sm"
@@ -67,15 +68,13 @@ function QuestCard({ index, onClick }: QuestCardProps) {
 						size="1.5rem"
 						fw={600}
 					>
-						Norway Fjord Adventures
+						{quest.name}
 					</Title>
 					<Text
 						size="sm"
 						c="dimmed"
 					>
-						With Fjord Tours you can explore more of the magical fjord
-						landscapes with tours and activities on and around the fjords of
-						Norway
+						{quest.description}
 					</Text>
 
 					<Flex
@@ -83,7 +82,7 @@ function QuestCard({ index, onClick }: QuestCardProps) {
 						gap={8}
 					>
 						<Calendar size={20} />
-						<Text>Nov 22</Text>
+						<Text>{formatDate(quest.dueDate)}</Text>
 					</Flex>
 				</Stack>
 
@@ -96,12 +95,14 @@ function QuestCard({ index, onClick }: QuestCardProps) {
 						color="yellow"
 						radius="xl"
 						size="md"
-						value={66}
+						value={percent}
 						striped
 						animated
 					/>
 					<ListChecks size={20} />
-					<Text>2/3</Text>
+					<Text>
+						{quest.completedTasks}/{quest.totalTasks}
+					</Text>
 				</Flex>
 
 				<Group
@@ -109,11 +110,8 @@ function QuestCard({ index, onClick }: QuestCardProps) {
 					pt={8}
 				>
 					<Members
-						members={[
-							{ name: "Gandalf", avatar: 1 },
-							{ name: "Bilbo Baggins", avatar: 2 },
-						]}
-						totalMembers={3}
+						members={quest.assignedMembers}
+						totalMembers={quest.totalMembers}
 						numOfMembersToShow={3}
 					/>
 					<Flex
