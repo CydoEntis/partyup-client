@@ -1,37 +1,31 @@
 import {
-	ActionIcon,
 	AppShell,
-	Box,
 	Button,
-	Collapse,
-	Drawer,
 	NavLink as MantineNavLink,
 	Stack,
-	useComputedColorScheme,
-	useMantineColorScheme,
 } from "@mantine/core";
-import { ChevronRight, LayoutGrid, Moon, PlusCircle, Sun } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { LayoutGrid, PlusCircle } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
+import NewCampaignDrawer from "../../features/campaign/NewCampaignDrawer";
 
 type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
-	const [opened, { open, close }] = useDisclosure(false);
+	const [
+		openedNewCampaign,
+		{ open: openNewCampaign, close: closeNewCampaign },
+	] = useDisclosure(false);
 
 	return (
 		<>
-			<Drawer
-				opened={opened}
-				onClose={close}
-				title="Authentication"
-				position="right"
-			>
-				This bitch open
-			</Drawer>
+			<NewCampaignDrawer
+				isOpened={openedNewCampaign}
+				onClose={closeNewCampaign}
+			/>
 			<AppShell.Navbar
 				p="md"
 				bg="secondary"
@@ -48,7 +42,7 @@ function Sidenav({}: Props) {
 							variant="light"
 							rightSection={<PlusCircle size={20} />}
 							h={40}
-							onClick={open}
+							onClick={openNewCampaign}
 						>
 							New Campaign
 						</Button>
