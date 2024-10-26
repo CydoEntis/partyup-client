@@ -23,7 +23,7 @@ type QuestState = {
 		campaignId: number,
 		params?: QueryParams,
 	) => Promise<PaginatedQuests>;
-	getQuest: (campaignId: number, id: number) => Promise<void>;
+	getQuest: (campaignId: number, id: number) => Promise<Quest>;
 	createQuest: (campaignId: number, quest: CreateQuest) => Promise<Quest>;
 	deleteQuest: (campaignId: number, id: number) => Promise<void>;
 };
@@ -70,7 +70,9 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		set({ loading: true, error: null });
 		try {
 			const quest = await questService.getQuestById(campaignId, questId);
+			console.log("Quest: ", quest);
 			set({ quest, loading: false });
+			return quest;
 		} catch (error) {
 			set({ error: "Failed to fetch quest", loading: false });
 			throw error;

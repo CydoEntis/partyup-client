@@ -36,11 +36,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 		set({ loading: true, error: null });
 		try {
 			const campaigns = await campaignService.getAllCampaigns(params);
-
-			console.log("Paginated Campaigns: ", campaigns);
-
 			set({ campaigns, loading: false });
-
 			return campaigns;
 		} catch (error) {
 			set({ error: "Failed to fetch campaigns", loading: false });

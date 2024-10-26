@@ -5,7 +5,7 @@ import {
 	Quest,
 	CreateQuest,
 } from "../shared/types/quest.types";
-import { QueryParams } from "../stores/useCampaignStore";
+import { QueryParams } from "../stores/useQuestStore";
 
 const getAllQuests = async (
 	campaignId: number,
@@ -23,8 +23,6 @@ const getAllQuests = async (
 		if (params.pageSize)
 			queryParams.append("pageSize", params.pageSize.toString());
 	}
-
-	console.log("Constructed query params: ", queryParams);
 
 	const response = (
 		await apiClient.get(

@@ -38,7 +38,6 @@ function CampaignPage({}: Props) {
 		fetchCampaign();
 	}, [campaignId]);
 
-	console.log("Campaign: ", campaign);
 
 	return (
 		<>

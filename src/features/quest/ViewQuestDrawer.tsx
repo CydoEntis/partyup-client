@@ -12,31 +12,45 @@ import CommentList from "../../components/comments/CommentList";
 import TaskList from "../../components/tasks/TaskList";
 import { Check, Clock, X } from "lucide-react";
 import { DrawerProps } from "../../shared/types/drawer.types";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { formatDate } from "../../shared/utils/date.utils";
+import { Quest } from "../../shared/types/quest.types";
 
 function ViewQuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const { campaignId, questId } = useParams();
-	const { getQuest, quest } = useQuestStore();
+	const { getQuest } = useQuestStore();
+	const navigate = useNavigate();
+	const [quest, setQuest] = useState<Quest | null>(null);
+	console.log(questId);
 	useEffect(() => {
-		useEffect(() => {
-			const fetchQuest = async () => {
-				if (campaignId) {
-					await getQuest(Number(campaignId), Number(questId));
-				}
-			};
+		const fetchQuest = async () => {
+			if (campaignId && questId) {
+				const questData = await getQuest(Number(campaignId), Number(questId));
+				console.log(questData);
 
+				setQuest(questData);
+			}
+		};
+
+		if (isOpened) {
 			fetchQuest();
-		}, [campaignId]);
-	}, [questId]);
+		} else {
+			setQuest(null); // Clear quest data when the drawer closes
+		}
+	}, [isOpened, questId, getQuest]);
+
+	const handleClose = () => {
+		navigate(`/campaigns/${campaignId}/quests`);
+		onClose();
+	};
 
 	return (
 		<Drawer
 			size="xl"
 			opened={isOpened}
-			onClose={onClose}
+			onClose={handleClose}
 			position="right"
 		>
 			{quest ? (

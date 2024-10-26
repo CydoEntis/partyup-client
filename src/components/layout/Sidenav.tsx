@@ -44,7 +44,6 @@ function Sidenav({}: Props) {
 		fetchCampaigns();
 	}, [searchParams, getCampaigns]);
 
-	console.log("Campaigns: ", campaigns);
 	const logoutHandler = () => {
 		logout();
 		navigate("/login");
@@ -93,7 +92,7 @@ function Sidenav({}: Props) {
 										<MantineNavLink
 											key={campaign.id}
 											component={NavLink}
-											to={`/campaigns/${campaign.id}`}
+											to={`/campaigns/${campaign.id}/quests`}
 											label={campaign.name}
 											color="violet"
 											className="rounded-md"

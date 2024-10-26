@@ -15,11 +15,11 @@ function Members({ members, totalMembers, numOfMembersToShow }: MemberProps) {
 			closeDelay={100}
 		>
 			<Avatar.Group spacing="sm">
-				{showableMembers.map((member) => (
+				{showableMembers.map((member, index) => (
 					<Tooltip
+						key={index}
 						label={member.displayName}
 						withArrow
-						key={member.id}
 					>
 						<Avatar
 							src="image.png"

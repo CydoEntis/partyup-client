@@ -35,6 +35,7 @@ export type CreateQuest = {
 };
 
 export type Task = {
+	id: number,
 	description: string;
 	isCompleted: boolean;
 	createdAt: Date;

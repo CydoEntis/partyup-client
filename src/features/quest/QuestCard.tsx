@@ -28,7 +28,7 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 	const { campaignId } = useParams();
 	const navigate = useNavigate();
 	const test = () => {
-		navigate(`/campaigns/${campaignId}/quests/${quest.id}`, { replace: true });
+		navigate(`/campaigns/${campaignId}/quests/${quest.id}`);
 		onClick();
 	};
 
