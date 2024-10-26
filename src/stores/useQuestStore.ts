@@ -15,7 +15,7 @@ export type QueryParams = {
 };
 
 type QuestState = {
-	paginatedQuests: PaginatedQuests | null;
+	paginatedQuests: PaginatedQuests;
 	quest: Quest | null;
 	loading: boolean;
 	error: string | null;
@@ -28,14 +28,30 @@ type QuestState = {
 	deleteQuest: (campaignId: number, id: number) => Promise<void>;
 };
 
-export const useQuestStore = create<QuestState>((set) => ({
-	paginatedQuests: null,
+export const useQuestStore = create<QuestState>((set, get) => ({
+	paginatedQuests: {
+		items: [],
+		totalCount: 0,
+		totalPages: 0,
+		currentPage: 1,
+		hasNextPage: false,
+		hasPreviousPage: false,
+		pageRange: [],
+	},
 	quest: null,
 	loading: false,
 	error: null,
 
 	getQuests: async (campaignId: number, params?: QueryParams) => {
 		set({ loading: true, error: null });
+		const paginatedQuestsState = get().paginatedQuests;
+		const currentQuests = get().paginatedQuests?.items[campaignId];
+
+		if (currentQuests && !params) {
+			set({ loading: false });
+			return paginatedQuestsState;
+		}
+
 		try {
 			const paginatedQuests = await questService.getAllQuests(
 				campaignId,

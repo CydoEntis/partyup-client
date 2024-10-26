@@ -3,7 +3,7 @@ import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
 import { Quest } from "../../shared/types/quest.types";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useCampaignStore from "../../stores/useCampaignStore";
 
 type CampaignTabsProps = {
@@ -13,7 +13,6 @@ type CampaignTabsProps = {
 
 function CampaignTabs({ quests, onOpenQuestHandler }: CampaignTabsProps) {
 	const { campaignId } = useParams();
-
 
 
 	return (

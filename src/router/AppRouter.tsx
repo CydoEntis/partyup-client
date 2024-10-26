@@ -27,8 +27,14 @@ const router = createBrowserRouter([
 				element: <Test />,
 			},
 			{
-				path: "campaigns/:campaignId",
+				path: "campaigns/:campaignId/quests",
 				element: <CampaignPage />,
+				children: [
+					{
+						path: ":questId",
+						element: <CampaignPage />,
+					},
+				],
 			},
 		],
 	},

@@ -16,6 +16,7 @@ import Members from "../../components/avatar/Members";
 import { Quest } from "../../shared/types/quest.types";
 import { formatDate } from "../../shared/utils/date.utils";
 import { getPercentage } from "../../shared/utils/progress-bar.utils";
+import { useNavigate, useParams } from "react-router-dom";
 
 type QuestCardProps = {
 	quest: Quest;
@@ -24,7 +25,12 @@ type QuestCardProps = {
 
 function QuestCard({ quest, onClick }: QuestCardProps) {
 	const percent = getPercentage(quest.completedTasks, quest.totalTasks);
-
+	const { campaignId } = useParams();
+	const navigate = useNavigate();
+	const test = () => {
+		navigate(`/campaigns/${campaignId}/quests/${quest.id}`, { replace: true });
+		onClick();
+	};
 
 	return (
 		<>
@@ -36,7 +42,7 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 				padding="lg"
 				radius="md"
 				withBorder
-				onClick={onClick}
+				onClick={test}
 			>
 				<Group
 					pb={12}

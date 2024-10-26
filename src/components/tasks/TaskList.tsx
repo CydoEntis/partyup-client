@@ -1,9 +1,10 @@
 import { Checkbox, ScrollArea, Stack, Title } from "@mantine/core";
 import React from "react";
+import { Task } from "../../shared/types/quest.types";
 
 type TaskListProps = {
 	title: string;
-	tasks: [];
+	tasks: Task[];
 };
 
 function TaskList({ title, tasks }: TaskListProps) {
@@ -16,12 +17,15 @@ function TaskList({ title, tasks }: TaskListProps) {
 			>
 				<Checkbox.Group>
 					<Stack>
-						<Checkbox
-							color="violet"
-							size="md"
-							value="react"
-							label="React"
-						/>
+						{tasks.map((task) => (
+							<Checkbox
+								color="violet"
+								size="md"
+								value={task.description}
+								label={task.description}
+								checked={task.isCompleted}
+							/>
+						))}
 					</Stack>
 				</Checkbox.Group>
 			</ScrollArea>

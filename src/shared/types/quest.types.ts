@@ -11,7 +11,7 @@ export type Quest = {
 	campaignId: number;
 	assignedMembers: Member[];
 	totalMembers: number;
-	tasks: Subquest[];
+	tasks: Task[];
 	completedTasks: number;
 	totalTasks: number;
 };
@@ -31,17 +31,17 @@ export type CreateQuest = {
 	description: string;
 	dueDate: Date;
 	memberIds: Number[];
-	subquests: Subquest[];
+	tasks: Task[];
 };
 
-export type Subquest = {
+export type Task = {
 	description: string;
 	isCompleted: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 };
 
-export type CreateSubquest = {
+export type CreateTask = {
 	description: string;
 };
 
