@@ -3,7 +3,7 @@ import CampaignTabs from "../../features/campaign/CampaignTabs";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useDisclosure } from "@mantine/hooks";
-import ViewQuestDrawer from "../../features/quest/ViewQuestDrawer";
+import ViewQuestDrawer from "../../features/quest/QuestDrawer";
 import { Tabs } from "@mantine/core";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../../features/quest/QuestCard";

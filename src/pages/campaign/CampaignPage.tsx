@@ -5,7 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 import InviteCampaignMember from "../../features/campaign/InviteCampaignMember";
 
 import InviteMemberDrawer from "../../features/members/InviteMemberDrawer";
-import ViewQuestDrawer from "../../features/quest/ViewQuestDrawer";
+import QuestDrawer from "../../features/quest/QuestDrawer";
 import useCampaignStore from "../../stores/useCampaignStore";
 import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
@@ -23,7 +23,7 @@ function CampaignPage({}: Props) {
 		openedInviteMember,
 		{ open: openMemberInvite, close: closeMemberInvite },
 	] = useDisclosure(false);
-	const [openedViewQuest, { open: openViewQuest, close: closeViewQuest }] =
+	const [openedQuest, { open: openViewQuest, close: closeQuest }] =
 		useDisclosure(false);
 
 	useEffect(() => {
@@ -45,10 +45,11 @@ function CampaignPage({}: Props) {
 				isOpened={openedInviteMember}
 				onClose={closeMemberInvite}
 			/>
-			<ViewQuestDrawer
-				isOpened={openedViewQuest}
-				onClose={closeViewQuest}
+			<QuestDrawer
+				isOpened={openedQuest}
+				onClose={closeQuest}
 			/>
+
 			{campaign && (
 				<CampaignHeader title={campaign!.name}>
 					<InviteCampaignMember onOpenHandler={openMemberInvite} />

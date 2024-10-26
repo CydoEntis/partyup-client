@@ -41,7 +41,7 @@ function TaskList({ title, tasks }: TaskListProps) {
 								size="md"
 								value={task.id.toString()}
 								label={task.description}
-								checked={task.isCompleted} // Check the isCompleted property
+								checked={task.isCompleted} 
 								onChange={(event) =>
 									handleTaskUpdate(task.id, event.currentTarget.checked)
 								}
