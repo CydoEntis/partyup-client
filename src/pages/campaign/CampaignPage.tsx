@@ -5,16 +5,16 @@ import { useDisclosure } from "@mantine/hooks";
 import InviteCampaignMember from "../../features/campaign/InviteCampaignMember";
 
 import InviteMemberDrawer from "../../features/members/InviteMemberDrawer";
-import QuestDrawer from "../../features/quest/QuestDrawer";
 import useCampaignStore from "../../stores/useCampaignStore";
 import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
 import { Campaign } from "../../shared/types/campaign.types";
+import QuestDrawer from "../../features/quest/QuestDrawer";
 
 type Props = {};
 
 function CampaignPage({}: Props) {
-	const { campaignId } = useParams();
+	const { campaignId, questId } = useParams();
 	const { getCampaign, loading } = useCampaignStore();
 	const { getQuests, paginatedQuests } = useQuestStore();
 	const [campaign, setCampaign] = useState<Campaign | null>(null);
@@ -23,8 +23,26 @@ function CampaignPage({}: Props) {
 		openedInviteMember,
 		{ open: openMemberInvite, close: closeMemberInvite },
 	] = useDisclosure(false);
-	const [openedQuest, { open: openViewQuest, close: closeQuest }] =
+	const [openedQuest, { open: openQuest, close: closeQuest }] =
 		useDisclosure(false);
+
+	const [questMode, setQuestMode] = useState("view");
+
+	const handleNewQuest = () => {
+		setQuestMode("create");
+		openQuest();
+	};
+
+	const handleViewQuest = () => {
+		setQuestMode("view");
+		openQuest();
+	};
+
+	useEffect(() => {
+		if (questId) {
+			openQuest();
+		}
+	}, [questId]);
 
 	useEffect(() => {
 		const fetchCampaign = async () => {
@@ -38,7 +56,6 @@ function CampaignPage({}: Props) {
 		fetchCampaign();
 	}, [campaignId]);
 
-
 	return (
 		<>
 			<InviteMemberDrawer
@@ -46,18 +63,22 @@ function CampaignPage({}: Props) {
 				onClose={closeMemberInvite}
 			/>
 			<QuestDrawer
+				mode={questMode}
 				isOpened={openedQuest}
 				onClose={closeQuest}
 			/>
 
 			{campaign && (
-				<CampaignHeader title={campaign!.name}>
+				<CampaignHeader
+					title={campaign!.name}
+					onNewQuestHandler={handleNewQuest}
+				>
 					<InviteCampaignMember onOpenHandler={openMemberInvite} />
 				</CampaignHeader>
 			)}
 			{paginatedQuests && (
 				<CampaignTabs
-					onOpenQuestHandler={openViewQuest}
+					onOpenQuestHandler={handleViewQuest}
 					quests={paginatedQuests.items}
 				/>
 			)}
