@@ -109,6 +109,7 @@ function CreateQuest({}: Props) {
 			<Textarea
 				label="Description"
 				placeholder="Your quest description"
+				autosize
 				{...form.getInputProps("description")}
 			/>
 			<DateInput
