@@ -3,14 +3,27 @@ import useQuestStore from "../../stores/useQuestStore";
 import { useForm, zodResolver } from "@mantine/form";
 import { AxiosError } from "axios";
 import { useParams } from "react-router-dom";
-import { Button, MultiSelect, Textarea, TextInput } from "@mantine/core";
+import {
+	Button,
+	MultiSelect,
+	Select,
+	Textarea,
+	TextInput,
+} from "@mantine/core";
 import classes from "../auth/auth.module.css";
 import { Task } from "../../shared/types/quest.types";
-import { DateInput, DatePickerInput } from "@mantine/dates";
+import { DateInput } from "@mantine/dates";
 import useMemberStore from "../../stores/useMemberStore";
 import { useEffect } from "react";
 
 type Props = {};
+
+export enum PriorityLevel {
+	CRITICAL = "Critical",
+	HIGH = "High",
+	MEDIUM = "Medium",
+	LOW = "Low",
+}
 
 const createQuestSchema = z.object({
 	name: z
@@ -26,7 +39,12 @@ const createQuestSchema = z.object({
 		.refine((date) => date >= new Date(), {
 			message: "Due date cannot be in the past",
 		}),
+	priority: z.nativeEnum(PriorityLevel).default(PriorityLevel.LOW),
+	members: z
+		.array(z.string())
+		.min(1, "At least one member must be assigned to the quest"), // New validation for members
 });
+
 type CreateQuestData = z.infer<typeof createQuestSchema>;
 
 function CreateQuest({}: Props) {
@@ -40,20 +58,22 @@ function CreateQuest({}: Props) {
 			name: "",
 			description: "",
 			dueDate: new Date(),
+			priority: PriorityLevel.LOW,
+			members: [], // Initialize members as an empty array
 		},
 	});
 
 	async function onSubmit(data: CreateQuestData) {
 		try {
 			const newQuest = {
-				name: "",
-				description: "",
-				dueDate: new Date(),
-				memberIds: [] as Number[],
+				name: data.name,
+				description: data.description,
+				dueDate: data.dueDate,
+				memberIds: data.members.map(Number), // Convert member IDs to numbers
 				tasks: [] as Task[],
 			};
-			// await createQuest(Number(campaignId), newQuest);
-			console.log("Create quest: ", data);
+			await createQuest(Number(campaignId), newQuest); // Ensure to call createQuest with newQuest
+			console.log("Create quest: ", newQuest);
 			form.reset();
 		} catch (error) {
 			console.error(error);
@@ -73,10 +93,8 @@ function CreateQuest({}: Props) {
 	}
 
 	useEffect(() => {
-		getMembers(Number(campaignId), {pageSize: 99999999});
+		getMembers(Number(campaignId), { pageSize: 99999999 });
 	}, [campaignId]);
-
-	console.log("Members: ", members);
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
@@ -98,16 +116,6 @@ function CreateQuest({}: Props) {
 				placeholder="Pick date"
 				{...form.getInputProps("dueDate")}
 				color="violet"
-				getDayProps={(date: Date) => {
-					const isSelected =
-						form.values.dueDate?.toDateString() === date.toDateString();
-
-					return {
-						style: {
-							backgroundColor: isSelected ? "#5F3DC4" : undefined,
-						},
-					};
-				}}
 			/>
 			<MultiSelect
 				label="Member List"
@@ -117,7 +125,19 @@ function CreateQuest({}: Props) {
 					label: member.displayName,
 				}))}
 				searchable
-				w={400}
+				{...form.getInputProps("members")} // Connect MultiSelect to the members input
+			/>
+			<Select
+				label="Priority Level"
+				placeholder="Assign a Priority Level"
+				data={[
+					PriorityLevel.CRITICAL,
+					PriorityLevel.HIGH,
+					PriorityLevel.MEDIUM,
+					PriorityLevel.LOW,
+				]}
+				defaultValue={PriorityLevel.LOW}
+				{...form.getInputProps("priority")}
 			/>
 			<Button
 				fullWidth
@@ -126,7 +146,7 @@ function CreateQuest({}: Props) {
 				variant="light"
 				type="submit"
 			>
-				Sign in
+				Create Quest
 			</Button>
 		</form>
 	);
