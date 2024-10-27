@@ -4,11 +4,39 @@ import {
 	Member,
 	CreateMember,
 	UpdateMemberRole,
+	PaginatedMembers,
 } from "../shared/types/member.types";
+import { QueryParams } from "../shared/types/query-paramts.types";
 
-const getAllMembers = async (campaignId: number): Promise<Member[]> => {
+const getAllMembers = async (
+	campaignId: number,
+	params?: QueryParams,
+): Promise<PaginatedMembers> => {
+	const queryParams = new URLSearchParams();
+
+	if (params) {
+		if (params.searchValue)
+			queryParams.append("searchValue", params.searchValue);
+		if (params.orderOn) queryParams.append("orderOn", params.orderOn);
+		if (params.orderBy) queryParams.append("orderBy", params.orderBy);
+		if (params.pageNumber)
+			queryParams.append("pageNumber", params.pageNumber.toString());
+		if (params.pageSize)
+			queryParams.append("pageSize", params.pageSize.toString());
+	}
+
 	const response = (
-		await apiClient.get(`${endpoints.campaigns}/${campaignId}/members`)
+		await apiClient.get(
+			`${endpoints.campaigns}/${campaignId}/members?${queryParams.toString()}`,
+		)
+	).data;
+	if (!response.isSuccess) throw new Error();
+	return response.result;
+};
+
+const getMemberList = async (campaignId: number): Promise<PaginatedMembers> => {
+	const response = (
+		await apiClient.get(`${endpoints.campaigns}/${campaignId}/members}`)
 	).data;
 	if (!response.isSuccess) throw new Error();
 	return response.result;

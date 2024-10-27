@@ -9,6 +9,16 @@ export type Member = {
 	joinedOn: Date;
 };
 
+export type PaginatedMembers = {
+	items: Member[];
+	totalCount: number;
+	totalPages: number;
+	currentPage: number;
+	hasNextPage: boolean;
+	hasPreviousPage: boolean;
+	pageRange: number[];
+};
+
 export type CreateMember = Partial<Pick<Member, "userId" | "id">>;
 
 export type UpdateMemberRole = Partial<Pick<Member, "id" | "role">>;

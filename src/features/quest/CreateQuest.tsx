@@ -3,7 +3,7 @@ import useQuestStore from "../../stores/useQuestStore";
 import { useForm, zodResolver } from "@mantine/form";
 import { AxiosError } from "axios";
 import { useParams } from "react-router-dom";
-import { Button, Textarea, TextInput } from "@mantine/core";
+import { Button, MultiSelect, Textarea, TextInput } from "@mantine/core";
 import classes from "../auth/auth.module.css";
 import { Task } from "../../shared/types/quest.types";
 import { DateInput, DatePickerInput } from "@mantine/dates";
@@ -73,7 +73,7 @@ function CreateQuest({}: Props) {
 	}
 
 	useEffect(() => {
-		getMembers(Number(campaignId));
+		getMembers(Number(campaignId), {pageSize: 99999999});
 	}, [campaignId]);
 
 	console.log("Members: ", members);
@@ -108,6 +108,16 @@ function CreateQuest({}: Props) {
 						},
 					};
 				}}
+			/>
+			<MultiSelect
+				label="Member List"
+				placeholder="Assign a Member"
+				data={members?.items.map((member) => ({
+					value: member.id.toString(),
+					label: member.displayName,
+				}))}
+				searchable
+				w={400}
 			/>
 			<Button
 				fullWidth

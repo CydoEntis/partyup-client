@@ -3,15 +3,17 @@ import {
 	Member,
 	CreateMember,
 	UpdateMemberRole,
+	PaginatedMembers,
 } from "../shared/types/member.types";
 import memberService from "../services/memberService";
+import { QueryParams } from "../shared/types/query-paramts.types";
 
 type Memberstate = {
-	// members: [];
+	members: PaginatedMembers | null;
 	member: Member | null;
 	loading: boolean;
 	error: string | null;
-	getMembers: (campaignId: number) => Promise<void>;
+	getMembers: (campaignId: number, queryParams: QueryParams) => Promise<void>;
 	getMember: (campaignId: number, memberId: number) => Promise<void>;
 	createMember: (member: CreateMember) => Promise<number>;
 	updateMemberRole: (
@@ -22,15 +24,18 @@ type Memberstate = {
 };
 
 export const useMemberStore = create<Memberstate>((set) => ({
-	members: [],
+	members: null,
 	member: null,
 	loading: false,
 	error: null,
 
-	getMembers: async (campaignId: number) => {
+	getMembers: async (campaignId: number, queryParams: QueryParams) => {
 		set({ loading: true, error: null });
 		try {
-			const members = await memberService.getAllMembers(campaignId);
+			const members = await memberService.getAllMembers(
+				campaignId,
+				queryParams,
+			);
 			set({ members, loading: false });
 		} catch (error) {
 			set({ error: "Failed to fetch members", loading: false });
@@ -54,7 +59,21 @@ export const useMemberStore = create<Memberstate>((set) => ({
 		try {
 			const newMember = await memberService.createMember(member);
 			set((state) => ({
-				members: [...state.members, newMember],
+				campaigns: state.members
+					? {
+							...state.members,
+							items: [newMember, ...state.members.items],
+							totalCount: state.members.totalCount + 1,
+					  }
+					: {
+							items: [newMember],
+							totalCount: 1,
+							totalPages: 1,
+							currentPage: 1,
+							hasNextPage: false,
+							hasPreviousPage: false,
+							pageRange: [],
+					  },
 				loading: false,
 			}));
 			return newMember.id;
