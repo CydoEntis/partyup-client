@@ -1,4 +1,4 @@
-import { Box, Drawer, Flex, Title } from "@mantine/core";
+import { ActionIcon, Box, Drawer, Flex, Group, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 import { useNavigate, useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
@@ -7,6 +7,7 @@ import { Quest } from "../../shared/types/quest.types";
 import ViewQuest from "./ViewQuest";
 import EditQuest from "./EditQuest";
 import CreateQuest from "./CreateQuest";
+import { Edit, X } from "lucide-react";
 
 function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
 	const { campaignId, questId } = useParams();
@@ -38,6 +39,13 @@ function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
 		onClose();
 	};
 
+	const handleEditQuest = () => {
+		if (content === "edit") {
+			setContent("view");
+		} else {
+			setContent("edit");
+		}
+	};
 
 	return (
 		<Drawer
@@ -50,7 +58,14 @@ function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
 				px={32}
 				h="100%"
 			>
-				<Title size="2rem">Placeholder</Title>
+				<Group>
+					<Title size="2rem">Placeholder</Title>
+					{content === "edit" || content === "view" ? (
+						<ActionIcon onClick={handleEditQuest}>
+							{content === "edit" ? <X /> : <Edit />}
+						</ActionIcon>
+					) : null}
+				</Group>
 				{content === "view" && quest ? <ViewQuest quest={quest} /> : null}
 				{content === "edit" ? <EditQuest /> : null}
 				{content === "create" ? <CreateQuest /> : null}

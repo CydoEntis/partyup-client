@@ -1,3 +1,7 @@
 .input:focus-within {
   border: 1px solid #6741D9 !important; /* Focus color (violet) */
 }
+
+.test:focus-within {
+  background: "red";
+}

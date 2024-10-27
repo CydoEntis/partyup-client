@@ -7,7 +7,7 @@ import {
 import memberService from "../services/memberService";
 
 type Memberstate = {
-	members: Member[];
+	// members: [];
 	member: Member | null;
 	loading: boolean;
 	error: string | null;
