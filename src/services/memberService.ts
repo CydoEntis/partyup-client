@@ -34,14 +34,6 @@ const getAllMembers = async (
 	return response.result;
 };
 
-const getMemberList = async (campaignId: number): Promise<PaginatedMembers> => {
-	const response = (
-		await apiClient.get(`${endpoints.campaigns}/${campaignId}/members}`)
-	).data;
-	if (!response.isSuccess) throw new Error();
-	return response.result;
-};
-
 const getMemberById = async (
 	campaignId: number,
 	memberId: number,

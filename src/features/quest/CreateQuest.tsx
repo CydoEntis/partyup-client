@@ -4,17 +4,25 @@ import { useForm, zodResolver } from "@mantine/form";
 import { AxiosError } from "axios";
 import { useParams } from "react-router-dom";
 import {
+	ActionIcon,
 	Button,
+	Group,
 	MultiSelect,
 	Select,
+	Stack,
 	Textarea,
 	TextInput,
+	Text,
+	Box,
+	Fieldset,
+	Flex,
 } from "@mantine/core";
 import classes from "../auth/auth.module.css";
 import { Task } from "../../shared/types/quest.types";
 import { DateInput } from "@mantine/dates";
 import useMemberStore from "../../stores/useMemberStore";
 import { useEffect } from "react";
+import { Trash2 } from "lucide-react";
 
 type Props = {};
 
@@ -42,7 +50,8 @@ const createQuestSchema = z.object({
 	priority: z.nativeEnum(PriorityLevel).default(PriorityLevel.LOW),
 	members: z
 		.array(z.string())
-		.min(1, "At least one member must be assigned to the quest"), // New validation for members
+		.min(1, "At least one member must be assigned to the quest"),
+	tasks: z.array(z.string().min(1, "Task cannot be empty")).max(10).optional(),
 });
 
 type CreateQuestData = z.infer<typeof createQuestSchema>;
@@ -59,9 +68,22 @@ function CreateQuest({}: Props) {
 			description: "",
 			dueDate: new Date(),
 			priority: PriorityLevel.LOW,
-			members: [], // Initialize members as an empty array
+			members: [],
+			tasks: [],
 		},
 	});
+
+	const handleAddTask = () => {
+		if (form.values.tasks) {
+			if (form.values.tasks.length < 10) {
+				form.insertListItem("tasks", "");
+			}
+		}
+	};
+
+	const handleRemoveTask = (index: number) => {
+		form.removeListItem("tasks", index);
+	};
 
 	async function onSubmit(data: CreateQuestData) {
 		try {
@@ -98,48 +120,96 @@ function CreateQuest({}: Props) {
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
-			<TextInput
-				label="Title"
-				placeholder="What should this quest be called?"
-				classNames={{
-					input: classes.input,
-				}}
-				{...form.getInputProps("name")}
-			/>
-			<Textarea
-				label="Description"
-				placeholder="Your quest description"
-				autosize
-				{...form.getInputProps("description")}
-			/>
-			<DateInput
-				label="Pick date"
-				placeholder="Pick date"
-				{...form.getInputProps("dueDate")}
-				color="violet"
-			/>
-			<MultiSelect
-				label="Member List"
-				placeholder="Assign a Member"
-				data={members?.items.map((member) => ({
-					value: member.id.toString(),
-					label: member.displayName,
-				}))}
-				searchable
-				{...form.getInputProps("members")} // Connect MultiSelect to the members input
-			/>
-			<Select
-				label="Priority Level"
-				placeholder="Assign a Priority Level"
-				data={[
-					PriorityLevel.CRITICAL,
-					PriorityLevel.HIGH,
-					PriorityLevel.MEDIUM,
-					PriorityLevel.LOW,
-				]}
-				defaultValue={PriorityLevel.LOW}
-				{...form.getInputProps("priority")}
-			/>
+			<Stack gap={8}>
+				<TextInput
+					label="Title"
+					placeholder="What should this quest be called?"
+					classNames={{
+						input: classes.input,
+					}}
+					{...form.getInputProps("name")}
+				/>
+				<Textarea
+					label="Description"
+					placeholder="Your quest description"
+					autosize
+					{...form.getInputProps("description")}
+				/>
+
+				<DateInput
+					label="Pick date"
+					placeholder="Pick date"
+					{...form.getInputProps("dueDate")}
+					color="violet"
+				/>
+				<MultiSelect
+					label="Member List"
+					placeholder="Assign a Member"
+					data={members?.items.map((member) => ({
+						value: member.id.toString(),
+						label: member.displayName,
+					}))}
+					searchable
+					{...form.getInputProps("members")}
+				/>
+				<Select
+					label="Priority Level"
+					placeholder="Assign a Priority Level"
+					data={[
+						PriorityLevel.CRITICAL,
+						PriorityLevel.HIGH,
+						PriorityLevel.MEDIUM,
+						PriorityLevel.LOW,
+					]}
+					defaultValue={PriorityLevel.LOW}
+					{...form.getInputProps("priority")}
+				/>
+
+				<Stack
+					gap={8}
+					py={8}
+				>
+						<Text size="sm">Tasks (Optionaly up to 10)</Text>
+					{form.values.tasks && form.values.tasks.length === 0 ? (
+						<Text>You can optionally add up to 10 tasks</Text>
+					) : (
+						(form.values.tasks || []).map((_, index) => (
+							<Flex
+								key={index}
+								w="100%"
+								gap={8}
+							>
+								<TextInput
+									placeholder="Task description"
+									{...form.getInputProps(`tasks.${index}`)}
+									classNames={{ input: classes.input }}
+									w="100%"
+								/>
+								<ActionIcon
+									color="red"
+									variant="light"
+									onClick={() => handleRemoveTask(index)}
+									h={37}
+									w={37}
+								>
+									<Trash2 size={16} />
+								</ActionIcon>
+							</Flex>
+						))
+					)}
+					{form.values.tasks && form.values.tasks.length >= 10 ? null : (
+						<Group justify="flex-start">
+							<Button
+								color="violet"
+								variant="light"
+								onClick={handleAddTask}
+							>
+								Add Task
+							</Button>
+						</Group>
+					)}
+				</Stack>
+			</Stack>
 			<Button
 				fullWidth
 				mt="xl"
