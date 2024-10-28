@@ -14,25 +14,33 @@ function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
 	const { getQuest } = useQuestStore();
 	const navigate = useNavigate();
 	const [quest, setQuest] = useState<Quest | null>(null);
-	const [content, setContent] = useState("");
+	const [content, setContent] = useState(mode); // Initialize content with mode
+	const [drawerTitle, setDrawerTitle] = useState("");
 
 	useEffect(() => {
 		const fetchQuest = async () => {
 			if (campaignId && questId) {
 				const questData = await getQuest(Number(campaignId), Number(questId));
-				console.log(questData);
 				setQuest(questData);
 			}
 		};
 
 		if (isOpened) {
 			fetchQuest();
-			setContent(mode);
+			setContent(mode); // Set content based on mode
 		} else {
 			setQuest(null);
 			setContent("view");
 		}
 	}, [isOpened, campaignId, questId, getQuest, mode]);
+
+	useEffect(() => {
+		if (mode === "create") {
+			setDrawerTitle("Create New Quest");
+		} else if (quest) {
+			setDrawerTitle(quest.name);
+		}
+	}, [quest, mode]);
 
 	const handleClose = () => {
 		navigate(`/campaigns/${campaignId}/quests`);
@@ -40,11 +48,7 @@ function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
 	};
 
 	const handleEditQuest = () => {
-		if (content === "edit") {
-			setContent("view");
-		} else {
-			setContent("edit");
-		}
+		setContent((prev) => (prev === "edit" ? "view" : "edit")); // Toggle content
 	};
 
 	return (
@@ -59,7 +63,7 @@ function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
 				h="100%"
 			>
 				<Group>
-					<Title size="2rem">Placeholder</Title>
+					<Title size="2rem">{drawerTitle}</Title>
 					{content === "edit" || content === "view" ? (
 						<ActionIcon onClick={handleEditQuest}>
 							{content === "edit" ? <X /> : <Edit />}
@@ -67,7 +71,7 @@ function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
 					) : null}
 				</Group>
 				{content === "view" && quest ? <ViewQuest quest={quest} /> : null}
-				{content === "edit" ? <EditQuest /> : null}
+				{content === "edit" && quest ? <EditQuest /> : null}{" "}
 				{content === "create" ? <CreateQuest /> : null}
 			</Box>
 		</Drawer>
