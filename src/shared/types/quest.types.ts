@@ -1,3 +1,4 @@
+import { PriorityLevel } from "../../features/quest/CreateQuest";
 import { Member } from "./member.types";
 
 export type Quest = {
@@ -27,12 +28,16 @@ export type PaginatedQuests = {
 };
 
 export type CreateQuest = {
+	campaignId: number;
 	name: string;
 	description: string;
+	priority: PriorityLevel;
 	dueDate: Date;
 	memberIds: Number[];
-	tasks: Task[];
+	tasks: CreateTask[];
 };
+
+
 
 export type Task = {
 	id: number,

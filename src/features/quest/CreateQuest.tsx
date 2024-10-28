@@ -13,16 +13,14 @@ import {
 	Textarea,
 	TextInput,
 	Text,
-	Box,
-	Fieldset,
 	Flex,
 } from "@mantine/core";
 import classes from "../auth/auth.module.css";
-import { Task } from "../../shared/types/quest.types";
 import { DateInput } from "@mantine/dates";
 import useMemberStore from "../../stores/useMemberStore";
 import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
+import { CreateTask } from "../../shared/types/quest.types";
 
 type Props = {};
 
@@ -88,18 +86,25 @@ function CreateQuest({}: Props) {
 	async function onSubmit(data: CreateQuestData) {
 		try {
 			const newQuest = {
+				campaignId: Number(campaignId),
 				name: data.name,
+				priority: data.priority,
 				description: data.description,
 				dueDate: data.dueDate,
-				memberIds: data.members.map(Number), // Convert member IDs to numbers
-				tasks: [] as Task[],
+				memberIds: data.members.map(Number),
+				tasks: (data.tasks || []).map((task) => ({
+					description: task, 
+				})) as CreateTask[],
 			};
-			await createQuest(Number(campaignId), newQuest); // Ensure to call createQuest with newQuest
+
 			console.log("Create quest: ", newQuest);
+
+
+			await createQuest(Number(campaignId), newQuest);
 			form.reset();
 		} catch (error) {
-			console.error(error);
 			if (error instanceof AxiosError && error.response?.data?.errors) {
+				console.error(error.response.data.errors);
 				const errors = error.response.data.errors as Record<string, string[]>;
 				const fieldErrors: Record<string, string> = {};
 
@@ -169,7 +174,7 @@ function CreateQuest({}: Props) {
 					gap={8}
 					py={8}
 				>
-						<Text size="sm">Tasks (Optionaly up to 10)</Text>
+					<Text size="sm">Tasks</Text>
 					{form.values.tasks && form.values.tasks.length === 0 ? (
 						<Text>You can optionally add up to 10 tasks</Text>
 					) : (
