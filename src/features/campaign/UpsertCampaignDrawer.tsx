@@ -45,18 +45,18 @@ function UpsertCampaignForm({}: UpsetCampaignDrawer) {
 	const { getMembers, members } = useMemberStore();
 	const [selectedColor, setSelectedColor] = useState("blue");
 	const colors = [
-		"red",
-		"pink",
-		"grape",
-		"violet",
-		"indigo",
-		"blue",
-		"cyan",
-		"teal",
-		"green",
-		"lime",
-		"yellow",
-		"orange",
+		{ name: "red", value: "#E03131" },
+		{ name: "pink", value: "#C2255C" },
+		{ name: "grape", value: "#9C36B5" },
+		{ name: "violet", value: "#6741D9" },
+		{ name: "indigo", value: "#3B5BDB" },
+		{ name: "blue", value: "#1971C2" },
+		{ name: "cyan", value: "#0C8599" },
+		{ name: "teal", value: "#099268" },
+		{ name: "green", value: "#2F9E44" },
+		{ name: "lime", value: "#66A80F" },
+		{ name: "yellow", value: "#F08C00" },
+		{ name: "orange", value: "#E8590C" },
 	];
 
 	const form = useForm<CreateCampaignData>({
@@ -132,11 +132,11 @@ function UpsertCampaignForm({}: UpsetCampaignDrawer) {
 				>
 					{colors.map((color) => (
 						<ColorSwatch
-							color={color}
-							onClick={() => setSelectedColor(color)}
-							style={{ color: "#000", cursor: "pointer" }}
+							color={color.value}
+							onClick={() => setSelectedColor(color.name)}
+							style={{ color: "#fff", cursor: "pointer" }}
 						>
-							{selectedColor === color ? <Check size={20} /> : null}
+							{selectedColor === color.name ? <Check size={20} /> : null}
 						</ColorSwatch>
 					))}
 				</Flex>
