@@ -42,11 +42,11 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 		onClose();
 	};
 
-	const handleEdit = (quest: Quest) => {
+	const handleEdit = (title: string) => {
 		if (viewType === "edit") {
-			setDrawerState("view", quest.name);
+			setDrawerState("view", title);
 		} else {
-			setDrawerState("edit", quest.name);
+			setDrawerState("edit", title);
 		}
 	};
 
@@ -65,7 +65,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 					<Title size="2rem">{drawerTitle}</Title>
 					{((viewType === "edit" && quest) || viewType === "view") && quest ? (
 						<ToggleEdit
-							toggle={() => handleEdit(quest)}
+							toggle={() => handleEdit(quest.name)}
 							isEditing={viewType === "edit"}
 						/>
 					) : null}

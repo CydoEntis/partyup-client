@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 import useCampaignStore from "../../stores/useCampaignStore";
 import { Color } from "../../shared/types/color.types";
 import { Check } from "lucide-react";
-import { Campaign } from "../../shared/types/campaign.types";
 
 const createCampaignSchema = z.object({
 	title: z
@@ -38,15 +37,15 @@ const createCampaignSchema = z.object({
 
 type CreateCampaignData = z.infer<typeof createCampaignSchema>;
 
-type UpsertCampaignProps = {
-	campaign?: Campaign;
+type CreateCampaignDrawerProps = {
+	isEditing: boolean;
 };
 
-function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
+function CreateCampaignDrawer({ isEditing }: CreateCampaignDrawerProps) {
 	const { campaignId } = useParams();
 	const { createCampaign } = useCampaignStore();
 	const { getMembers, members } = useMemberStore();
-	const [selectedColor, setSelectedColor] = useState("red");
+	const [selectedColor, setSelectedColor] = useState("blue");
 	const colors = [
 		{ name: "red", value: "#E03131" },
 		{ name: "pink", value: "#C2255C" },
@@ -152,10 +151,10 @@ function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
 				variant="light"
 				type="submit"
 			>
-				{campaign ? "Update Campaign" : "Create Campaign"}
+				{isEditing ? "Update Campaign" : "Create Campaign"}
 			</Button>
 		</form>
 	);
 }
 
-export default UpsertCampaignForm;
+export default CreateCampaignDrawer;

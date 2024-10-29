@@ -15,7 +15,7 @@ import useAuthStore from "../../stores/useAuthStore";
 
 import useFetchRecentCampaigns from "../../hooks/useFetchCampaigns";
 import useLogout from "../../hooks/useLogout";
-import CampaignDrawer from "../../features/quest/CampaignDrawer";
+import CampaignDrawer from "../../features/campaign/CampaignDrawer";
 
 type Props = {};
 
@@ -34,6 +34,7 @@ function Sidenav({}: Props) {
 			<CampaignDrawer
 				isOpened={openedNewCampaign}
 				onClose={closeNewCampaign}
+				
 			/>
 			<AppShell.Navbar
 				p="md"

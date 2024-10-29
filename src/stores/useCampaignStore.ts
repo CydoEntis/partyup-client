@@ -12,7 +12,7 @@ type CampaignState = {
 	loading: boolean;
 	error: string | null;
 	getCampaigns: (params?: QueryParams) => Promise<PaginatedCampaigns>;
-	getCampaign: (id: number) => Promise<Campaign>;
+	getCampaign: (id: string) => Promise<Campaign>;
 	createCampaign: (campaign: CreateCampaign) => Promise<Campaign>;
 	// updateCampaignDetails: (
 	// 	id: number,
@@ -42,12 +42,12 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 		}
 	},
 
-	getCampaign: async (campaignId: number) => {
+	getCampaign: async (campaignId: string) => {
 		const campaigns: Campaign[] | undefined = get().campaigns?.items;
 
 		if (campaigns) {
 			const existingCampaign = campaigns.find(
-				(campaign) => campaign.id === campaignId,
+				(campaign) => campaign.id === +campaignId,
 			);
 
 			if (existingCampaign) {
@@ -58,7 +58,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 		set({ loading: true, error: null });
 
 		try {
-			const campaign = await campaignService.getCampaignById(campaignId);
+			const campaign = await campaignService.getCampaignById(+campaignId);
 			return campaign;
 		} catch (error) {
 			set({ error: "Failed to fetch campaign", loading: false });

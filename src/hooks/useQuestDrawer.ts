@@ -2,26 +2,22 @@ import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { useParams } from "react-router-dom";
 
-type QuestMode = "view" | "create";
+type QuestViewType = "view" | "create";
 
 function useQuestDrawer() {
 	const { questId } = useParams();
-	const [questMode, setQuestMode] = useState<QuestMode>("view");
+	const [questViewType, setQuestViewType] = useState<QuestViewType>("view");
 
-	const [
-		openedInviteMember,
-		{ open: openMemberInvite, close: closeMemberInvite },
-	] = useDisclosure(false);
 	const [openedQuest, { open: openQuest, close: closeQuest }] =
 		useDisclosure(false);
 
 	const handleNewQuest = () => {
-		setQuestMode("create");
+		setQuestViewType("create");
 		openQuest();
 	};
 
 	const handleViewQuest = () => {
-		setQuestMode("view");
+		setQuestViewType("view");
 		openQuest();
 	};
 
@@ -32,11 +28,8 @@ function useQuestDrawer() {
 	}, [questId, openQuest]);
 
 	return {
-		questMode,
-		setQuestMode,
-		openedInviteMember,
-		openMemberInvite,
-		closeMemberInvite,
+		questViewType,
+		setQuestViewType,
 		openedQuest,
 		openQuest,
 		closeQuest,
