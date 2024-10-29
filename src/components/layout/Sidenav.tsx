@@ -11,11 +11,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
-import NewCampaignDrawer from "../../features/campaign/NewCampaignDrawer";
 import useAuthStore from "../../stores/useAuthStore";
 
 import useFetchRecentCampaigns from "../../hooks/useFetchCampaigns";
 import useLogout from "../../hooks/useLogout";
+import CampaignDrawer from "../../features/quest/CampaignDrawer";
 
 type Props = {};
 
@@ -31,7 +31,7 @@ function Sidenav({}: Props) {
 
 	return (
 		<>
-			<NewCampaignDrawer
+			<CampaignDrawer
 				isOpened={openedNewCampaign}
 				onClose={closeNewCampaign}
 			/>

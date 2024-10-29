@@ -1,6 +1,4 @@
 import { Color } from "./color.types";
-import { Member } from "./member.types";
-import { Quest } from "./quest.types";
 
 export type Campaign = {
 	id: number;
@@ -33,7 +31,7 @@ export type PaginatedCampaigns = {
 };
 
 export type CreateCampaign = {
-	name: string;
+	title: string;
 	description: string;
 	color: Color;
 	dueDate: Date;
