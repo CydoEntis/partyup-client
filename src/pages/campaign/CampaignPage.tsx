@@ -29,7 +29,7 @@ function CampaignPage({}: Props) {
 				onClose={closeMemberInvite}
 			/>
 			<QuestDrawer
-				mode={questMode}
+				viewType={questMode}
 				isOpened={openedQuest}
 				onClose={closeQuest}
 			/>

@@ -8,47 +8,46 @@ import ViewQuest from "./ViewQuest";
 import EditQuest from "./EditQuest";
 import CreateQuest from "./CreateQuest";
 import { Edit, X } from "lucide-react";
+import useDrawerData from "../../hooks/useDrawerData";
+import ToggleEdit from "../../components/toggle/ToggleEdit";
 
-function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
+function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const { campaignId, questId } = useParams();
 	const { getQuest } = useQuestStore();
+	const [quest, setQuest] = useState<Quest | null>();
+	const { setDrawerState, viewType, drawerTitle } = useDrawerData();
 	const navigate = useNavigate();
-	const [quest, setQuest] = useState<Quest | null>(null);
-	const [content, setContent] = useState(mode); // Initialize content with mode
-	const [drawerTitle, setDrawerTitle] = useState("");
 
-	useEffect(() => {
-		const fetchQuest = async () => {
-			if (campaignId && questId) {
-				const questData = await getQuest(Number(campaignId), Number(questId));
-				setQuest(questData);
+	const fetchQuest = async () => {
+		if (campaignId && questId) {
+			const fetchedQuest = await getQuest(campaignId, questId);
+
+			if (fetchedQuest) {
+				setQuest(fetchedQuest);
+				setDrawerState("view", fetchedQuest.name);
 			}
-		};
-
-		if (isOpened) {
-			fetchQuest();
-			setContent(mode); // Set content based on mode
-		} else {
-			setQuest(null);
-			setContent("view");
 		}
-	}, [isOpened, campaignId, questId, getQuest, mode]);
+	};
 
 	useEffect(() => {
-		if (mode === "create") {
-			setDrawerTitle("Create New Quest");
-		} else if (quest) {
-			setDrawerTitle(quest.name);
+		if (questId) {
+			fetchQuest();
 		}
-	}, [quest, mode]);
+	}, [campaignId, questId]);
 
 	const handleClose = () => {
+		setDrawerState("create", "Create a Quest");
+		setQuest(null);
 		navigate(`/campaigns/${campaignId}/quests`);
 		onClose();
 	};
 
-	const handleEditQuest = () => {
-		setContent((prev) => (prev === "edit" ? "view" : "edit")); // Toggle content
+	const handleEdit = (quest: Quest) => {
+		if (viewType === "edit") {
+			setDrawerState("view", quest.name);
+		} else {
+			setDrawerState("edit", quest.name);
+		}
 	};
 
 	return (
@@ -64,15 +63,16 @@ function QuestDrawer({ isOpened, onClose, mode = "view" }: DrawerProps) {
 			>
 				<Group>
 					<Title size="2rem">{drawerTitle}</Title>
-					{content === "edit" || content === "view" ? (
-						<ActionIcon onClick={handleEditQuest}>
-							{content === "edit" ? <X /> : <Edit />}
-						</ActionIcon>
+					{((viewType === "edit" && quest) || viewType === "view") && quest ? (
+						<ToggleEdit
+							toggle={() => handleEdit(quest)}
+							isEditing={viewType === "edit"}
+						/>
 					) : null}
 				</Group>
-				{content === "view" && quest ? <ViewQuest quest={quest} /> : null}
-				{content === "edit" && quest ? <EditQuest /> : null}{" "}
-				{content === "create" ? <CreateQuest /> : null}
+				{viewType === "view" && quest ? <ViewQuest quest={quest} /> : null}
+				{viewType === "edit" && quest ? <EditQuest /> : null}{" "}
+				{viewType === "create" ? <CreateQuest /> : null}
 			</Box>
 		</Drawer>
 	);

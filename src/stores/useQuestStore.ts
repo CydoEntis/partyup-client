@@ -23,9 +23,9 @@ type QuestState = {
 		campaignId: number,
 		params?: QueryParams,
 	) => Promise<PaginatedQuests>;
-	getQuest: (campaignId: number, id: number) => Promise<Quest>;
+	getQuest: (campaignId: string, questId: string) => Promise<Quest>;
 	createQuest: (campaignId: number, quest: CreateQuest) => Promise<Quest>;
-	deleteQuest: (campaignId: number, id: number) => Promise<void>;
+	deleteQuest: (campaignId: string, id: string) => Promise<void>;
 };
 
 export const useQuestStore = create<QuestState>((set, get) => ({
@@ -50,7 +50,7 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 				params,
 			);
 
-			console.log(paginatedQuests)
+			console.log(paginatedQuests);
 
 			set({ paginatedQuests, loading: false });
 			return paginatedQuests;
@@ -60,10 +60,10 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		}
 	},
 
-	getQuest: async (campaignId: number, questId: number) => {
+	getQuest: async (campaignId: string, questId: string) => {
 		set({ loading: true, error: null });
 		try {
-			const quest = await questService.getQuestById(campaignId, questId);
+			const quest = await questService.getQuestById(+campaignId, +questId);
 			console.log("Quest: ", quest);
 			set({ quest, loading: false });
 			return quest;
@@ -105,16 +105,16 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		}
 	},
 
-	deleteQuest: async (campaignId: number, questId: number) => {
+	deleteQuest: async (campaignId: string, questId: string) => {
 		set({ loading: true, error: null });
 		try {
-			await questService.deleteQuest(campaignId, questId);
+			await questService.deleteQuest(+campaignId, +questId);
 			set((state) => ({
 				paginatedQuests: {
 					...state.paginatedQuests!,
 					items:
 						state.paginatedQuests?.items.filter(
-							(quest) => quest.id !== questId,
+							(quest) => quest.id !== +questId,
 						) || [],
 					totalCount: (state.paginatedQuests?.totalCount || 0) - 1,
 				},
