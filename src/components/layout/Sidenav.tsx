@@ -1,10 +1,12 @@
 import {
 	AppShell,
 	Button,
+	Flex,
+	Indicator,
 	NavLink as MantineNavLink,
 	Stack,
 } from "@mantine/core";
-import { LayoutGrid, LogOut, PlusCircle } from "lucide-react";
+import { Group, LayoutGrid, LogOut, PlusCircle } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
@@ -72,11 +74,24 @@ function Sidenav({}: Props) {
 											key={campaign.id}
 											component={NavLink}
 											to={`/campaigns/${campaign.id}/quests`}
-											label={campaign.title}
+											label={
+												<Flex
+													align="center"
+													gap={16}
+													px={10}
+												>
+													<Indicator
+														inline
+														color={campaign.color}
+														size={8}
+													/>
+													{campaign.title}
+												</Flex>
+											}
 											color="violet"
 											className="rounded-md"
 											mt={8}
-										/>
+										></MantineNavLink>
 								  ))
 								: null}
 						</MantineNavLink>
