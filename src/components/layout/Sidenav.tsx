@@ -5,28 +5,39 @@ import {
 	Stack,
 } from "@mantine/core";
 import { LayoutGrid, LogOut, PlusCircle } from "lucide-react";
-import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
+import {
+	NavLink,
+	useNavigate,
+	useParams,
+	useSearchParams,
+} from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
 import NewCampaignDrawer from "../../features/campaign/NewCampaignDrawer";
 import useCampaignStore from "../../stores/useCampaignStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "../../stores/useAuthStore";
+import {
+	PaginatedCampaigns,
+} from "../../shared/types/campaign.types";
 
 type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
 	const [searchParams] = useSearchParams();
+	const { campaignId } = useParams();
 	const { logout } = useAuthStore();
 	const navigate = useNavigate();
 	const [
 		openedNewCampaign,
 		{ open: openNewCampaign, close: closeNewCampaign },
 	] = useDisclosure(false);
+	const [recentCampaigns, setRecentCampaigns] =
+		useState<PaginatedCampaigns | null>(null);
 
-	const { getCampaigns, campaigns, loading } = useCampaignStore();
+	const { getCampaigns, loading } = useCampaignStore();
 
 	const fetchCampaigns = async () => {
 		try {
@@ -34,7 +45,8 @@ function Sidenav({}: Props) {
 			searchParams.forEach((value, key) => {
 				queryParams[key] = value;
 			});
-			const campaigns = await getCampaigns(queryParams);
+			const recentCampaigns = await getCampaigns(queryParams);
+			setRecentCampaigns(recentCampaigns);
 		} catch (error) {
 			console.error("Failed to fetch campaigns:", error);
 		}
@@ -42,7 +54,9 @@ function Sidenav({}: Props) {
 
 	useEffect(() => {
 		fetchCampaigns();
-	}, [searchParams, getCampaigns]);
+	}, [searchParams, getCampaigns, campaignId]);
+
+	console.log("Campaigns: ", recentCampaigns?.items);
 
 	const logoutHandler = () => {
 		logout();
@@ -87,13 +101,13 @@ function Sidenav({}: Props) {
 							label="Campaigns"
 							className="rounded-md"
 						>
-							{campaigns && campaigns.items
-								? campaigns.items.map((campaign) => (
+							{recentCampaigns && recentCampaigns.items
+								? recentCampaigns.items.map((campaign) => (
 										<MantineNavLink
 											key={campaign.id}
 											component={NavLink}
 											to={`/campaigns/${campaign.id}/quests`}
-											label={campaign.name}
+											label={campaign.title}
 											color="violet"
 											className="rounded-md"
 											mt={8}

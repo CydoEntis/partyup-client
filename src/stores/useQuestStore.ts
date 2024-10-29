@@ -44,19 +44,13 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 
 	getQuests: async (campaignId: number, params?: QueryParams) => {
 		set({ loading: true, error: null });
-		const paginatedQuestsState = get().paginatedQuests;
-		const currentQuests = get().paginatedQuests?.items[campaignId];
-
-		if (currentQuests && !params) {
-			set({ loading: false });
-			return paginatedQuestsState;
-		}
-
 		try {
 			const paginatedQuests = await questService.getAllQuests(
 				campaignId,
 				params,
 			);
+
+			console.log(paginatedQuests)
 
 			set({ paginatedQuests, loading: false });
 			return paginatedQuests;

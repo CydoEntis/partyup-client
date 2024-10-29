@@ -10,6 +10,7 @@ import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
 import { Campaign } from "../../shared/types/campaign.types";
 import QuestDrawer from "../../features/quest/QuestDrawer";
+import { PaginatedQuests } from "../../shared/types/quest.types";
 
 type Props = {};
 
@@ -18,6 +19,7 @@ function CampaignPage({}: Props) {
 	const { getCampaign, loading } = useCampaignStore();
 	const { getQuests, paginatedQuests } = useQuestStore();
 	const [campaign, setCampaign] = useState<Campaign | null>(null);
+	const [currentQuests, setCurrentQuests] = useState<PaginatedQuests | null>();
 
 	const [
 		openedInviteMember,
@@ -49,7 +51,9 @@ function CampaignPage({}: Props) {
 			if (campaignId) {
 				const campaignData = await getCampaign(Number(campaignId));
 				setCampaign(campaignData);
-				getQuests(Number(campaignId));
+				const currentQuests = await getQuests(Number(campaignId));
+				setCurrentQuests(currentQuests);
+				console.log("Current Quests: ", currentQuests.items)
 			}
 		};
 
@@ -70,7 +74,7 @@ function CampaignPage({}: Props) {
 
 			{campaign && (
 				<CampaignHeader
-					title={campaign!.name}
+					title={campaign!.title}
 					onNewQuestHandler={handleNewQuest}
 				>
 					<InviteCampaignMember onOpenHandler={openMemberInvite} />
