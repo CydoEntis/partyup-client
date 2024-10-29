@@ -2,18 +2,12 @@ import { Group, Tabs } from "@mantine/core";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
-import { Quest } from "../../shared/types/quest.types";
-import { useNavigate, useParams } from "react-router-dom";
-import useCampaignStore from "../../stores/useCampaignStore";
+import useFetchQuests from "../../hooks/useFetchQuests";
+import useQuestDrawer from "../../hooks/useQuestDrawer";
 
-type CampaignTabsProps = {
-	quests: Quest[];
-	onOpenQuestHandler: () => void;
-};
-
-function CampaignTabs({ quests, onOpenQuestHandler }: CampaignTabsProps) {
-	const { campaignId } = useParams();
-
+function CampaignTabs() {
+	const { paginatedQuests, loading: questsLoading } = useFetchQuests();
+	const { handleViewQuest } = useQuestDrawer();
 
 	return (
 		<Tabs
@@ -47,11 +41,11 @@ function CampaignTabs({ quests, onOpenQuestHandler }: CampaignTabsProps) {
 				p={16}
 			>
 				<SimpleGridLayout cols={6}>
-					{quests.map((quest) => (
+					{paginatedQuests?.items.map((quest) => (
 						<QuestCard
 							key={quest.id}
 							quest={quest}
-							onClick={onOpenQuestHandler}
+							onClick={handleViewQuest}
 						/>
 					))}
 				</SimpleGridLayout>

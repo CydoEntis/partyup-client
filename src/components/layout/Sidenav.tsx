@@ -5,63 +5,28 @@ import {
 	Stack,
 } from "@mantine/core";
 import { LayoutGrid, LogOut, PlusCircle } from "lucide-react";
-import {
-	NavLink,
-	useNavigate,
-	useParams,
-	useSearchParams,
-} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
 import NewCampaignDrawer from "../../features/campaign/NewCampaignDrawer";
-import useCampaignStore from "../../stores/useCampaignStore";
-import { useEffect, useState } from "react";
 import useAuthStore from "../../stores/useAuthStore";
-import {
-	PaginatedCampaigns,
-} from "../../shared/types/campaign.types";
+
+import useFetchRecentCampaigns from "../../hooks/useFetchCampaigns";
+import useLogout from "../../hooks/useLogout";
 
 type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
-	const [searchParams] = useSearchParams();
-	const { campaignId } = useParams();
-	const { logout } = useAuthStore();
-	const navigate = useNavigate();
+	const { recentCampaigns, loading, error } = useFetchRecentCampaigns();
+	const logoutHandler = useLogout();
+
 	const [
 		openedNewCampaign,
 		{ open: openNewCampaign, close: closeNewCampaign },
 	] = useDisclosure(false);
-	const [recentCampaigns, setRecentCampaigns] =
-		useState<PaginatedCampaigns | null>(null);
 
-	const { getCampaigns, loading } = useCampaignStore();
-
-	const fetchCampaigns = async () => {
-		try {
-			const queryParams: { [key: string]: string | undefined } = {};
-			searchParams.forEach((value, key) => {
-				queryParams[key] = value;
-			});
-			const recentCampaigns = await getCampaigns(queryParams);
-			setRecentCampaigns(recentCampaigns);
-		} catch (error) {
-			console.error("Failed to fetch campaigns:", error);
-		}
-	};
-
-	useEffect(() => {
-		fetchCampaigns();
-	}, [searchParams, getCampaigns, campaignId]);
-
-	console.log("Campaigns: ", recentCampaigns?.items);
-
-	const logoutHandler = () => {
-		logout();
-		navigate("/login");
-	};
 	return (
 		<>
 			<NewCampaignDrawer
