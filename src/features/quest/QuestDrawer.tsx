@@ -21,8 +21,6 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 		defaultTitle: "Create Quest",
 		defaultView: "create",
 	});
-	// const [drawerMode, setDrawerMode] = useState<QuestDrawerType>("create");
-	// const [drawerTitle, setDrawerTitle] = useState<string>("Create Quest");
 	const navigate = useNavigate();
 
 	const fetchQuest = async () => {
@@ -56,7 +54,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 			if (drawerViewType === "edit") {
 				setDrawer("view", quest.name);
 			} else {
-				setDrawer("edit", `Edit: ${quest.name}`);
+				setDrawer("edit", `Editing: ${quest.name}`);
 			}
 		}
 	};

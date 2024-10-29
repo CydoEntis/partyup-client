@@ -31,7 +31,9 @@ function CampaignDrawer({
 				h="100%"
 			>
 				<Title size="2rem">
-					{drawerMode === "create" ? "Create a Campaign" : "Edit Campaign"}
+					{drawerMode === "create"
+						? "Create a Campaign"
+						: `Editing: ${campaign?.title} `}
 				</Title>
 				<UpsertCampaignForm campaign={campaign} />
 			</Box>

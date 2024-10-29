@@ -47,6 +47,7 @@ function CampaignPage({}: Props) {
 				<CampaignDrawer
 					isOpened={openedCampaign}
 					onClose={closeCampaign}
+					drawerMode="edit"
 					campaign={campaign}
 				/>
 			)}
