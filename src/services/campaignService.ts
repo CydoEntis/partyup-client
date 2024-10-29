@@ -4,7 +4,7 @@ import {
 	Campaign,
 	CreateCampaign,
 	PaginatedCampaigns,
-	UpdateCampaignDetails,
+	UpdateCampaign,
 	UpdateCampaignLeader,
 } from "../shared/types/campaign.types";
 import { QueryParams } from "../shared/types/query-paramts.types";
@@ -52,9 +52,9 @@ const createCampaign = async (campaign: CreateCampaign): Promise<Campaign> => {
 	return response.result;
 };
 
-const updateCampaignDetails = async (
+const updateCampaign = async (
 	campaignId: number,
-	updatedCampaignDetails: UpdateCampaignDetails,
+	updatedCampaignDetails: UpdateCampaign,
 ): Promise<Campaign> => {
 	const response = (
 		await apiClient.put(
@@ -91,7 +91,7 @@ export default {
 	getAllCampaigns,
 	getCampaignById,
 	createCampaign,
-	updateCampaignDetails,
+	updateCampaign,
 	updateCampaignLeader,
 	deleteCampaign,
 };

@@ -15,7 +15,9 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const { campaignId, questId } = useParams();
 	const { getQuest } = useQuestStore();
 	const [quest, setQuest] = useState<Quest | null>();
-	const { setDrawerState, viewType, drawerTitle } = useDrawerData();
+	const { setDrawerState, viewType, drawerTitle } = useDrawerData({
+		defaultTitle: "Create a Quest",
+	});
 	const navigate = useNavigate();
 
 	const fetchQuest = async () => {
@@ -25,6 +27,8 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 			if (fetchedQuest) {
 				setQuest(fetchedQuest);
 				setDrawerState("view", fetchedQuest.name);
+			} else {
+				setDrawerState("create", "Create a Quest");
 			}
 		}
 	};

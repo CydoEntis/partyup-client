@@ -36,7 +36,7 @@ const createCampaignSchema = z.object({
 		}),
 });
 
-type CreateCampaignData = z.infer<typeof createCampaignSchema>;
+type CampaignData = z.infer<typeof createCampaignSchema>;
 
 type UpsertCampaignProps = {
 	campaign?: Campaign;
@@ -45,8 +45,7 @@ type UpsertCampaignProps = {
 function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
 	const { campaignId } = useParams();
 	const { createCampaign } = useCampaignStore();
-	const { getMembers, members } = useMemberStore();
-	const [selectedColor, setSelectedColor] = useState("red");
+	const [selectedColor, setSelectedColor] = useState(campaign?.color || "red");
 	const colors = [
 		{ name: "red", value: "#E03131" },
 		{ name: "pink", value: "#C2255C" },
@@ -62,30 +61,50 @@ function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
 		{ name: "orange", value: "#E8590C" },
 	];
 
-	const form = useForm<CreateCampaignData>({
+	const form = useForm<CampaignData>({
 		validate: zodResolver(createCampaignSchema),
 		initialValues: {
-			title: "",
-			description: "",
-			dueDate: new Date(),
+			title: campaign?.title || "",
+			description: campaign?.description || "",
+			dueDate: campaign?.dueDate ? new Date(campaign.dueDate) : new Date(),
 		},
 	});
 
-	async function onSubmit(data: CreateCampaignData) {
-		try {
-			const newCampaign = {
-				campaignId: Number(campaignId),
-				title: data.title,
-				description: data.description,
-				dueDate: data.dueDate,
-				color: selectedColor as Color,
-			};
+	const createNewCampaign = async (data: CampaignData) => {
+		const newCampaign = {
+			campaignId: Number(campaignId),
+			title: data.title,
+			description: data.description,
+			dueDate: data.dueDate,
+			color: selectedColor as Color,
+		};
 
-			await createCampaign(newCampaign);
-			form.reset();
+		await createCampaign(newCampaign);
+		form.reset();
+	};
+
+	const updateExistingCampaign = async (data: CampaignData) => {
+		const updatedCampaign = {
+			campaignId: Number(campaignId),
+			title: data.title,
+			description: data.description,
+			dueDate: data.dueDate,
+			color: selectedColor as Color,
+		};
+
+		await createCampaign(updatedCampaign);
+		form.reset();
+	};
+
+	async function onSubmit(data: CampaignData) {
+		try {
+			if (campaign) {
+				updateExistingCampaign(data);
+			} else {
+				createNewCampaign(data);
+			}
 		} catch (error) {
 			if (error instanceof AxiosError && error.response?.data?.errors) {
-				console.error(error.response.data.errors);
 				const errors = error.response.data.errors as Record<string, string[]>;
 				const fieldErrors: Record<string, string> = {};
 
@@ -101,8 +120,15 @@ function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
 	}
 
 	useEffect(() => {
-		getMembers(Number(campaignId), { pageSize: 99999999 });
-	}, [campaignId]);
+		if (campaign) {
+			form.setValues({
+				title: campaign.title,
+				description: campaign.description,
+				dueDate: new Date(campaign.dueDate),
+			});
+			setSelectedColor(campaign.color);
+		}
+	}, [campaign, campaignId]);
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
@@ -137,7 +163,7 @@ function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
 						<ColorSwatch
 							key={color.name}
 							color={color.value}
-							onClick={() => setSelectedColor(color.name)}
+							onClick={() => setSelectedColor(color.name as Color)}
 							style={{ color: "#fff", cursor: "pointer" }}
 						>
 							{selectedColor === color.name ? <Check size={20} /> : null}

@@ -27,11 +27,6 @@ function useQuestDrawer() {
 		openCampaign();
 	};
 
-	useEffect(() => {
-		if (campaignId) {
-			openCampaign();
-		}
-	}, [campaignId, openCampaign]);
 
 	return {
 		campaignViewType,

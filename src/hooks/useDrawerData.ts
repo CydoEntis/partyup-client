@@ -2,15 +2,21 @@ import { useState, useEffect } from "react";
 
 export type ViewTypes = "view" | "create" | "edit";
 
+type UseDrawerDataProps = {
+	defaultTitle: string;
+};
+
 type UseDrawerDataResult = {
 	viewType: ViewTypes;
 	drawerTitle: string;
 	setDrawerState: (viewType: ViewTypes, title: string) => void;
 };
 
-function useDrawerData(): UseDrawerDataResult {
-	const [viewType, setViewType] = useState<ViewTypes>("view");
-	const [drawerTitle, setDrawerTitle] = useState("");
+function useDrawerData({
+	defaultTitle,
+}: UseDrawerDataProps): UseDrawerDataResult {
+	const [viewType, setViewType] = useState<ViewTypes>("create");
+	const [drawerTitle, setDrawerTitle] = useState(defaultTitle);
 
 	const setDrawerState = (viewType: ViewTypes, title: string) => {
 		setViewType(viewType);

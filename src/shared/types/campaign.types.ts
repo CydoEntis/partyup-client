@@ -18,7 +18,7 @@ export type SimpleMember = {
 	id: number;
 	displayName: string;
 	avatar: number;
-}
+};
 
 export type PaginatedCampaigns = {
 	items: Campaign[];
@@ -37,11 +37,15 @@ export type CreateCampaign = {
 	dueDate: Date;
 };
 
-// export type UpdateCampaignDetails = {
-// 	id: number;
-// } & Partial<Pick<Campaign, "name" | "description" | "color" | "dueDate">>;
+export type UpdateCampaign = {
+	campaignId: number;
+	title: string;
+	description: string;
+	color: Color;
+	dueDate: Date;
+};
 
-// export type UpdateCampaignLeader = {
-// 	campaignId: number;
-// 	userId: string;
-// };
+export type UpdateCampaignLeader = {
+	campaignId: number;
+	userId: string;
+};

@@ -3,6 +3,7 @@ import {
 	Campaign,
 	CreateCampaign,
 	PaginatedCampaigns,
+	UpdateCampaign,
 } from "../shared/types/campaign.types";
 import campaignService from "../services/campaignService";
 import { QueryParams } from "../shared/types/query-paramts.types";
@@ -14,14 +15,7 @@ type CampaignState = {
 	getCampaigns: (params?: QueryParams) => Promise<PaginatedCampaigns>;
 	getCampaign: (id: string) => Promise<Campaign>;
 	createCampaign: (campaign: CreateCampaign) => Promise<Campaign>;
-	// updateCampaignDetails: (
-	// 	id: number,
-	// 	updatedDetails: UpdateCampaignDetails,
-	// ) => Promise<void>;
-	// updateCampaignLeader: (
-	// 	id: number,
-	// 	newLeader: UpdateCampaignLeader,
-	// ) => Promise<void>;
+	UpdateCampaign: (id: number, updatedDetails: UpdateCampaign) => Promise<void>;
 	deleteCampaign: (id: number) => Promise<void>;
 };
 
@@ -95,72 +89,35 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 		}
 	},
 
-	// updateCampaignDetails: async (
-	// 	id: number,
-	// 	updatedCampaignDetails: UpdateCampaignDetails,
-	// ): Promise<void> => {
-	// 	set({ loading: true, error: null });
-	// 	try {
-	// 		const updatedCampaign = await campaignService.updateCampaignDetails(
-	// 			id,
-	// 			updatedCampaignDetails,
-	// 		);
-	// 		set((state) => {
-	// 			const updatedCampaigns =
-	// 				state.campaigns?.items.map((campaign) =>
-	// 					campaign.id === id ? { ...campaign, ...updatedCampaign } : campaign,
-	// 				) || [];
+	UpdateCampaign: async (
+		id: number,
+		updatedDetails: UpdateCampaign,
+	): Promise<void> => {
+		set({ loading: true, error: null });
+		try {
+			const updatedCampaign = await campaignService.updateCampaign(
+				id,
+				updatedDetails,
+			);
+			set((state) => {
+				const updatedCampaigns =
+					state.campaigns?.items.map((campaign) =>
+						campaign.id === id ? { ...campaign, ...updatedCampaign } : campaign,
+					) || [];
 
-	// 			return {
-	// 				campaigns: {
-	// 					...state.campaigns!,
-	// 					items: updatedCampaigns,
-	// 				},
-	// 				campaign:
-	// 					state.campaign?.id === id
-	// 						? { ...state.campaign, ...updatedCampaign }
-	// 						: state.campaign,
-	// 				loading: false,
-	// 			};
-	// 		});
-	// 	} catch (error) {
-	// 		set({ error: "Failed to update campaign details", loading: false });
-	// 		throw error;
-	// 	}
-	// },
-
-	// updateCampaignLeader: async (id: number, newLeader: UpdateCampaignLeader) => {
-	// 	set({ loading: true, error: null });
-	// 	try {
-	// 		const { userId } = await campaignService.updateCampaignLeader(
-	// 			id,
-	// 			newLeader,
-	// 		);
-	// 		set((state) => {
-	// 			const updatedCampaigns =
-	// 				state.campaigns?.items.map((campaign) =>
-	// 					campaign.id === id
-	// 						? { ...campaign, campaignLeaderId: userId }
-	// 						: campaign,
-	// 				) || [];
-
-	// 			return {
-	// 				campaigns: {
-	// 					...state.campaigns!,
-	// 					items: updatedCampaigns,
-	// 				},
-	// 				campaign:
-	// 					state.campaign?.id === id
-	// 						? { ...state.campaign, campaignLeaderId: userId }
-	// 						: state.campaign,
-	// 				loading: false,
-	// 			};
-	// 		});
-	// 	} catch (error) {
-	// 		set({ error: "Failed to update campaign leader", loading: false });
-	// 		throw error;
-	// 	}
-	// },
+				return {
+					campaigns: {
+						...state.campaigns!,
+						items: updatedCampaigns,
+					},
+					loading: false,
+				};
+			});
+		} catch (error) {
+			set({ error: "Failed to update campaign details", loading: false });
+			throw error;
+		}
+	},
 
 	deleteCampaign: async (campaignId: number) => {
 		set({ loading: true, error: null });
