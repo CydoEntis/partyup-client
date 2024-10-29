@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Drawer, Flex, Group, Title } from "@mantine/core";
+import { Box, Drawer, Group, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 import { useNavigate, useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
@@ -8,16 +8,21 @@ import ViewQuest from "./ViewQuest";
 import EditQuest from "./EditQuest";
 import CreateQuest from "./CreateQuest";
 import { Edit, X } from "lucide-react";
-import useDrawerData from "../../hooks/useDrawerData";
 import ToggleEdit from "../../components/toggle/ToggleEdit";
+import useDrawerTypeHandler from "../../hooks/useDrawerData";
+
+export type QuestDrawerType = "create" | "edit" | "view";
 
 function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const { campaignId, questId } = useParams();
 	const { getQuest } = useQuestStore();
 	const [quest, setQuest] = useState<Quest | null>();
-	const { setDrawerState, viewType, drawerTitle } = useDrawerData({
-		defaultTitle: "Create a Quest",
+	const { setDrawer, drawerTitle, drawerViewType } = useDrawerTypeHandler({
+		defaultTitle: "Create Quest",
+		defaultView: "create",
 	});
+	// const [drawerMode, setDrawerMode] = useState<QuestDrawerType>("create");
+	// const [drawerTitle, setDrawerTitle] = useState<string>("Create Quest");
 	const navigate = useNavigate();
 
 	const fetchQuest = async () => {
@@ -26,9 +31,9 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 
 			if (fetchedQuest) {
 				setQuest(fetchedQuest);
-				setDrawerState("view", fetchedQuest.name);
+				setDrawer("view", fetchedQuest.name);
 			} else {
-				setDrawerState("create", "Create a Quest");
+				setDrawer("create", "Create Quest");
 			}
 		}
 	};
@@ -40,17 +45,19 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	}, [campaignId, questId]);
 
 	const handleClose = () => {
-		setDrawerState("create", "Create a Quest");
+		setDrawer("create", "Create Quest");
 		setQuest(null);
 		navigate(`/campaigns/${campaignId}/quests`);
 		onClose();
 	};
 
-	const handleEdit = (title: string) => {
-		if (viewType === "edit") {
-			setDrawerState("view", title);
-		} else {
-			setDrawerState("edit", title);
+	const handleEdit = () => {
+		if (quest) {
+			if (drawerViewType === "edit") {
+				setDrawer("view", quest.name);
+			} else {
+				setDrawer("edit", `Edit: ${quest.name}`);
+			}
 		}
 	};
 
@@ -67,16 +74,20 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 			>
 				<Group>
 					<Title size="2rem">{drawerTitle}</Title>
-					{((viewType === "edit" && quest) || viewType === "view") && quest ? (
+					{((drawerViewType === "edit" && quest) ||
+						drawerViewType === "view") &&
+					quest ? (
 						<ToggleEdit
-							toggle={() => handleEdit(quest.name)}
-							isEditing={viewType === "edit"}
+							toggle={handleEdit}
+							isEditing={drawerViewType === "edit"}
 						/>
 					) : null}
 				</Group>
-				{viewType === "view" && quest ? <ViewQuest quest={quest} /> : null}
-				{viewType === "edit" && quest ? <EditQuest /> : null}{" "}
-				{viewType === "create" ? <CreateQuest /> : null}
+				{drawerViewType === "view" && quest ? (
+					<ViewQuest quest={quest} />
+				) : null}
+				{drawerViewType === "edit" && quest ? <EditQuest /> : null}{" "}
+				{drawerViewType === "create" ? <CreateQuest /> : null}
 			</Box>
 		</Drawer>
 	);

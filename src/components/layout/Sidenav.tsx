@@ -34,7 +34,7 @@ function Sidenav({}: Props) {
 			<CampaignDrawer
 				isOpened={openedNewCampaign}
 				onClose={closeNewCampaign}
-				
+				drawerMode="create"
 			/>
 			<AppShell.Navbar
 				p="md"

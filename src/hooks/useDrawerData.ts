@@ -2,32 +2,34 @@ import { useState, useEffect } from "react";
 
 export type ViewTypes = "view" | "create" | "edit";
 
-type UseDrawerDataProps = {
+type UseDrawerTypeHandlerProps = {
 	defaultTitle: string;
+	defaultView: ViewTypes;
 };
 
-type UseDrawerDataResult = {
-	viewType: ViewTypes;
+type UseDrawerTypeHandlerResult = {
+	drawerViewType: ViewTypes;
 	drawerTitle: string;
-	setDrawerState: (viewType: ViewTypes, title: string) => void;
+	setDrawer: (viewType: ViewTypes, title: string) => void;
 };
 
-function useDrawerData({
+function useDrawerTypeHandler({
 	defaultTitle,
-}: UseDrawerDataProps): UseDrawerDataResult {
-	const [viewType, setViewType] = useState<ViewTypes>("create");
+	defaultView,
+}: UseDrawerTypeHandlerProps): UseDrawerTypeHandlerResult {
+	const [drawerViewType, setDrawerViewType] = useState<ViewTypes>(defaultView);
 	const [drawerTitle, setDrawerTitle] = useState(defaultTitle);
 
-	const setDrawerState = (viewType: ViewTypes, title: string) => {
-		setViewType(viewType);
+	const setDrawer = (viewType: ViewTypes, title: string) => {
+		setDrawerViewType(viewType);
 		setDrawerTitle(title);
 	};
 
 	return {
-		viewType,
+		drawerViewType,
 		drawerTitle,
-		setDrawerState,
+		setDrawer,
 	};
 }
 
-export default useDrawerData;
+export default useDrawerTypeHandler;

@@ -10,9 +10,15 @@ import UpsertCampaignForm from "./UpsertCampaignDrawer";
 
 type CampaignDrawerProps = DrawerProps & {
 	campaign?: Campaign;
+	drawerMode: "create" | "edit";
 };
 
-function CampaignDrawer({ isOpened, onClose, campaign }: CampaignDrawerProps) {
+function CampaignDrawer({
+	isOpened,
+	onClose,
+	drawerMode,
+	campaign,
+}: CampaignDrawerProps) {
 	return (
 		<Drawer
 			size="xl"
@@ -25,7 +31,7 @@ function CampaignDrawer({ isOpened, onClose, campaign }: CampaignDrawerProps) {
 				h="100%"
 			>
 				<Title size="2rem">
-					{campaign ? campaign.title : "Create a Campaign"}
+					{drawerMode === "create" ? "Create a Campaign" : "Edit Campaign"}
 				</Title>
 				<UpsertCampaignForm campaign={campaign} />
 			</Box>
