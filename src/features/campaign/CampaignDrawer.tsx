@@ -1,10 +1,6 @@
 import { Box, Drawer, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 
-import useDrawerData from "../../hooks/useDrawerData";
-import useCampaignStore from "../../stores/useCampaignStore";
 import { Campaign } from "../../shared/types/campaign.types";
 import UpsertCampaignForm from "./UpsertCampaignDrawer";
 
@@ -35,7 +31,10 @@ function CampaignDrawer({
 						? "Create a Campaign"
 						: `Editing: ${campaign?.title} `}
 				</Title>
-				<UpsertCampaignForm campaign={campaign} />
+				<UpsertCampaignForm
+					campaign={campaign}
+					onClose={onClose}
+				/>
 			</Box>
 		</Drawer>
 	);

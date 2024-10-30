@@ -15,8 +15,11 @@ type CampaignState = {
 	getCampaigns: (params?: QueryParams) => Promise<PaginatedCampaigns>;
 	getCampaign: (id: string) => Promise<Campaign>;
 	createCampaign: (campaign: CreateCampaign) => Promise<Campaign>;
-	UpdateCampaign: (id: number, updatedDetails: UpdateCampaign) => Promise<void>;
-	deleteCampaign: (id: number) => Promise<void>;
+	updateCampaign: (
+		campaignId: string,
+		updatedDetails: UpdateCampaign,
+	) => Promise<void>;
+	deleteCampaign: (id: string) => Promise<void>;
 };
 
 export const useCampaignStore = create<CampaignState>((set, get) => ({
@@ -89,20 +92,22 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 		}
 	},
 
-	UpdateCampaign: async (
-		id: number,
+	updateCampaign: async (
+		campaignId: string,
 		updatedDetails: UpdateCampaign,
 	): Promise<void> => {
 		set({ loading: true, error: null });
 		try {
 			const updatedCampaign = await campaignService.updateCampaign(
-				id,
+				+campaignId,
 				updatedDetails,
 			);
 			set((state) => {
 				const updatedCampaigns =
 					state.campaigns?.items.map((campaign) =>
-						campaign.id === id ? { ...campaign, ...updatedCampaign } : campaign,
+						campaign.id === +campaignId
+							? { ...campaign, ...updatedCampaign }
+							: campaign,
 					) || [];
 
 				return {
@@ -119,16 +124,16 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 		}
 	},
 
-	deleteCampaign: async (campaignId: number) => {
+	deleteCampaign: async (campaignId: string) => {
 		set({ loading: true, error: null });
 		try {
-			await campaignService.deleteCampaign(campaignId);
+			await campaignService.deleteCampaign(+campaignId);
 			set((state) => ({
 				campaigns: {
 					...state.campaigns!,
 					items:
 						state.campaigns?.items.filter(
-							(campaign) => campaign.id !== campaignId,
+							(campaign) => campaign.id !== +campaignId,
 						) || [],
 					totalCount: (state.campaigns?.totalCount || 0) - 1,
 				},

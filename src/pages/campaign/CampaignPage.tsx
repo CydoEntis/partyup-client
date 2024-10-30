@@ -85,7 +85,11 @@ function CampaignPage({}: Props) {
 							</Button>
 						</Group>
 					</Flex>
-					<InviteCampaignMember onOpenHandler={openMemberInvite} />
+					<InviteCampaignMember
+						totalMembers={campaign.totalMembers}
+						members={campaign.members}
+						onOpenHandler={openMemberInvite}
+					/>
 				</CampaignHeader>
 			)}
 			<CampaignTabs />

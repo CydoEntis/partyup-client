@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { useForm, zodResolver } from "@mantine/form";
 import { AxiosError } from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
 	Button,
 	ColorSwatch,
@@ -40,11 +40,13 @@ type CampaignData = z.infer<typeof createCampaignSchema>;
 
 type UpsertCampaignProps = {
 	campaign?: Campaign;
+	onClose: () => void;
 };
 
-function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
+function UpsertCampaignForm({ campaign, onClose }: UpsertCampaignProps) {
 	const { campaignId } = useParams();
-	const { createCampaign } = useCampaignStore();
+	const { createCampaign, updateCampaign } = useCampaignStore();
+	const navigate = useNavigate();
 	const [selectedColor, setSelectedColor] = useState(campaign?.color || "red");
 	const colors = [
 		{ name: "red", value: "#E03131" },
@@ -79,8 +81,8 @@ function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
 			color: selectedColor as Color,
 		};
 
-		await createCampaign(newCampaign);
-		form.reset();
+		const createdCampaign = await createCampaign(newCampaign);
+		return createdCampaign;
 	};
 
 	const updateExistingCampaign = async (data: CampaignData) => {
@@ -92,8 +94,9 @@ function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
 			color: selectedColor as Color,
 		};
 
-		await createCampaign(updatedCampaign);
-		form.reset();
+		if (campaignId) {
+			await updateCampaign(campaignId, updatedCampaign);
+		}
 	};
 
 	async function onSubmit(data: CampaignData) {
@@ -101,10 +104,15 @@ function UpsertCampaignForm({ campaign }: UpsertCampaignProps) {
 			if (campaign) {
 				updateExistingCampaign(data);
 			} else {
-				createNewCampaign(data);
+				const newCampaign = await createNewCampaign(data);
+				navigate(`/campaigns/${newCampaign.id}/quests`);
 			}
+
+			form.reset();
+			onClose();
 		} catch (error) {
 			if (error instanceof AxiosError && error.response?.data?.errors) {
+				console.error(error.response?.data?.errors);
 				const errors = error.response.data.errors as Record<string, string[]>;
 				const fieldErrors: Record<string, string> = {};
 

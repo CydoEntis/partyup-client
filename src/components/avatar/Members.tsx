@@ -1,8 +1,8 @@
 import { Tooltip, Avatar } from "@mantine/core";
-import { Member } from "../../shared/types/member.types";
+import { SimpleMember } from "../../shared/types/campaign.types";
 
 type MemberProps = {
-	members: Member[];
+	members: SimpleMember[];
 	totalMembers: number;
 	numOfMembersToShow: number;
 };
@@ -27,7 +27,9 @@ function Members({ members, totalMembers, numOfMembersToShow }: MemberProps) {
 						/>
 					</Tooltip>
 				))}
-				<Avatar radius="xl">+{totalMembers}</Avatar>
+				{members.length > 5 ? (
+					<Avatar radius="xl">+{totalMembers}</Avatar>
+				) : null}
 			</Avatar.Group>
 		</Tooltip.Group>
 	);
