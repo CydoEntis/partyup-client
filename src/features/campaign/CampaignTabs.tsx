@@ -6,7 +6,7 @@ import useFetchQuests from "../../hooks/useFetchQuests";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
 
 function CampaignTabs() {
-	const { paginatedQuests, loading: questsLoading } = useFetchQuests();
+	const { paginatedQuests } = useFetchQuests();
 	const { handleViewQuest } = useQuestDrawer();
 
 	return (

@@ -4,6 +4,7 @@ import {
 	PaginatedQuests,
 	Quest,
 	CreateQuest,
+	UpdateQuest,
 } from "../shared/types/quest.types";
 import { QueryParams } from "../stores/useQuestStore";
 
@@ -56,25 +57,23 @@ const createQuest = async (
 	).data;
 	if (!response.isSuccess) throw new Error();
 
-	console.log("Quest: ", response);
-
 	return response.result;
 };
 
-// const updateQuestDetails = async (
-// 	campaignId: number,
-// 	questId: number,
-// 	updatedQuestDetails: UpdateQuestDetails,
-// ): Promise<Quest> => {
-// 	const response = (
-// 		await apiClient.put(
-// 			`${endpoints.campaigns}/${campaignId}/quests/${questId}`,
-// 			updatedQuestDetails,
-// 		)
-// 	).data;
-// 	if (!response.isSuccess) throw new Error();
-// 	return response.result;
-// };
+const updateQuest = async (
+	campaignId: number,
+	questId: number,
+	updatedQuestDetails: UpdateQuest,
+): Promise<Quest> => {
+	const response = (
+		await apiClient.put(
+			`${endpoints.campaigns}/${campaignId}/quests/${questId}`,
+			updatedQuestDetails,
+		)
+	).data;
+	if (!response.isSuccess) throw new Error();
+	return response.result;
+};
 
 const deleteQuest = async (
 	campaignId: number,
@@ -92,5 +91,6 @@ export default {
 	getAllQuests,
 	getQuestById,
 	createQuest,
+	updateQuest,
 	deleteQuest,
 };

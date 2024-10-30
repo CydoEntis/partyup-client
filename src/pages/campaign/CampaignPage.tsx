@@ -2,7 +2,7 @@ import { ActionIcon, Button, Flex, Group, Title } from "@mantine/core";
 import CampaignHeader from "../../features/campaign/CampaignHeader";
 import CampaignTabs from "../../features/campaign/CampaignTabs";
 import InviteCampaignMember from "../../features/campaign/InviteCampaignMember";
-import UpsertCampaignForm from "../../features/campaign/UpsertCampaignDrawer";
+import UpsertCampaignForm from "../../features/campaign/UpsertCampaignForm";
 
 import InviteMemberDrawer from "../../features/members/InviteMemberDrawer";
 import QuestDrawer from "../../features/quest/QuestDrawer";

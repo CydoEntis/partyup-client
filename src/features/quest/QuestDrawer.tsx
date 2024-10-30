@@ -7,7 +7,6 @@ import { Quest } from "../../shared/types/quest.types";
 import ViewQuest from "./ViewQuest";
 import EditQuest from "./EditQuest";
 import CreateQuest from "./CreateQuest";
-import { Edit, X } from "lucide-react";
 import ToggleEdit from "../../components/toggle/ToggleEdit";
 import useDrawerTypeHandler from "../../hooks/useDrawerData";
 
@@ -29,7 +28,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 
 			if (fetchedQuest) {
 				setQuest(fetchedQuest);
-				setDrawer("view", fetchedQuest.name);
+				setDrawer("view", fetchedQuest.title);
 			} else {
 				setDrawer("create", "Create Quest");
 			}
@@ -52,9 +51,9 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const handleEdit = () => {
 		if (quest) {
 			if (drawerViewType === "edit") {
-				setDrawer("view", quest.name);
+				setDrawer("view", quest.title);
 			} else {
-				setDrawer("edit", `Editing: ${quest.name}`);
+				setDrawer("edit", `Editing: ${quest.title}`);
 			}
 		}
 	};

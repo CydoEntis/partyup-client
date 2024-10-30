@@ -1,9 +1,9 @@
-import { PriorityLevel } from "../../features/quest/CreateQuest";
 import { Member } from "./member.types";
+import { PriorityLevel } from "./prioty.types";
 
 export type Quest = {
 	id: number;
-	name: string;
+	title: string;
 	description: string;
 	isCompleted: boolean;
 	createdAt: Date;
@@ -29,7 +29,7 @@ export type PaginatedQuests = {
 
 export type CreateQuest = {
 	campaignId: number;
-	name: string;
+	title: string;
 	description: string;
 	priority: PriorityLevel;
 	dueDate: Date;
@@ -37,10 +37,19 @@ export type CreateQuest = {
 	tasks: CreateTask[];
 };
 
-
+export type UpdateQuest = {
+	id: number;
+	campaignId: number;
+	title: string;
+	description: string;
+	priority: PriorityLevel;
+	dueDate: Date;
+	memberIds: Number[];
+	tasks: CreateTask[];
+};
 
 export type Task = {
-	id: number,
+	id: number;
 	description: string;
 	isCompleted: boolean;
 	createdAt: Date;
@@ -53,7 +62,7 @@ export type CreateTask = {
 
 // export type UpdateQuestDetails = {
 // 	id: number;
-// } & Partial<Pick<Quest, "name" | "description" | "color" | "dueDate">>;
+// } & Partial<Pick<Quest, "title" | "description" | "color" | "dueDate">>;
 
 // export type UpdateQuestLeader = {
 // 	campaignId: number;

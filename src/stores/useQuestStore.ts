@@ -4,6 +4,7 @@ import {
 	PaginatedQuests,
 	Quest,
 	CreateQuest,
+	UpdateQuest,
 } from "../shared/types/quest.types";
 
 export type QueryParams = {
@@ -20,15 +21,20 @@ type QuestState = {
 	loading: boolean;
 	error: string | null;
 	getQuests: (
-		campaignId: number,
+		campaignId: string,
 		params?: QueryParams,
 	) => Promise<PaginatedQuests>;
 	getQuest: (campaignId: string, questId: string) => Promise<Quest>;
-	createQuest: (campaignId: number, quest: CreateQuest) => Promise<Quest>;
+	createQuest: (campaignId: string, quest: CreateQuest) => Promise<Quest>;
+	updateQuest: (
+		campaignId: string,
+		questId: string,
+		updatedDetails: UpdateQuest,
+	) => Promise<Quest>;
 	deleteQuest: (campaignId: string, id: string) => Promise<void>;
 };
 
-export const useQuestStore = create<QuestState>((set, get) => ({
+export const useQuestStore = create<QuestState>((set) => ({
 	paginatedQuests: {
 		items: [],
 		totalCount: 0,
@@ -42,11 +48,11 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 	loading: false,
 	error: null,
 
-	getQuests: async (campaignId: number, params?: QueryParams) => {
+	getQuests: async (campaignId: string, params?: QueryParams) => {
 		set({ loading: true, error: null });
 		try {
 			const paginatedQuests = await questService.getAllQuests(
-				campaignId,
+				Number(campaignId),
 				params,
 			);
 
@@ -74,12 +80,15 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 	},
 
 	createQuest: async (
-		campaignId: number,
+		campaignId: string,
 		quest: CreateQuest,
 	): Promise<Quest> => {
 		set({ loading: true, error: null });
 		try {
-			const newQuest = await questService.createQuest(campaignId, quest);
+			const newQuest = await questService.createQuest(
+				Number(campaignId),
+				quest,
+			);
 			set((state) => ({
 				paginatedQuests: state.paginatedQuests
 					? {
@@ -98,9 +107,47 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 					  },
 				loading: false,
 			}));
+			set({ quest: newQuest });
 			return newQuest;
 		} catch (error) {
 			set({ error: "Failed to create quest", loading: false });
+			throw error;
+		}
+	},
+
+	updateQuest: async (
+		campaignId: string,
+		questId: string,
+		updatedDetails: UpdateQuest,
+	): Promise<Quest> => {
+		set({ loading: true, error: null });
+		try {
+			const updatedQuest = await questService.updateQuest(
+				Number(campaignId),
+				Number(questId),
+				updatedDetails,
+			);
+
+			set((state) => ({
+				paginatedQuests: {
+					...state.paginatedQuests,
+					items: state.paginatedQuests.items.map((quest) =>
+						quest.id === Number(questId)
+							? { ...quest, ...updatedQuest }
+							: quest,
+					),
+				},
+				quest:
+					state.quest?.id === Number(questId)
+						? { ...state.quest, ...updatedQuest }
+						: state.quest,
+				loading: false,
+			}));
+
+			console.log("Updated quest: ", updatedQuest);
+			return updatedQuest;
+		} catch (error) {
+			set({ error: "Failed to update quest", loading: false });
 			throw error;
 		}
 	},

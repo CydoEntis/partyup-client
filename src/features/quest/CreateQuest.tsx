@@ -26,13 +26,6 @@ type CreateQuestProps = {
 	onClose: () => void;
 };
 
-export enum PriorityLevel {
-	CRITICAL = "Critical",
-	HIGH = "High",
-	MEDIUM = "Medium",
-	LOW = "Low",
-}
-
 const createQuestSchema = z.object({
 	name: z
 		.string()
@@ -108,7 +101,7 @@ function CreateQuest({ onClose }: CreateQuestProps) {
 
 			console.log("Create quest: ", newQuest);
 
-			await createQuest(Number(campaignId), newQuest);
+			await createQuest(campaignId, newQuest);
 			onClose();
 			form.reset();
 		} catch (error) {

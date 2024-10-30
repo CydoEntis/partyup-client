@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../stores/useQuestStore";
 import { PaginatedQuests } from "../shared/types/quest.types";
