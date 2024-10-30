@@ -2,18 +2,15 @@ import { Button, Group, Text } from "@mantine/core";
 import { Users2, Plus } from "lucide-react";
 import Members from "../../components/avatar/Members";
 import { Member } from "../../shared/types/member.types";
-import { SimpleMember } from "../../shared/types/campaign.types";
 
 type InviteCampaignMemberProps = {
 	onOpenHandler: () => void;
-	totalMembers: number;
-	members: SimpleMember[];
+	members: Member[];
 };
 
 function InviteCampaignMember({
 	onOpenHandler,
 	members,
-	totalMembers,
 }: InviteCampaignMemberProps) {
 	return (
 		<Group>
@@ -22,8 +19,8 @@ function InviteCampaignMember({
 				<Text>Assign to Campaign</Text>
 				<Members
 					members={members}
-					totalMembers={totalMembers}
-					numOfMembersToShow={Members.length}
+					totalMembers={members.length}
+					numOfMembersToShow={5}
 				/>
 			</Group>
 

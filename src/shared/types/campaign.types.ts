@@ -1,4 +1,5 @@
 import { Color } from "./color.types";
+import { Member } from "./member.types";
 
 export type Campaign = {
 	id: number;
@@ -7,17 +8,10 @@ export type Campaign = {
 	creatorId: string;
 	creator: string;
 	color: Color;
-	totalMembers: number;
-	members: SimpleMember[];
+	members: Member[];
 	createdAt: Date;
 	updatedAt: Date;
 	dueDate: Date;
-};
-
-export type SimpleMember = {
-	id: number;
-	displayName: string;
-	avatar: number;
 };
 
 export type PaginatedCampaigns = {

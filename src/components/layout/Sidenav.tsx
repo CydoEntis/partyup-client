@@ -6,12 +6,11 @@ import {
 	NavLink as MantineNavLink,
 	Stack,
 } from "@mantine/core";
-import { Group, LayoutGrid, LogOut, PlusCircle } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { LayoutGrid, LogOut, PlusCircle } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
-import useAuthStore from "../../stores/useAuthStore";
 
 import useFetchRecentCampaigns from "../../hooks/useFetchCampaigns";
 import useLogout from "../../hooks/useLogout";
@@ -21,8 +20,9 @@ type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
-	const { campaigns, loading, error } = useFetchRecentCampaigns();
+	const { campaigns } = useFetchRecentCampaigns();
 	const logoutHandler = useLogout();
+
 
 	const [
 		openedNewCampaign,

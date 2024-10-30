@@ -25,8 +25,6 @@ const getAllCampaigns = async (
 			queryParams.append("pageSize", params.pageSize.toString());
 	}
 
-	console.log("Constructed query params: ", queryParams);
-
 	const response = (
 		await apiClient.get(`${endpoints.campaigns}?${queryParams.toString()}`)
 	).data;
@@ -46,8 +44,6 @@ const createCampaign = async (campaign: CreateCampaign): Promise<Campaign> => {
 	const response = (await apiClient.post(`${endpoints.campaigns}`, campaign))
 		.data;
 	if (!response.isSuccess) throw new Error();
-
-	console.log("Campaign: ", response);
 
 	return response.result;
 };

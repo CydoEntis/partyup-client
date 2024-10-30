@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
 import useCampaignStore from "../stores/useCampaignStore";
-import { PaginatedCampaigns } from "../shared/types/campaign.types";
 import { AxiosError } from "axios";
 
 function useFetchRecentCampaigns() {

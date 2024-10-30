@@ -5,10 +5,9 @@ import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
 import { Quest } from "../../shared/types/quest.types";
 import ViewQuest from "./ViewQuest";
-import EditQuest from "./EditQuest";
-import CreateQuest from "./CreateQuest";
 import ToggleEdit from "../../components/toggle/ToggleEdit";
 import useDrawerTypeHandler from "../../hooks/useDrawerData";
+import UpsertQuestForm from "./UpsertQuestForm";
 
 export type QuestDrawerType = "create" | "edit" | "view";
 
@@ -83,8 +82,15 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 				{drawerViewType === "view" && quest ? (
 					<ViewQuest quest={quest} />
 				) : null}
-				{drawerViewType === "edit" && quest ? <EditQuest /> : null}{" "}
-				{drawerViewType === "create" ? <CreateQuest onClose={onClose}/> : null}
+				{drawerViewType === "edit" && quest ? (
+					<UpsertQuestForm
+						onClose={onClose}
+						quest={quest}
+					/>
+				) : null}{" "}
+				{drawerViewType === "create" ? (
+					<UpsertQuestForm onClose={onClose} />
+				) : null}
 			</Box>
 		</Drawer>
 	);

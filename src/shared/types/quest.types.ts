@@ -1,4 +1,4 @@
-import { Member } from "./member.types";
+import { SimpleMember } from "./campaign.types";
 import { PriorityLevel } from "./prioty.types";
 
 export type Quest = {
@@ -9,12 +9,13 @@ export type Quest = {
 	createdAt: Date;
 	updatedAt: Date;
 	dueDate: Date;
+	priority: PriorityLevel;
 	campaignId: number;
-	assignedMembers: Member[];
+	members: SimpleMember[];
 	totalMembers: number;
-	tasks: Task[];
-	completedTasks: number;
-	totalTasks: number;
+	steps: Step[];
+	completedSteps: number;
+	totalSteps: number;
 };
 
 export type PaginatedQuests = {
@@ -34,7 +35,7 @@ export type CreateQuest = {
 	priority: PriorityLevel;
 	dueDate: Date;
 	memberIds: Number[];
-	tasks: CreateTask[];
+	steps: CreateStep[];
 };
 
 export type UpdateQuest = {
@@ -45,10 +46,10 @@ export type UpdateQuest = {
 	priority: PriorityLevel;
 	dueDate: Date;
 	memberIds: Number[];
-	tasks: CreateTask[];
+	steps: Step[];
 };
 
-export type Task = {
+export type Step = {
 	id: number;
 	description: string;
 	isCompleted: boolean;
@@ -56,7 +57,7 @@ export type Task = {
 	updatedAt: Date;
 };
 
-export type CreateTask = {
+export type CreateStep = {
 	description: string;
 };
 

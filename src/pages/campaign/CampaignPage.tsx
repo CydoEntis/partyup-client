@@ -2,13 +2,11 @@ import { ActionIcon, Button, Flex, Group, Title } from "@mantine/core";
 import CampaignHeader from "../../features/campaign/CampaignHeader";
 import CampaignTabs from "../../features/campaign/CampaignTabs";
 import InviteCampaignMember from "../../features/campaign/InviteCampaignMember";
-import UpsertCampaignForm from "../../features/campaign/UpsertCampaignForm";
 
 import InviteMemberDrawer from "../../features/members/InviteMemberDrawer";
 import QuestDrawer from "../../features/quest/QuestDrawer";
 import useCampaignDrawer from "../../hooks/useCampaignDrawer";
 import useFetchCampaign from "../../hooks/useFetchCampaign";
-import useFetchQuests from "../../hooks/useFetchQuests";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
 import { Edit, Plus } from "lucide-react";
 import CampaignDrawer from "../../features/campaign/CampaignDrawer";
@@ -16,7 +14,7 @@ import CampaignDrawer from "../../features/campaign/CampaignDrawer";
 type Props = {};
 
 function CampaignPage({}: Props) {
-	const { campaign, loading: campaignLoading } = useFetchCampaign();
+	const { campaign } = useFetchCampaign();
 	const { questViewType, openedQuest, closeQuest, handleNewQuest } =
 		useQuestDrawer();
 
@@ -24,9 +22,7 @@ function CampaignPage({}: Props) {
 		openMemberInvite,
 		closeMemberInvite,
 		openedInviteMember,
-		campaignViewType,
 		openedCampaign,
-		openCampaign,
 		closeCampaign,
 		handleEditCampaign,
 	} = useCampaignDrawer();
@@ -86,7 +82,6 @@ function CampaignPage({}: Props) {
 						</Group>
 					</Flex>
 					<InviteCampaignMember
-						totalMembers={campaign.totalMembers}
 						members={campaign.members}
 						onOpenHandler={openMemberInvite}
 					/>

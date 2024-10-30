@@ -3,7 +3,6 @@ import {
 	Button,
 	Checkbox,
 	Group,
-	Paper,
 	PasswordInput,
 	TextInput,
 } from "@mantine/core";
@@ -30,7 +29,7 @@ type LoginFormData = z.infer<typeof loginFormSchema>;
 type Props = {};
 
 function LoginForm({}: Props) {
-	const { login: loginUser, loading } = useAuthStore();
+	const { login: loginUser } = useAuthStore();
 	const navigate = useNavigate();
 
 	const form = useForm<LoginFormData>({
@@ -41,30 +40,28 @@ function LoginForm({}: Props) {
 		},
 	});
 
-async function onSubmit(data: LoginFormData) {
-	try {
-		console.log(data);
-		await loginUser(data);
+	async function onSubmit(data: LoginFormData) {
+		try {
+			await loginUser(data);
 
-		form.reset();
-		navigate("/dashboard");
-	} catch (error) {
-		console.error(error);
-		if (error instanceof AxiosError && error.response?.data?.errors) {
+			form.reset();
+			navigate("/dashboard");
+		} catch (error) {
+			console.error(error);
+			if (error instanceof AxiosError && error.response?.data?.errors) {
+				const errors = error.response.data.errors as Record<string, string[]>;
+				const fieldErrors: Record<string, string> = {};
 
-			const errors = error.response.data.errors as Record<string, string[]>;
-			const fieldErrors: Record<string, string> = {};
-
-			for (const [key, messages] of Object.entries(errors)) {
-				if (Array.isArray(messages) && messages.length > 0) {
-					fieldErrors[key] = messages[0];
+				for (const [key, messages] of Object.entries(errors)) {
+					if (Array.isArray(messages) && messages.length > 0) {
+						fieldErrors[key] = messages[0];
+					}
 				}
-			}
 
-			form.setErrors(fieldErrors);
+				form.setErrors(fieldErrors);
+			}
 		}
 	}
-}
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>

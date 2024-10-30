@@ -1,14 +1,16 @@
 import { Tooltip, Avatar } from "@mantine/core";
-import { SimpleMember } from "../../shared/types/campaign.types";
+import { Member } from "../../shared/types/member.types";
 
 type MemberProps = {
-	members: SimpleMember[];
+	members: Member[];
 	totalMembers: number;
 	numOfMembersToShow: number;
 };
 
 function Members({ members, totalMembers, numOfMembersToShow }: MemberProps) {
 	const showableMembers = members.slice(0, numOfMembersToShow);
+	const remainingMembers = totalMembers - numOfMembersToShow;
+
 	return (
 		<Tooltip.Group
 			openDelay={300}
@@ -27,8 +29,8 @@ function Members({ members, totalMembers, numOfMembersToShow }: MemberProps) {
 						/>
 					</Tooltip>
 				))}
-				{members.length > 5 ? (
-					<Avatar radius="xl">+{totalMembers}</Avatar>
+				{remainingMembers > 0 ? (
+					<Avatar radius="xl">+{remainingMembers}</Avatar>
 				) : null}
 			</Avatar.Group>
 		</Tooltip.Group>
