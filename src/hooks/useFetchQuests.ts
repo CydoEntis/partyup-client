@@ -10,16 +10,13 @@ type UseFetchQuestsResult = {
 
 function useFetchQuests(): UseFetchQuestsResult {
 	const { campaignId } = useParams();
-	const { getQuests, loading } = useQuestStore();
-	const [paginatedQuests, setPaginatedQuests] =
-		useState<PaginatedQuests | null>(null);
+	const { getQuests, paginatedQuests, loading } = useQuestStore();
 
 	useEffect(() => {
 		const fetchCampaign = async () => {
 			if (campaignId) {
 				try {
-					const paginatedQuests = await getQuests(Number(campaignId));
-					setPaginatedQuests(paginatedQuests);
+					await getQuests(Number(campaignId));
 				} catch (error) {
 					console.error("Error fetching campaign or quests:", error);
 				}

@@ -13,7 +13,6 @@ import {
 } from "@mantine/core";
 import classes from "../auth/auth.module.css";
 import { DateInput } from "@mantine/dates";
-import useMemberStore from "../../stores/useMemberStore";
 import { useEffect, useState } from "react";
 import useCampaignStore from "../../stores/useCampaignStore";
 import { Color } from "../../shared/types/color.types";
@@ -29,11 +28,18 @@ const createCampaignSchema = z.object({
 		.string()
 		.min(5, "Description must be more than 5 characters")
 		.max(120, "Description cannot exceed 120 characters"),
-	dueDate: z
-		.date({ required_error: "Due date is required" })
-		.refine((date) => date >= new Date(), {
+	dueDate: z.date({ required_error: "Due date is required" }).refine(
+		(date) => {
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+			const selectedDate = new Date(date);
+			selectedDate.setHours(0, 0, 0, 0);
+			return selectedDate >= today;
+		},
+		{
 			message: "Due date cannot be in the past",
-		}),
+		},
+	),
 });
 
 type CampaignData = z.infer<typeof createCampaignSchema>;

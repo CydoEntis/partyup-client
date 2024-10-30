@@ -22,7 +22,9 @@ import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
 import { CreateTask } from "../../shared/types/quest.types";
 
-type Props = {};
+type CreateQuestProps = {
+	onClose: () => void;
+};
 
 export enum PriorityLevel {
 	CRITICAL = "Critical",
@@ -40,11 +42,18 @@ const createQuestSchema = z.object({
 		.string()
 		.min(5, "Description must be more than 5 characters")
 		.max(120, "Description cannot exceed 120 characters"),
-	dueDate: z
-		.date({ required_error: "Due date is required" })
-		.refine((date) => date >= new Date(), {
+	dueDate: z.date({ required_error: "Due date is required" }).refine(
+		(date) => {
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+			const selectedDate = new Date(date);
+			selectedDate.setHours(0, 0, 0, 0);
+			return selectedDate >= today;
+		},
+		{
 			message: "Due date cannot be in the past",
-		}),
+		},
+	),
 	priority: z.nativeEnum(PriorityLevel).default(PriorityLevel.LOW),
 	members: z
 		.array(z.string())
@@ -54,7 +63,7 @@ const createQuestSchema = z.object({
 
 type CreateQuestData = z.infer<typeof createQuestSchema>;
 
-function CreateQuest({}: Props) {
+function CreateQuest({ onClose }: CreateQuestProps) {
 	const { campaignId } = useParams();
 	const { createQuest } = useQuestStore();
 	const { getMembers, members } = useMemberStore();
@@ -93,14 +102,14 @@ function CreateQuest({}: Props) {
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
 				tasks: (data.tasks || []).map((task) => ({
-					description: task, 
+					description: task,
 				})) as CreateTask[],
 			};
 
 			console.log("Create quest: ", newQuest);
 
-
 			await createQuest(Number(campaignId), newQuest);
+			onClose();
 			form.reset();
 		} catch (error) {
 			if (error instanceof AxiosError && error.response?.data?.errors) {

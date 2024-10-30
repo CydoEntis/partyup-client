@@ -85,7 +85,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 					<ViewQuest quest={quest} />
 				) : null}
 				{drawerViewType === "edit" && quest ? <EditQuest /> : null}{" "}
-				{drawerViewType === "create" ? <CreateQuest /> : null}
+				{drawerViewType === "create" ? <CreateQuest onClose={onClose}/> : null}
 			</Box>
 		</Drawer>
 	);
