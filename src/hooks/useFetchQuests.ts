@@ -16,7 +16,7 @@ function useFetchQuests(): UseFetchQuestsResult {
 		const fetchCampaign = async () => {
 			if (campaignId) {
 				try {
-					await getQuests(Number(campaignId));
+					await getQuests(campaignId);
 				} catch (error) {
 					console.error("Error fetching campaign or quests:", error);
 				}

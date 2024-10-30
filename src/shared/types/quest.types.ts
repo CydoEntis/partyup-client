@@ -1,4 +1,4 @@
-import { SimpleMember } from "./campaign.types";
+import { Member } from "./member.types";
 import { PriorityLevel } from "./prioty.types";
 
 export type Quest = {
@@ -11,7 +11,7 @@ export type Quest = {
 	dueDate: Date;
 	priority: PriorityLevel;
 	campaignId: number;
-	members: SimpleMember[];
+	members: Member[];
 	totalMembers: number;
 	steps: Step[];
 	completedSteps: number;

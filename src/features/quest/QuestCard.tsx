@@ -24,7 +24,7 @@ type QuestCardProps = {
 };
 
 function QuestCard({ quest, onClick }: QuestCardProps) {
-	const percent = getPercentage(quest.completedTasks, quest.totalTasks);
+	const percent = getPercentage(quest.completedSteps, quest.totalSteps);
 	const { campaignId } = useParams();
 	const navigate = useNavigate();
 	const test = () => {
@@ -74,7 +74,7 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 						size="1.5rem"
 						fw={600}
 					>
-						{quest.name}
+						{quest.title}
 					</Title>
 					<Text
 						size="sm"
@@ -107,7 +107,7 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 					/>
 					<ListChecks size={20} />
 					<Text>
-						{quest.completedTasks}/{quest.totalTasks}
+						{quest.completedSteps}/{quest.totalSteps}
 					</Text>
 				</Flex>
 
@@ -116,8 +116,7 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 					pt={8}
 				>
 					<Members
-						members={quest.assignedMembers}
-						totalMembers={quest.totalMembers}
+						members={quest.members}
 						numOfMembersToShow={3}
 					/>
 					<Flex

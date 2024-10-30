@@ -3,13 +3,12 @@ import { Member } from "../../shared/types/member.types";
 
 type MemberProps = {
 	members: Member[];
-	totalMembers: number;
 	numOfMembersToShow: number;
 };
 
-function Members({ members, totalMembers, numOfMembersToShow }: MemberProps) {
+function Members({ members, numOfMembersToShow }: MemberProps) {
 	const showableMembers = members.slice(0, numOfMembersToShow);
-	const remainingMembers = totalMembers - numOfMembersToShow;
+	const remainingMembers = members.length - numOfMembersToShow;
 
 	return (
 		<Tooltip.Group
