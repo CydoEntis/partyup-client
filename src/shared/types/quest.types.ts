@@ -12,10 +12,8 @@ export type Quest = {
 	priority: PriorityLevel;
 	campaignId: number;
 	members: Member[];
-	totalMembers: number;
 	steps: Step[];
 	completedSteps: number;
-	totalSteps: number;
 };
 
 export type PaginatedQuests = {

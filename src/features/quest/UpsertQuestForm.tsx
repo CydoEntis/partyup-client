@@ -6,18 +6,18 @@ import {
 	ActionIcon,
 	Button,
 	Flex,
+	Group,
 	MultiSelect,
 	Select,
 	Stack,
 	Textarea,
 	TextInput,
 	Text,
-	Group,
 } from "@mantine/core";
 import classes from "../auth/auth.module.css";
 import { DateInput } from "@mantine/dates";
 import { useEffect } from "react";
-import { CreateTask, Quest } from "../../shared/types/quest.types";
+import { CreateStep, Quest, Step } from "../../shared/types/quest.types";
 import useQuestStore from "../../stores/useQuestStore";
 import { PriorityLevel } from "../../shared/types/prioty.types";
 import { Trash2 } from "lucide-react";
@@ -46,22 +46,9 @@ const questSchema = z.object({
 	),
 	priority: z.nativeEnum(PriorityLevel).default(PriorityLevel.LOW),
 	members: z
-		.array(
-			z.object({
-				id: z.number(),
-				displayName: z.string(),
-				avatar: z.number(),
-			}),
-		)
+		.array(z.string())
 		.min(1, "At least one member must be assigned to the quest"),
-	tasks: z
-		.array(
-			z.object({
-				description: z.string().min(1, "Task cannot be empty"),
-			}),
-		)
-		.max(10)
-		.optional(),
+	steps: z.array(z.string().min(1, "Task cannot be empty")).max(10).optional(),
 });
 
 type QuestData = z.infer<typeof questSchema>;
@@ -77,30 +64,28 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 	const { getMembers, members } = useMemberStore();
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		getMembers(Number(campaignId), { pageSize: 99999999 });
-	}, [campaignId]);
-
 	const form = useForm<QuestData>({
 		validate: zodResolver(questSchema),
 		initialValues: {
-			title: quest?.title || "",
-			description: quest?.description || "",
-			dueDate: quest?.dueDate ? new Date(quest.dueDate) : new Date(),
-			priority: quest?.priority || PriorityLevel.LOW,
-			members: quest?.members || [],
-			tasks: quest?.tasks || [],
+			title: "",
+			description: "",
+			dueDate: new Date(),
+			priority: PriorityLevel.LOW,
+			members: [],
+			steps: [],
 		},
 	});
 
 	const handleAddTask = () => {
-		if (form.values.tasks && form.values.tasks.length < 10) {
-			form.insertListItem("tasks", { description: "" });
+		if (form.values.steps) {
+			if (form.values.steps.length < 10) {
+				form.insertListItem("steps", "");
+			}
 		}
 	};
 
 	const handleRemoveTask = (index: number) => {
-		form.removeListItem("tasks", index);
+		form.removeListItem("steps", index);
 	};
 
 	const createNewQuest = async (data: QuestData) => {
@@ -112,9 +97,9 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				description: data.description,
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
-				tasks: (data.tasks || []).map((task) => ({
-					description: task.description,
-				})) as CreateTask[],
+				steps: (data.steps || []).map((task) => ({
+					description: task,
+				})) as CreateStep[],
 			};
 
 			const createdQuest = await createQuest(campaignId, newQuest);
@@ -124,7 +109,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 
 	const updateExistingQuest = async (data: QuestData) => {
 		if (campaignId && questId) {
-			const updatedQuest = {
+			const updatedCampaign = {
 				id: Number(questId),
 				campaignId: Number(campaignId),
 				title: data.title,
@@ -132,11 +117,11 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				description: data.description,
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
-				tasks: (data.tasks || []).map((task) => ({
-					description: task.description,
-				})) as CreateTask[],
+				steps: (data.steps || []).map((task) => ({
+					description: task,
+				})) as Step[],
 			};
-			await updateQuest(campaignId, questId, updatedQuest);
+			await updateQuest(campaignId, questId, updatedCampaign);
 		}
 	};
 
@@ -145,7 +130,6 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			if (quest) {
 				updateExistingQuest(data);
 			} else {
-				console.log("Creating new campaign");
 				const newCampaign = await createNewQuest(data);
 				navigate(`/campaigns/${newCampaign!.id}/quests`);
 			}
@@ -168,27 +152,30 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			}
 		}
 	}
-	console.log(form.errors);
-
+	console.log(quest);
 	useEffect(() => {
 		if (quest) {
 			form.setValues({
 				title: quest.title,
 				description: quest.description,
 				dueDate: new Date(quest.dueDate),
-				priority: quest.priority,
-				members: quest.members,
-				tasks: quest.tasks,
+				priority: quest.priority || PriorityLevel.LOW, // Ensure you set the priority
+				members: quest.members.map((member) => member.id.toString()), // Set existing member IDs as strings
+				steps: quest.steps.map((step) => step.description), // Assuming each step has a description field
 			});
 		}
 	}, [quest, questId]);
+
+	useEffect(() => {
+		getMembers(Number(campaignId), { pageSize: 99999999 });
+	}, [campaignId]);
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
 			<Stack gap={8}>
 				<TextInput
 					label="Title"
-					placeholder="What should this quest be called?"
+					placeholder="Name of your Campaign?"
 					classNames={{
 						input: classes.input,
 					}}
@@ -196,14 +183,13 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				/>
 				<Textarea
 					label="Description"
-					placeholder="Your quest description"
+					placeholder="Describe your campaign"
 					autosize
 					{...form.getInputProps("description")}
 				/>
-
 				<DateInput
-					label="Pick date"
-					placeholder="Pick date"
+					label="Due Date"
+					placeholder="Due Date"
 					{...form.getInputProps("dueDate")}
 					color="violet"
 				/>
@@ -234,11 +220,11 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 					gap={8}
 					py={8}
 				>
-					<Text size="sm">Tasks</Text>
-					{form.values.tasks && form.values.tasks.length === 0 ? (
-						<Text>You can optionally add up to 10 tasks</Text>
+					<Text size="sm">Steps</Text>
+					{form.values.steps && form.values.steps.length === 0 ? (
+						<Text>You can optionally add up to 10 steps</Text>
 					) : (
-						(form.values.tasks || []).map((_, index) => (
+						(form.values.steps || []).map((_, index) => (
 							<Flex
 								key={index}
 								w="100%"
@@ -246,7 +232,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 							>
 								<TextInput
 									placeholder="Task description"
-									{...form.getInputProps(`tasks.${index}.description`)}
+									{...form.getInputProps(`steps.${index}`)}
 									classNames={{ input: classes.input }}
 									w="100%"
 								/>
@@ -262,7 +248,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 							</Flex>
 						))
 					)}
-					{form.values.tasks && form.values.tasks.length >= 10 ? null : (
+					{form.values.steps && form.values.steps.length >= 10 ? null : (
 						<Group justify="flex-start">
 							<Button
 								color="violet"

@@ -1,9 +1,9 @@
 import { Badge, Box, Button, Flex, Stack, Title, Text } from "@mantine/core";
 import { Clock, Check, X } from "lucide-react";
 import CommentList from "../../components/comments/CommentList";
-import TaskList from "../../components/tasks/TaskList";
 import { formatDate } from "../../shared/utils/date.utils";
 import { Quest } from "../../shared/types/quest.types";
+import StepList from "../../components/steps/StepList";
 
 type ViewQuestProps = { quest: Quest };
 
@@ -44,9 +44,9 @@ function ViewQuest({ quest }: ViewQuestProps) {
 
 				{/* Tasks Section */}
 				<Stack>
-					<TaskList
+					<StepList
 						title="Tasks"
-						tasks={quest.tasks}
+						steps={quest.steps}
 					/>
 				</Stack>
 			</Box>

@@ -56,7 +56,6 @@ export const useQuestStore = create<QuestState>((set) => ({
 				params,
 			);
 
-			console.log(paginatedQuests);
 
 			set({ paginatedQuests, loading: false });
 			return paginatedQuests;
@@ -70,7 +69,6 @@ export const useQuestStore = create<QuestState>((set) => ({
 		set({ loading: true, error: null });
 		try {
 			const quest = await questService.getQuestById(+campaignId, +questId);
-			console.log("Quest: ", quest);
 			set({ quest, loading: false });
 			return quest;
 		} catch (error) {
@@ -144,7 +142,6 @@ export const useQuestStore = create<QuestState>((set) => ({
 				loading: false,
 			}));
 
-			console.log("Updated quest: ", updatedQuest);
 			return updatedQuest;
 		} catch (error) {
 			set({ error: "Failed to update quest", loading: false });
