@@ -102,6 +102,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				})) as CreateStep[],
 			};
 
+
 			const createdQuest = await createQuest(campaignId, newQuest);
 			return createdQuest;
 		}
@@ -130,8 +131,8 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			if (quest) {
 				updateExistingQuest(data);
 			} else {
-				const newCampaign = await createNewQuest(data);
-				navigate(`/campaigns/${newCampaign!.id}/quests`);
+				await createNewQuest(data);
+				navigate(`/campaigns/${campaignId}/quests`);
 			}
 
 			form.reset();
@@ -152,16 +153,15 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			}
 		}
 	}
-	console.log(quest);
 	useEffect(() => {
 		if (quest) {
 			form.setValues({
 				title: quest.title,
 				description: quest.description,
 				dueDate: new Date(quest.dueDate),
-				priority: quest.priority || PriorityLevel.LOW, // Ensure you set the priority
-				members: quest.members.map((member) => member.id.toString()), // Set existing member IDs as strings
-				steps: quest.steps.map((step) => step.description), // Assuming each step has a description field
+				priority: quest.priority || PriorityLevel.LOW,
+				members: quest.members.map((member) => member.id.toString()),
+				steps: quest.steps.map((step) => step.description),
 			});
 		}
 	}, [quest, questId]);

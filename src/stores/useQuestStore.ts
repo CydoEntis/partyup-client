@@ -56,7 +56,6 @@ export const useQuestStore = create<QuestState>((set) => ({
 				params,
 			);
 
-
 			set({ paginatedQuests, loading: false });
 			return paginatedQuests;
 		} catch (error) {
@@ -87,6 +86,9 @@ export const useQuestStore = create<QuestState>((set) => ({
 				Number(campaignId),
 				quest,
 			);
+
+			console.log("New Quest:", newQuest);
+
 			set((state) => ({
 				paginatedQuests: state.paginatedQuests
 					? {
@@ -103,9 +105,11 @@ export const useQuestStore = create<QuestState>((set) => ({
 							hasPreviousPage: false,
 							pageRange: [],
 					  },
+				quest: newQuest,
 				loading: false,
+				error: null,
 			}));
-			set({ quest: newQuest });
+
 			return newQuest;
 		} catch (error) {
 			set({ error: "Failed to create quest", loading: false });
