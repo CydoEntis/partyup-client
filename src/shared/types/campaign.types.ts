@@ -38,7 +38,7 @@ export type CreateCampaign = {
 };
 
 export type UpdateCampaign = {
-	campaignId: number;
+	id: number;
 	title: string;
 	description: string;
 	color: Color;

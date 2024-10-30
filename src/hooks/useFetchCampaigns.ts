@@ -5,11 +5,10 @@ import { PaginatedCampaigns } from "../shared/types/campaign.types";
 import { AxiosError } from "axios";
 
 function useFetchRecentCampaigns() {
-	const { getCampaigns } = useCampaignStore();
+	const { getCampaigns, campaigns } = useCampaignStore();
 	const { campaignId } = useParams();
 	const [searchParams] = useSearchParams();
-	const [recentCampaigns, setRecentCampaigns] =
-		useState<PaginatedCampaigns | null>(null);
+
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
 
@@ -22,8 +21,7 @@ function useFetchRecentCampaigns() {
 				searchParams.forEach((value, key) => {
 					queryParams[key] = value;
 				});
-				const recentCampaigns = await getCampaigns(queryParams);
-				setRecentCampaigns(recentCampaigns);
+				await getCampaigns(queryParams);
 			} catch (error) {
 				if (error instanceof AxiosError) {
 					setError(error);
@@ -38,7 +36,7 @@ function useFetchRecentCampaigns() {
 		fetchCampaigns();
 	}, [searchParams, getCampaigns, campaignId]);
 
-	return { recentCampaigns, loading, error };
+	return { campaigns, loading, error };
 }
 
 export default useFetchRecentCampaigns;

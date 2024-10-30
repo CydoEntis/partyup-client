@@ -87,13 +87,12 @@ function UpsertCampaignForm({ campaign, onClose }: UpsertCampaignProps) {
 
 	const updateExistingCampaign = async (data: CampaignData) => {
 		const updatedCampaign = {
-			campaignId: Number(campaignId),
+			id: Number(campaignId),
 			title: data.title,
 			description: data.description,
 			dueDate: data.dueDate,
 			color: selectedColor as Color,
 		};
-
 		if (campaignId) {
 			await updateCampaign(campaignId, updatedCampaign);
 		}

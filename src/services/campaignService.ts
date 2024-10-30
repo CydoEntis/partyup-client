@@ -63,6 +63,9 @@ const updateCampaign = async (
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
+
+	console.log(response.result);
+
 	return response.result;
 };
 

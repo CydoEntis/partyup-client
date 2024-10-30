@@ -10,6 +10,7 @@ import { QueryParams } from "../shared/types/query-paramts.types";
 
 type CampaignState = {
 	campaigns: PaginatedCampaigns | null;
+	campaign: Campaign | null;
 	loading: boolean;
 	error: string | null;
 	getCampaigns: (params?: QueryParams) => Promise<PaginatedCampaigns>;
@@ -24,6 +25,7 @@ type CampaignState = {
 
 export const useCampaignStore = create<CampaignState>((set, get) => ({
 	campaigns: null,
+	campaign: null,
 	loading: false,
 	error: null,
 
@@ -47,6 +49,8 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 				(campaign) => campaign.id === +campaignId,
 			);
 
+			set({ campaign: existingCampaign });
+
 			if (existingCampaign) {
 				return existingCampaign;
 			}
@@ -56,6 +60,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 
 		try {
 			const campaign = await campaignService.getCampaignById(+campaignId);
+			set({ campaign: campaign });
 			return campaign;
 		} catch (error) {
 			set({ error: "Failed to fetch campaign", loading: false });
@@ -85,6 +90,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 					  },
 				loading: false,
 			}));
+			set({ campaign: newCampaign });
 			return newCampaign;
 		} catch (error) {
 			set({ error: "Failed to create campaign", loading: false });
@@ -99,25 +105,35 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 		set({ loading: true, error: null });
 		try {
 			const updatedCampaign = await campaignService.updateCampaign(
-				+campaignId,
+				Number(campaignId),
 				updatedDetails,
 			);
-			set((state) => {
-				const updatedCampaigns =
-					state.campaigns?.items.map((campaign) =>
-						campaign.id === +campaignId
-							? { ...campaign, ...updatedCampaign }
-							: campaign,
-					) || [];
 
-				return {
-					campaigns: {
-						...state.campaigns!,
-						items: updatedCampaigns,
-					},
-					loading: false,
-				};
-			});
+			const currentItems = get().campaigns?.items || [];
+			const updatedCampaigns = currentItems.map((campaign) =>
+				campaign.id === Number(campaignId)
+					? {
+							...campaign,
+							...updatedCampaign,
+							members: campaign.members,
+					  }
+					: campaign,
+			);
+
+			set((state) => ({
+				campaign: {
+					...state.campaign,
+					...updatedCampaign,
+					members: state.campaign?.members || [],
+				},
+				campaigns: {
+					...state.campaigns!,
+					items: updatedCampaigns,
+				},
+				loading: false,
+			}));
+
+			console.log("Updated campaigns: ", updatedCampaigns);
 		} catch (error) {
 			set({ error: "Failed to update campaign details", loading: false });
 			throw error;

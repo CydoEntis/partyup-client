@@ -21,7 +21,7 @@ type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
-	const { recentCampaigns, loading, error } = useFetchRecentCampaigns();
+	const { campaigns, loading, error } = useFetchRecentCampaigns();
 	const logoutHandler = useLogout();
 
 	const [
@@ -69,8 +69,8 @@ function Sidenav({}: Props) {
 							label="Campaigns"
 							className="rounded-md"
 						>
-							{recentCampaigns && recentCampaigns.items
-								? recentCampaigns.items.map((campaign) => (
+							{campaigns && campaigns.items
+								? campaigns.items.map((campaign) => (
 										<MantineNavLink
 											key={campaign.id}
 											component={NavLink}
