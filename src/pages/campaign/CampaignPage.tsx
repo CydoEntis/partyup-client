@@ -3,7 +3,7 @@ import CampaignHeader from "../../features/campaign/CampaignHeader";
 import CampaignTabs from "../../features/campaign/CampaignTabs";
 import InviteCampaignMember from "../../features/campaign/InviteCampaignMember";
 
-import InviteMemberDrawer from "../../features/members/InviteMemberDrawer";
+import InviteMemberModal from "../../features/members/InviteMemberModal";
 import QuestDrawer from "../../features/quest/QuestDrawer";
 import useCampaignDrawer from "../../hooks/useCampaignDrawer";
 import useFetchCampaign from "../../hooks/useFetchCampaign";
@@ -30,7 +30,7 @@ function CampaignPage({}: Props) {
 
 	return (
 		<>
-			<InviteMemberDrawer
+			<InviteMemberModal
 				isOpened={openedInviteMember}
 				onClose={closeMemberInvite}
 			/>

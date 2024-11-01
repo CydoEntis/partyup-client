@@ -2,38 +2,63 @@ import {
 	ActionIcon,
 	Button,
 	CopyButton,
-	Drawer,
 	Paper,
 	Stack,
 	Text,
 	Tooltip,
-	Group,
 	Flex,
+	Modal,
 } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 import { Check, Copy, RefreshCcw } from "lucide-react";
 import memberService from "../../services/memberService";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function InviteMemberDrawer({ isOpened, onClose }: DrawerProps) {
+function InviteMemberModal({ isOpened, onClose }: DrawerProps) {
 	const { campaignId } = useParams();
 	const [inviteLink, setInviteLink] = useState("");
+	const [countdown, setCountdown] = useState(0);
+	const expirationTime = 900; // 15 minutes
+
 	const generateInviteLink = async () => {
 		if (campaignId) {
 			const token = await memberService.generateInviteToken(campaignId);
 			setInviteLink(
 				`http://localhost:5173/campaigns/1/accept-invite?invite=${token}`,
 			);
+			setCountdown(expirationTime);
 		}
 	};
 
+	useEffect(() => {
+		if (isOpened) {
+			generateInviteLink();
+		}
+	}, [isOpened]);
+
+	useEffect(() => {
+		let timer: NodeJS.Timeout;
+
+		if (countdown > 0) {
+			timer = setInterval(() => {
+				setCountdown((prev) => prev - 1);
+			}, 1000);
+		} else {
+			setInviteLink("");
+		}
+
+		return () => {
+			clearInterval(timer);
+		};
+	}, [countdown]);
+
 	return (
-		<Drawer
+		<Modal
 			opened={isOpened}
 			onClose={onClose}
 			title="Invite Member"
-			position="right"
+			centered
 		>
 			<Stack gap={8}>
 				<Paper
@@ -45,7 +70,7 @@ function InviteMemberDrawer({ isOpened, onClose }: DrawerProps) {
 					}}
 				>
 					{inviteLink === "" ? (
-						<Text ta="center">Generate an Invite Link</Text>
+						<Text ta="center">Generating Invite Link...</Text>
 					) : (
 						<Flex
 							align="center"
@@ -77,6 +102,11 @@ function InviteMemberDrawer({ isOpened, onClose }: DrawerProps) {
 						</Flex>
 					)}
 				</Paper>
+				{countdown > 0 ? (
+					<Text ta="center" size="sm" c="red">Link expires in: {countdown} seconds</Text>
+				) : (
+					<Text ta="center" c="red">Token has expired!</Text>
+				)}
 				<Button
 					fullWidth
 					variant="light"
@@ -84,11 +114,11 @@ function InviteMemberDrawer({ isOpened, onClose }: DrawerProps) {
 					leftSection={<RefreshCcw size={16} />}
 					onClick={generateInviteLink}
 				>
-					Invite Link
+					Get New Link
 				</Button>
 			</Stack>
-		</Drawer>
+		</Modal>
 	);
 }
 
-export default InviteMemberDrawer;
+export default InviteMemberModal;
