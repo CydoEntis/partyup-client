@@ -5,44 +5,39 @@ import {
 	Indicator,
 	NavLink as MantineNavLink,
 	Stack,
+	Skeleton,
 } from "@mantine/core";
-import { LayoutGrid, LogOut, PlusCircle } from "lucide-react";
-import { NavLink, useParams } from "react-router-dom";
+import { LayoutGrid, LogOut, PlusCircle, Users2 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
-
-import useFetchRecentCampaigns from "../../hooks/useFetchCampaigns";
 import useLogout from "../../hooks/useLogout";
 import CampaignDrawer from "../../features/campaign/CampaignDrawer";
 import useCampaignStore from "../../stores/useCampaignStore";
-import { AxiosError } from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
-	const { getCampaigns, campaigns } = useCampaignStore();
-
+	const { getRecentCampaigns, recentCampaigns, loading } = useCampaignStore();
 	const logoutHandler = useLogout();
-
-	useEffect(() => {
-		const fetchRecentCampaigns = async () => {
-			const queryParams = {
-				orderOn: "updatedAt",
-				pageSize: 5
-			}
-			await getCampaigns(queryParams);
-		};
-
-		fetchRecentCampaigns();
-	}, [campaigns]);
-
+	const [isRecentOpen, setIsRecentOpen] = useState(false);
 	const [
 		openedNewCampaign,
 		{ open: openNewCampaign, close: closeNewCampaign },
 	] = useDisclosure(false);
+
+	useEffect(() => {
+		const fetchRecentCampaigns = async () => {
+			await getRecentCampaigns();
+			setIsRecentOpen(recentCampaigns.length > 0);
+		};
+		fetchRecentCampaigns();
+	}, [getRecentCampaigns, recentCampaigns.length]);
+
+	const toggleRecentOpen = () => setIsRecentOpen((prev) => !prev);
 
 	return (
 		<>
@@ -56,76 +51,119 @@ function Sidenav({}: Props) {
 				bg="secondary"
 				style={{
 					navbar: {
-						borderColor: `${isLightMode ? "#DCDEE0" : "#3A3A3A"}`,
+						borderColor: isLightMode ? "#DCDEE0" : "#3A3A3A",
 					},
 				}}
 			>
-				<Stack style={{ flexGrow: 1 }}>
-					<Stack gap={8}>
-						<Button
-							color="violet"
-							variant="light"
-							rightSection={<PlusCircle size={20} />}
-							h={40}
-							onClick={openNewCampaign}
-						>
-							New Campaign
-						</Button>
-						<MantineNavLink
-							component={NavLink}
-							to="/dashboard"
-							leftSection={<LayoutGrid size={20} />}
-							label="Dashboard"
-							color="violet"
-							className="rounded-md"
+				{loading ? (
+					<Stack style={{ flexGrow: 1 }}>
+						<Skeleton
+							height={30}
+							radius="md"
+							mb="sm"
 						/>
+						<Skeleton
+							height={30}
+							radius="md"
+							mb="sm"
+						/>
+						<Skeleton
+							height={30}
+							radius="md"
+							mb="sm"
+						/>
+						<Skeleton
+							height={30}
+							radius="md"
+							mb="sm"
+						/>
+						<Skeleton
+							height={30}
+							radius="md"
+							mb="sm"
+						/>
+					</Stack>
+				) : (
+					<Stack style={{ flexGrow: 1 }}>
+						<Stack gap={8}>
+							<Button
+								color="violet"
+								variant="light"
+								rightSection={<PlusCircle size={20} />}
+								h={40}
+								onClick={openNewCampaign}
+							>
+								New Campaign
+							</Button>
+							<MantineNavLink
+								component={NavLink}
+								to="/dashboard"
+								leftSection={<LayoutGrid size={20} />}
+								label="Dashboard"
+								variant="subtle"
+								color="gray"
+								className="rounded-md"
+							/>
 
-						<MantineNavLink
-							label="Campaigns"
-							className="rounded-md"
-						>
-							{campaigns && campaigns.items
-								? campaigns.items.map((campaign) => (
-										<MantineNavLink
-											key={campaign.id}
-											component={NavLink}
-											to={`/campaigns/${campaign.id}/quests`}
-											label={
-												<Flex
-													align="center"
-													gap={16}
-													px={10}
-												>
-													<Indicator
-														inline
-														color={campaign.color}
-														size={8}
-													/>
-													{campaign.title}
-												</Flex>
-											}
-											color="violet"
-											className="rounded-md"
-											mt={8}
-										></MantineNavLink>
-								  ))
-								: null}
-						</MantineNavLink>
+							<MantineNavLink
+								label="Recent Parties"
+								className="rounded-md"
+								variant="subtle"
+								color="gray"
+								opened={isRecentOpen}
+								onClick={toggleRecentOpen}
+							>
+								{recentCampaigns?.map((campaign) => (
+									<MantineNavLink
+										key={campaign.id}
+										component={NavLink}
+										to={`/campaigns/${campaign.id}/quests`}
+										label={
+											<Flex
+												align="center"
+												gap={16}
+												px={10}
+											>
+												<Indicator
+													inline
+													color={campaign.color}
+													size={8}
+												/>
+												{campaign.title}
+											</Flex>
+										}
+										color="violet"
+										className="rounded-md"
+										mt={8}
+									/>
+								))}
+							</MantineNavLink>
+
+							<MantineNavLink
+								component={NavLink}
+								to="/parties"
+								leftSection={<Users2 size={20} />}
+								label="Parties"
+								className="rounded-md"
+								variant="subtle"
+								color="gray"
+							/>
+						</Stack>
+						<Stack mt="auto">
+							<Button
+								justify="start"
+								leftSection={<LogOut size={20} />}
+								variant="light"
+								color="violet"
+								h={40}
+								onClick={logoutHandler}
+							>
+								Log out
+							</Button>
+							<ThemeToggle />
+						</Stack>
 					</Stack>
-					<Stack mt="auto">
-						<Button
-							justify="start"
-							leftSection={<LogOut size={20} />}
-							variant="light"
-							color="violet"
-							h={40}
-							onClick={logoutHandler}
-						>
-							Log out
-						</Button>
-						<ThemeToggle />
-					</Stack>
-				</Stack>
+				)}
 			</AppShell.Navbar>
 		</>
 	);

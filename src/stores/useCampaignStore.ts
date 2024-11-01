@@ -9,10 +9,12 @@ import campaignService from "../services/campaignService";
 import { QueryParams } from "../shared/types/query-params.types";
 
 type CampaignState = {
+	recentCampaigns: Campaign[];
 	campaigns: PaginatedCampaigns | null;
 	campaign: Campaign | null;
 	loading: boolean;
 	error: string | null;
+	getRecentCampaigns: () => Promise<void>;
 	getCampaigns: (params?: QueryParams) => Promise<PaginatedCampaigns>;
 	getCampaign: (id: string) => Promise<Campaign>;
 	createCampaign: (campaign: CreateCampaign) => Promise<Campaign>;
@@ -24,10 +26,29 @@ type CampaignState = {
 };
 
 export const useCampaignStore = create<CampaignState>((set, get) => ({
+	recentCampaigns: [],
 	campaigns: null,
 	campaign: null,
 	loading: false,
 	error: null,
+
+	getRecentCampaigns: async () => {
+		set({ loading: true, error: null });
+		try {
+			const queryParams = {
+				orderOn: "updatedAt",
+				pageSize: 5,
+			};
+
+			const campaigns = await campaignService.getAllCampaigns(queryParams);
+			console.log(campaigns);
+
+			set({ recentCampaigns: campaigns.items, loading: false });
+		} catch (error) {
+			set({ error: "Failed to fetch campaigns", loading: false });
+			throw error;
+		}
+	},
 
 	getCampaigns: async (params?: QueryParams) => {
 		set({ loading: true, error: null });
