@@ -1,20 +1,42 @@
-import { ActionIcon, Button, Flex, Group, Title } from "@mantine/core";
-import CampaignHeader from "../../features/campaign/CampaignHeader";
 import CampaignTabs from "../../features/campaign/CampaignTabs";
-import InviteCampaignMember from "../../features/campaign/InviteCampaignMember";
-
 import InviteMemberModal from "../../features/members/InviteMemberModal";
 import QuestDrawer from "../../features/quest/QuestDrawer";
 import useCampaignDrawer from "../../hooks/useCampaignDrawer";
-import useFetchCampaign from "../../hooks/useFetchCampaign";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
-import { Edit, Plus } from "lucide-react";
 import CampaignDrawer from "../../features/campaign/CampaignDrawer";
+import CampaignHeaderSkeleton from "../../features/loading-skeletons/CampaignHeaderSkeleton";
+import useCampaignStore from "../../stores/useCampaignStore";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import CampaignHeader from "../../features/campaign/CampaignHeader";
 
 type Props = {};
 
 function CampaignPage({}: Props) {
-	const { campaign } = useFetchCampaign();
+	const { campaignId } = useParams();
+	const {
+		getCampaign,
+		campaign,
+		loading: campaignLoading,
+	} = useCampaignStore();
+
+	// Temporarily override campaignLoading for testing
+	const isLoading = true; // Set this to true to always show loading skeleton
+
+	useEffect(() => {
+		const fetchCampaign = async () => {
+			if (campaignId) {
+				try {
+					await getCampaign(campaignId);
+				} catch (error) {
+					console.error("Error fetching campaign or quests:", error);
+				}
+			}
+		};
+
+		fetchCampaign();
+	}, [campaignId, getCampaign]);
+
 	const { questViewType, openedQuest, closeQuest, handleNewQuest } =
 		useQuestDrawer();
 
@@ -27,7 +49,6 @@ function CampaignPage({}: Props) {
 		handleEditCampaign,
 	} = useCampaignDrawer();
 
-
 	return (
 		<>
 			<InviteMemberModal
@@ -39,7 +60,6 @@ function CampaignPage({}: Props) {
 				isOpened={openedQuest}
 				onClose={closeQuest}
 			/>
-
 			{campaign && (
 				<CampaignDrawer
 					isOpened={openedCampaign}
@@ -48,46 +68,20 @@ function CampaignPage({}: Props) {
 					campaign={campaign}
 				/>
 			)}
-
-			{campaign && (
-				<CampaignHeader>
-					<Flex
-						justify="space-between"
-						align="center"
-						w="100%"
-						pb={16}
-					>
-						<Group
-							align="center"
-							w="100%"
-							justify="space-between"
-						>
-							<Group>
-								<Title size="2.5rem">{campaign.title}</Title>
-								<ActionIcon
-									variant="transparent"
-									color="violet"
-									onClick={handleEditCampaign}
-								>
-									<Edit size={20} />
-								</ActionIcon>
-							</Group>
-							<Button
-								variant="light"
-								color="violet"
-								rightSection={<Plus />}
-								onClick={handleNewQuest}
-							>
-								New Quest
-							</Button>
-						</Group>
-					</Flex>
-					<InviteCampaignMember
-						members={campaign.members}
-						onOpenHandler={openMemberInvite}
-					/>
-				</CampaignHeader>
+			{isLoading ? ( // Use isLoading instead of campaignLoading
+				<CampaignHeaderSkeleton />
+			) : campaign ? (
+				<CampaignHeader
+					title={campaign.title}
+					members={campaign.members}
+					handleEditCampaign={handleEditCampaign}
+					handleNewQuest={handleNewQuest}
+					openMemberInvite={openMemberInvite}
+				/>
+			) : (
+				<div>No campaign found</div>
 			)}
+
 			<CampaignTabs />
 		</>
 	);

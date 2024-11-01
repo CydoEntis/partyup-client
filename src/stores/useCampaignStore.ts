@@ -66,9 +66,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 	getCampaign: async (campaignId: string) => {
 		const campaigns: Campaign[] | undefined = get().campaigns?.items;
 
-		const existingCampaign = campaigns?.find(
-			(campaign) => campaign.id === +campaignId,
-		);
+		const existingCampaign = campaigns?.find((campaign) => campaign.id === +campaignId);
 		if (existingCampaign) {
 			set({ campaign: existingCampaign });
 			return existingCampaign;
@@ -168,10 +166,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 			set((state) => ({
 				campaigns: {
 					...state.campaigns!,
-					items:
-						state.campaigns?.items.filter(
-							(campaign) => campaign.id !== +campaignId,
-						) || [],
+					items: state.campaigns?.items.filter((campaign) => campaign.id !== +campaignId) || [],
 					totalCount: (state.campaigns?.totalCount || 0) - 1,
 				},
 			}));
