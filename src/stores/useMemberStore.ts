@@ -6,7 +6,7 @@ import {
 	PaginatedMembers,
 } from "../shared/types/member.types";
 import memberService from "../services/memberService";
-import { QueryParams } from "../shared/types/query-paramts.types";
+import { QueryParams } from "../shared/types/query-params.types";
 
 type Memberstate = {
 	members: PaginatedMembers | null;

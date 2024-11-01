@@ -7,7 +7,7 @@ import {
 	UpdateCampaign,
 	UpdateCampaignLeader,
 } from "../shared/types/campaign.types";
-import { QueryParams } from "../shared/types/query-paramts.types";
+import { QueryParams } from "../shared/types/query-params.types";
 
 const getAllCampaigns = async (
 	params?: QueryParams,

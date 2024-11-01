@@ -6,7 +6,7 @@ import {
 	UpdateMemberRole,
 	PaginatedMembers,
 } from "../shared/types/member.types";
-import { QueryParams } from "../shared/types/query-paramts.types";
+import { QueryParams } from "../shared/types/query-params.types";
 
 const getAllMembers = async (
 	campaignId: number,

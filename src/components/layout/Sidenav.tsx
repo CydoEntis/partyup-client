@@ -7,7 +7,7 @@ import {
 	Stack,
 } from "@mantine/core";
 import { LayoutGrid, LogOut, PlusCircle } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
@@ -15,14 +15,29 @@ import ThemeToggle from "../../features/theme/ThemeToggle";
 import useFetchRecentCampaigns from "../../hooks/useFetchCampaigns";
 import useLogout from "../../hooks/useLogout";
 import CampaignDrawer from "../../features/campaign/CampaignDrawer";
+import useCampaignStore from "../../stores/useCampaignStore";
+import { AxiosError } from "axios";
+import { useEffect } from "react";
 
 type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
-	const { campaigns } = useFetchRecentCampaigns();
+	const { getCampaigns, campaigns } = useCampaignStore();
+
 	const logoutHandler = useLogout();
 
+	useEffect(() => {
+		const fetchRecentCampaigns = async () => {
+			const queryParams = {
+				orderBy: "updatedAt",
+				pageSize: 5
+			}
+			await getCampaigns(queryParams);
+		};
+
+		fetchRecentCampaigns();
+	}, [campaigns]);
 
 	const [
 		openedNewCampaign,
