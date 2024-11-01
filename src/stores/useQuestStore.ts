@@ -132,25 +132,29 @@ export const useQuestStore = create<QuestState>((set) => ({
 
 			console.log(updatedQuest);
 
-			set((state) => ({
-				paginatedQuests: {
-					...state.paginatedQuests,
-					items: state.paginatedQuests.items.map((quest) =>
-						quest.id === Number(questId)
-							? {
-									...quest,
-									...updatedQuest,
-									dueDate: new Date(updatedQuest.dueDate),
-							  }
-							: quest,
-					),
-				},
-				quest:
-					state.quest?.id === Number(questId)
-						? { ...state.quest, ...updatedQuest }
-						: state.quest,
-				loading: false,
-			}));
+			set((state) => {
+				const updatedItems = state.paginatedQuests.items.map((quest) =>
+					quest.id === Number(questId)
+						? {
+								...quest,
+								...updatedQuest,
+								dueDate: new Date(updatedQuest.dueDate),
+						  }
+						: quest,
+				);
+
+				return {
+					paginatedQuests: {
+						...state.paginatedQuests,
+						items: updatedItems, 
+					},
+					quest:
+						state.quest?.id === Number(questId)
+							? { ...state.quest, ...updatedQuest }
+							: state.quest,
+					loading: false,
+				};
+			});
 
 			return updatedQuest;
 		} catch (error) {

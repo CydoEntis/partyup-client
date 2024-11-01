@@ -23,36 +23,6 @@ import { PriorityLevel } from "../../shared/types/prioty.types";
 import { Trash2 } from "lucide-react";
 import useMemberStore from "../../stores/useMemberStore";
 
-const questSchema = z.object({
-	title: z
-		.string()
-		.min(3, "Title must be more than 3 characters")
-		.max(50, "Title cannot exceed 50 characters"),
-	description: z
-		.string()
-		.min(5, "Description must be more than 5 characters")
-		.max(120, "Description cannot exceed 120 characters"),
-	dueDate: z.date({ required_error: "Due date is required" }).refine(
-		(date) => {
-			const today = new Date();
-			today.setHours(0, 0, 0, 0);
-			const selectedDate = new Date(date);
-			selectedDate.setHours(0, 0, 0, 0);
-			return selectedDate >= today;
-		},
-		{
-			message: "Due date cannot be in the past",
-		},
-	),
-	priority: z.nativeEnum(PriorityLevel).default(PriorityLevel.LOW),
-	members: z
-		.array(z.string())
-		.min(1, "At least one member must be assigned to the quest"),
-	steps: z.array(z.string().min(1, "Task cannot be empty")).max(10).optional(),
-});
-
-type QuestData = z.infer<typeof questSchema>;
-
 type UpsertQuestProps = {
 	quest?: Quest;
 	onClose: () => void;
@@ -63,6 +33,41 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 	const { createQuest, updateQuest } = useQuestStore();
 	const { getMembers, members } = useMemberStore();
 	const navigate = useNavigate();
+
+	const questSchema = z.object({
+		title: z
+			.string()
+			.min(3, "Title must be more than 3 characters")
+			.max(50, "Title cannot exceed 50 characters"),
+		description: z
+			.string()
+			.min(5, "Description must be more than 5 characters")
+			.max(120, "Description cannot exceed 120 characters"),
+		dueDate: z.date({ required_error: "Due date is required" }).refine(
+			(date) => {
+				const isEditing = !!quest;
+				const today = new Date();
+				today.setHours(0, 0, 0, 0);
+				const selectedDate = new Date(date);
+				selectedDate.setHours(0, 0, 0, 0);
+
+				return isEditing || selectedDate >= today;
+			},
+			{
+				message: "Due date cannot be in the past",
+			},
+		),
+		priority: z.nativeEnum(PriorityLevel).default(PriorityLevel.LOW),
+		members: z
+			.array(z.string())
+			.min(1, "At least one member must be assigned to the quest"),
+		steps: z
+			.array(z.string().min(1, "Task cannot be empty"))
+			.max(10)
+			.optional(),
+	});
+
+	type QuestData = z.infer<typeof questSchema>;
 
 	const form = useForm<QuestData>({
 		validate: zodResolver(questSchema),

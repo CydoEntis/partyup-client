@@ -30,7 +30,7 @@ function Sidenav({}: Props) {
 	useEffect(() => {
 		const fetchRecentCampaigns = async () => {
 			const queryParams = {
-				orderBy: "updatedAt",
+				orderOn: "updatedAt",
 				pageSize: 5
 			}
 			await getCampaigns(queryParams);
