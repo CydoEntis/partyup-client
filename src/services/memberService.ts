@@ -72,10 +72,21 @@ const deleteMember = async (memberId: number): Promise<void> => {
 	if (!response.isSuccess) throw new Error();
 };
 
+const generateInviteToken = async (campaignId: string): Promise<string> => {
+	const response = (
+		await apiClient.get(
+			`${endpoints.campaigns}/${Number(campaignId)}/members/invite`,
+		)
+	).data;
+	if (!response.isSuccess) throw new Error();
+	return response.result;
+};
+
 export default {
 	getAllMembers,
 	getMemberById,
 	createMember,
 	updateMemberRole,
 	deleteMember,
+	generateInviteToken,
 };

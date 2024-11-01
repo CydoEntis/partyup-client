@@ -4,6 +4,7 @@ import CampaignPage from "../pages/campaign/CampaignPage";
 import AppLayout from "../components/layout/AppLayout";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
+import PartiesPage from "../pages/campaign/PartiesPage";
 
 const router = createBrowserRouter([
 	{
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
 			{
 				path: "dashboard",
 				element: <Test />,
+			},
+			{
+				path: "parties",
+				element: <PartiesPage />,
 			},
 			{
 				path: "campaigns/:campaignId/quests",

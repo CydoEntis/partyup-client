@@ -100,9 +100,8 @@ function Sidenav({}: Props) {
 								to="/dashboard"
 								leftSection={<LayoutGrid size={20} />}
 								label="Dashboard"
-								variant="subtle"
-								color="gray"
 								className="rounded-md"
+								color="violet"
 							/>
 
 							<MantineNavLink
@@ -145,8 +144,7 @@ function Sidenav({}: Props) {
 								leftSection={<Users2 size={20} />}
 								label="Parties"
 								className="rounded-md"
-								variant="subtle"
-								color="gray"
+								color="violet"
 							/>
 						</Stack>
 						<Stack mt="auto">
