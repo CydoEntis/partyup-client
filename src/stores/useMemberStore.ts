@@ -8,7 +8,7 @@ import {
 import memberService from "../services/memberService";
 import { QueryParams } from "../shared/types/query-params.types";
 
-type Memberstate = {
+type MemberState = {
 	members: PaginatedMembers | null;
 	member: Member | null;
 	loading: boolean;
@@ -23,7 +23,7 @@ type Memberstate = {
 	deleteMember: (id: number) => Promise<void>;
 };
 
-export const useMemberStore = create<Memberstate>((set) => ({
+export const useMemberStore = create<MemberState>((set) => ({
 	members: null,
 	member: null,
 	loading: false,
@@ -59,7 +59,7 @@ export const useMemberStore = create<Memberstate>((set) => ({
 		try {
 			const newMember = await memberService.createMember(member);
 			set((state) => ({
-				campaigns: state.members
+				members: state.members
 					? {
 							...state.members,
 							items: [newMember, ...state.members.items],
@@ -94,11 +94,15 @@ export const useMemberStore = create<Memberstate>((set) => ({
 				updatedMemberRole,
 			);
 			set((state) => {
-				const updatedMembers = state.members.map((member) =>
-					member.id === id ? { ...member, ...updatedMember } : member,
-				);
+				const updatedMembers = state.members
+					? state.members.items.map((member) =>
+							member.id === id ? { ...member, ...updatedMember } : member,
+					  )
+					: [];
 				return {
-					members: updatedMembers,
+					members: state.members
+						? { ...state.members, items: updatedMembers }
+						: null,
 					member:
 						state.member?.id === id
 							? { ...state.member, ...updatedMember }
@@ -117,7 +121,15 @@ export const useMemberStore = create<Memberstate>((set) => ({
 		try {
 			await memberService.deleteMember(memberId);
 			set((state) => ({
-				members: state.members.filter((member) => member.id !== memberId),
+				members: state.members
+					? {
+							...state.members,
+							items: state.members.items.filter(
+								(member) => member.id !== memberId,
+							),
+							totalCount: state.members.totalCount - 1,
+					  }
+					: null,
 				loading: false,
 			}));
 		} catch (error) {

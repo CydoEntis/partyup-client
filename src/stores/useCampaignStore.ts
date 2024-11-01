@@ -40,7 +40,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 				pageSize: 5,
 			};
 			const campaigns = await campaignService.getAllCampaigns(queryParams);
-			set({ recentCampaigns: campaigns.items, loading: false });
+			set({ recentCampaigns: campaigns.items });
 		} catch (error) {
 			set({ error: "Failed to fetch campaigns" });
 			throw error;
@@ -53,37 +53,34 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 		set({ loading: true, error: null });
 		try {
 			const campaigns = await campaignService.getAllCampaigns(params);
-			set({ campaigns, loading: false });
+			set({ campaigns });
 			return campaigns;
 		} catch (error) {
-			set({ error: "Failed to fetch campaigns", loading: false });
+			set({ error: "Failed to fetch campaigns" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
 	getCampaign: async (campaignId: string) => {
 		const campaigns: Campaign[] | undefined = get().campaigns?.items;
 
-		if (campaigns) {
-			const existingCampaign = campaigns.find(
-				(campaign) => campaign.id === +campaignId,
-			);
-
+		const existingCampaign = campaigns?.find(
+			(campaign) => campaign.id === +campaignId,
+		);
+		if (existingCampaign) {
 			set({ campaign: existingCampaign });
-
-			if (existingCampaign) {
-				return existingCampaign;
-			}
+			return existingCampaign;
 		}
 
 		set({ loading: true, error: null });
-
 		try {
 			const campaign = await campaignService.getCampaignById(+campaignId);
-			set({ campaign: campaign, loading: false });
+			set({ campaign });
 			return campaign;
 		} catch (error) {
-			set({ error: "Failed to fetch campaign", loading: false });
+			set({ error: "Failed to fetch campaign" });
 			throw error;
 		} finally {
 			set({ loading: false });
@@ -110,13 +107,14 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 							hasPreviousPage: false,
 							pageRange: [],
 					  },
-				loading: false,
 			}));
 			set({ campaign: newCampaign });
 			return newCampaign;
 		} catch (error) {
-			set({ error: "Failed to create campaign", loading: false });
+			set({ error: "Failed to create campaign" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
@@ -152,13 +150,14 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 					...state.campaigns!,
 					items: updatedCampaigns,
 				},
-				loading: false,
 			}));
 
 			console.log("Updated campaigns: ", updatedCampaigns);
 		} catch (error) {
-			set({ error: "Failed to update campaign details", loading: false });
+			set({ error: "Failed to update campaign details" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
@@ -175,11 +174,12 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 						) || [],
 					totalCount: (state.campaigns?.totalCount || 0) - 1,
 				},
-				loading: false,
 			}));
 		} catch (error) {
-			set({ error: "Failed to delete campaign", loading: false });
+			set({ error: "Failed to delete campaign" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 }));

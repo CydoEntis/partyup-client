@@ -55,12 +55,13 @@ export const useQuestStore = create<QuestState>((set) => ({
 				Number(campaignId),
 				params,
 			);
-
-			set({ paginatedQuests, loading: false });
+			set({ paginatedQuests });
 			return paginatedQuests;
 		} catch (error) {
-			set({ error: "Failed to fetch quests", loading: false });
+			set({ error: "Failed to fetch quests" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
@@ -68,11 +69,13 @@ export const useQuestStore = create<QuestState>((set) => ({
 		set({ loading: true, error: null });
 		try {
 			const quest = await questService.getQuestById(+campaignId, +questId);
-			set({ quest, loading: false });
+			set({ quest });
 			return quest;
 		} catch (error) {
-			set({ error: "Failed to fetch quest", loading: false });
+			set({ error: "Failed to fetch quest" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
@@ -86,34 +89,20 @@ export const useQuestStore = create<QuestState>((set) => ({
 				Number(campaignId),
 				quest,
 			);
-
-			console.log("New Quest:", newQuest);
-
 			set((state) => ({
-				paginatedQuests: state.paginatedQuests
-					? {
-							...state.paginatedQuests,
-							items: [newQuest, ...state.paginatedQuests.items],
-							totalCount: state.paginatedQuests.totalCount + 1,
-					  }
-					: {
-							items: [newQuest],
-							totalCount: 1,
-							totalPages: 1,
-							currentPage: 1,
-							hasNextPage: false,
-							hasPreviousPage: false,
-							pageRange: [],
-					  },
+				paginatedQuests: {
+					...state.paginatedQuests,
+					items: [newQuest, ...state.paginatedQuests.items],
+					totalCount: state.paginatedQuests.totalCount + 1,
+				},
 				quest: newQuest,
-				loading: false,
-				error: null,
 			}));
-
 			return newQuest;
 		} catch (error) {
-			set({ error: "Failed to create quest", loading: false });
+			set({ error: "Failed to create quest" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
@@ -129,9 +118,6 @@ export const useQuestStore = create<QuestState>((set) => ({
 				Number(questId),
 				updatedDetails,
 			);
-
-			console.log(updatedQuest);
-
 			set((state) => {
 				const updatedItems = state.paginatedQuests.items.map((quest) =>
 					quest.id === Number(questId)
@@ -152,14 +138,14 @@ export const useQuestStore = create<QuestState>((set) => ({
 						state.quest?.id === Number(questId)
 							? { ...state.quest, ...updatedQuest }
 							: state.quest,
-					loading: false,
 				};
 			});
-
 			return updatedQuest;
 		} catch (error) {
-			set({ error: "Failed to update quest", loading: false });
+			set({ error: "Failed to update quest" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
@@ -169,20 +155,21 @@ export const useQuestStore = create<QuestState>((set) => ({
 			await questService.deleteQuest(+campaignId, +questId);
 			set((state) => ({
 				paginatedQuests: {
-					...state.paginatedQuests!,
-					items:
-						state.paginatedQuests?.items.filter(
-							(quest) => quest.id !== +questId,
-						) || [],
-					totalCount: (state.paginatedQuests?.totalCount || 0) - 1,
+					...state.paginatedQuests,
+					items: state.paginatedQuests.items.filter(
+						(quest) => quest.id !== +questId,
+					),
+					totalCount: (state.paginatedQuests.totalCount || 0) - 1,
 				},
-				loading: false,
 			}));
 		} catch (error) {
-			set({ error: "Failed to delete quest", loading: false });
+			set({ error: "Failed to delete quest" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
+
 	updateStep: async (
 		questId: string,
 		stepId: number,
@@ -191,7 +178,6 @@ export const useQuestStore = create<QuestState>((set) => ({
 		set({ loading: true, error: null });
 		try {
 			const updatedStep = await stepService.updateStep(updatedStepDetails);
-
 			set((state) => {
 				const updatedQuests = state.paginatedQuests.items.map((quest) =>
 					quest.id === +questId
@@ -209,12 +195,13 @@ export const useQuestStore = create<QuestState>((set) => ({
 						...state.paginatedQuests,
 						items: updatedQuests,
 					},
-					loading: false,
 				};
 			});
 		} catch (error) {
-			set({ error: "Failed to update step", loading: false });
+			set({ error: "Failed to update step" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 }));

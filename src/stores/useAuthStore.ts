@@ -1,7 +1,10 @@
-
-
 import { create } from "zustand";
-import { LoginCredentials, RegisterCredentials, Tokens, User } from "../shared/types/auth.types";
+import {
+	LoginCredentials,
+	RegisterCredentials,
+	Tokens,
+	User,
+} from "../shared/types/auth.types";
 import authService from "../services/authService";
 import localStorageService from "../services/localStorageService";
 
@@ -33,7 +36,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 				set({ user });
 			} catch (error) {
 				console.error("Error parsing stored tokens:", error);
-				set({ error: "Failed to initialize authentication", loading: false });
+				set({ error: "Failed to initialize authentication" });
 				throw error;
 			} finally {
 				set({ loading: false });
@@ -55,10 +58,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 					  }
 					: null,
 			}));
-
 			return newTokens;
 		} catch (error) {
-			set({ loading: false });
+			set({ error: "Failed to refresh tokens" });
 			throw error;
 		} finally {
 			set({ loading: false });
@@ -72,7 +74,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			localStorageService.setItem("questLog", user);
 			set({ user });
 		} catch (error) {
-			set({ loading: false });
+			set({ error: "Failed to register user" });
 			throw error;
 		} finally {
 			set({ loading: false });
@@ -83,17 +85,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 		set({ loading: true, error: null });
 		try {
 			const fetchedUser = await authService.loginUser(credentials);
-
 			const user: User = {
 				...fetchedUser,
 				isLoggedIn: true,
 			};
-
-			set({ user });
 			localStorageService.setItem("questLog", user);
 			set({ user });
 		} catch (error) {
-			set({ loading: false });
+			set({ error: "Failed to log in" });
 			throw error;
 		} finally {
 			set({ loading: false });
@@ -110,6 +109,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 				set({ user: null });
 			}
 		} catch (error) {
+			set({ error: "Failed to log out" });
 			throw error;
 		} finally {
 			set({ loading: false });
