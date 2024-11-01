@@ -102,7 +102,6 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				})) as CreateStep[],
 			};
 
-
 			const createdQuest = await createQuest(campaignId, newQuest);
 			return createdQuest;
 		}
@@ -110,7 +109,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 
 	const updateExistingQuest = async (data: QuestData) => {
 		if (campaignId && questId) {
-			const updatedCampaign = {
+			const updatedQuest = {
 				id: Number(questId),
 				campaignId: Number(campaignId),
 				title: data.title,
@@ -118,11 +117,18 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				description: data.description,
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
-				steps: (data.steps || []).map((task) => ({
-					description: task,
-				})) as Step[],
+				steps: (data.steps || []).map((task, index) => {
+					const existingStep = quest?.steps[index];
+					return {
+						id: existingStep ? existingStep.id : undefined,
+						description: task,
+					} as Step;
+				}),
 			};
-			await updateQuest(campaignId, questId, updatedCampaign);
+
+			console.log(updatedQuest);
+
+			await updateQuest(campaignId, questId, updatedQuest);
 		}
 	};
 
@@ -132,9 +138,8 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				updateExistingQuest(data);
 			} else {
 				await createNewQuest(data);
-				navigate(`/campaigns/${campaignId}/quests`);
 			}
-
+			navigate(`/campaigns/${campaignId}/quests`);
 			form.reset();
 			onClose();
 		} catch (error) {

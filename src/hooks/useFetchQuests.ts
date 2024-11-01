@@ -9,7 +9,7 @@ type UseFetchQuestsResult = {
 };
 
 function useFetchQuests(): UseFetchQuestsResult {
-	const { campaignId } = useParams();
+	const { campaignId, questId } = useParams();
 	const { getQuests, paginatedQuests, loading } = useQuestStore();
 
 	useEffect(() => {
@@ -24,7 +24,7 @@ function useFetchQuests(): UseFetchQuestsResult {
 		};
 
 		fetchCampaign();
-	}, [campaignId, getQuests]);
+	}, [campaignId, getQuests, questId]);
 
 	return { paginatedQuests, loading };
 }

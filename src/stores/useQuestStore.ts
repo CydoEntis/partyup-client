@@ -130,12 +130,18 @@ export const useQuestStore = create<QuestState>((set) => ({
 				updatedDetails,
 			);
 
+			console.log(updatedQuest);
+
 			set((state) => ({
 				paginatedQuests: {
 					...state.paginatedQuests,
 					items: state.paginatedQuests.items.map((quest) =>
 						quest.id === Number(questId)
-							? { ...quest, ...updatedQuest }
+							? {
+									...quest,
+									...updatedQuest,
+									dueDate: new Date(updatedQuest.dueDate),
+							  }
 							: quest,
 					),
 				},

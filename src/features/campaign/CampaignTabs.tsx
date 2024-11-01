@@ -2,11 +2,29 @@ import { Group, Tabs } from "@mantine/core";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
-import useFetchQuests from "../../hooks/useFetchQuests";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
+import { useParams } from "react-router-dom";
+import useQuestStore from "../../stores/useQuestStore";
+import { useEffect } from "react";
 
 function CampaignTabs() {
-	const { paginatedQuests } = useFetchQuests();
+	const { campaignId, questId } = useParams();
+	const { getQuests, paginatedQuests } = useQuestStore();
+
+	useEffect(() => {
+		const fetchCampaign = async () => {
+			if (campaignId) {
+				try {
+					await getQuests(campaignId);
+				} catch (error) {
+					console.error("Error fetching campaign or quests:", error);
+				}
+			}
+		};
+
+		fetchCampaign();
+	}, [campaignId, getQuests, questId]);
+
 	const { handleViewQuest } = useQuestDrawer();
 
 	return (

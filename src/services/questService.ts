@@ -63,15 +63,18 @@ const createQuest = async (
 const updateQuest = async (
 	campaignId: number,
 	questId: number,
-	updatedQuestDetails: UpdateQuest,
+	updatedQuest: UpdateQuest,
 ): Promise<Quest> => {
 	const response = (
 		await apiClient.put(
 			`${endpoints.campaigns}/${campaignId}/quests/${questId}`,
-			updatedQuestDetails,
+			updatedQuest,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
+
+	console.log("Updated quest response: ", response)
+
 	return response.result;
 };
 
