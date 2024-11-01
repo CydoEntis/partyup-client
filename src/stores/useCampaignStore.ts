@@ -39,14 +39,13 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 				orderOn: "updatedAt",
 				pageSize: 5,
 			};
-
 			const campaigns = await campaignService.getAllCampaigns(queryParams);
-			console.log(campaigns);
-
 			set({ recentCampaigns: campaigns.items, loading: false });
 		} catch (error) {
-			set({ error: "Failed to fetch campaigns", loading: false });
+			set({ error: "Failed to fetch campaigns" });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
@@ -81,11 +80,13 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 
 		try {
 			const campaign = await campaignService.getCampaignById(+campaignId);
-			set({ campaign: campaign });
+			set({ campaign: campaign, loading: false });
 			return campaign;
 		} catch (error) {
 			set({ error: "Failed to fetch campaign", loading: false });
 			throw error;
+		} finally {
+			set({ loading: false });
 		}
 	},
 
