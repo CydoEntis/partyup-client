@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Menu } from "@mantine/core";
+import { ActionIcon, Menu } from "@mantine/core";
 import { Ellipsis } from "lucide-react";
 import { ReactNode } from "react";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
@@ -34,6 +34,7 @@ function QuestOptions({ options }: QuestOptionProps) {
 					<Menu.Item
 						key={index}
 						leftSection={option.icon}
+						onClick={option.onClick}
 					>
 						{option.text}
 					</Menu.Item>

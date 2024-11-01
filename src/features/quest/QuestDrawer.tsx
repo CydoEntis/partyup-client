@@ -1,4 +1,4 @@
-import { Box, Drawer, Group, Title } from "@mantine/core";
+import { Box, Drawer, Group, Menu, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 import { useNavigate, useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
@@ -8,12 +8,14 @@ import ViewQuest from "./ViewQuest";
 import ToggleEdit from "../../components/toggle/ToggleEdit";
 import useDrawerTypeHandler from "../../hooks/useDrawerData";
 import UpsertQuestForm from "./UpsertQuestForm";
+import QuestOptions from "./QuestOptions";
+import { Edit, Trash2 } from "lucide-react";
 
 export type QuestDrawerType = "create" | "edit" | "view";
 
 function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const { campaignId, questId } = useParams();
-	const { getQuest } = useQuestStore();
+	const { getQuest, deleteQuest } = useQuestStore();
 	const [quest, setQuest] = useState<Quest | null>();
 	const { setDrawer, drawerTitle, drawerViewType } = useDrawerTypeHandler({
 		defaultTitle: "Create Quest",
@@ -57,6 +59,27 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 		}
 	};
 
+	const handleDelete = async () => {
+		if (campaignId && questId) {
+			console.log("DELETING")
+			deleteQuest(campaignId, questId);
+			handleClose();
+		}
+	};
+
+	const questOptions = [
+		{
+			icon: <Edit size={16} />,
+			text: "Edit",
+			onClick: handleEdit,
+		},
+		{
+			icon: <Trash2 size={16} />,
+			text: "Delete",
+			onClick: handleDelete,
+		},
+	];
+
 	return (
 		<Drawer
 			size="xl"
@@ -68,15 +91,16 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 				px={32}
 				h="100%"
 			>
-				<Group>
+				<Group justify="space-between">
 					<Title size="2rem">{drawerTitle}</Title>
 					{((drawerViewType === "edit" && quest) ||
 						drawerViewType === "view") &&
 					quest ? (
-						<ToggleEdit
-							toggle={handleEdit}
-							isEditing={drawerViewType === "edit"}
-						/>
+						// <ToggleEdit
+						// 	toggle={handleEdit}
+						// 	isEditing={drawerViewType === "edit"}
+						// />
+						<QuestOptions options={questOptions} />
 					) : null}
 				</Group>
 				{drawerViewType === "view" && quest ? (
