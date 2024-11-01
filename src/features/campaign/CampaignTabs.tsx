@@ -1,29 +1,35 @@
-import { Group, Tabs } from "@mantine/core";
+import { Group, Skeleton, Tabs } from "@mantine/core";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function CampaignTabs() {
-	const { campaignId, questId } = useParams();
-	const { getQuests, paginatedQuests } = useQuestStore();
+	const { campaignId } = useParams();
+	const { getQuests, paginatedQuests, loading: storeLoading } = useQuestStore();
+	const [loading, setLoading] = useState(true); // Local loading state
 
 	useEffect(() => {
 		const fetchCampaign = async () => {
 			if (campaignId) {
 				try {
-					await getQuests(campaignId);
+					// Simulate loading time
+					setTimeout(async () => {
+						await getQuests(campaignId);
+						setLoading(false); // Set loading to false after fetching
+					}, 2000); // 2-second delay for demonstration
 				} catch (error) {
 					console.error("Error fetching campaign or quests:", error);
+					setLoading(false); // Ensure loading is set to false on error
 				}
 			}
 		};
 
 		fetchCampaign();
-	}, [campaignId, getQuests, questId]);
+	}, [campaignId, getQuests]);
 
 	const { handleViewQuest } = useQuestDrawer();
 
@@ -59,13 +65,21 @@ function CampaignTabs() {
 				p={16}
 			>
 				<SimpleGridLayout cols={6}>
-					{paginatedQuests?.items.map((quest) => (
-						<QuestCard
-							key={quest.id}
-							quest={quest}
-							onClick={handleViewQuest}
-						/>
-					))}
+					{loading
+						? Array.from({ length: 12 }).map((_, index) => (
+								<Skeleton
+									key={index}
+									height={350}
+									mb="md"
+								/>
+						  ))
+						: paginatedQuests?.items.map((quest) => (
+								<QuestCard
+									key={quest.id}
+									quest={quest}
+									onClick={handleViewQuest}
+								/>
+						  ))}
 				</SimpleGridLayout>
 			</Tabs.Panel>
 			<Tabs.Panel value="list">List Tab View</Tabs.Panel>

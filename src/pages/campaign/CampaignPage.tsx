@@ -20,9 +20,6 @@ function CampaignPage({}: Props) {
 		loading: campaignLoading,
 	} = useCampaignStore();
 
-	// Temporarily override campaignLoading for testing
-	const isLoading = true; // Set this to true to always show loading skeleton
-
 	useEffect(() => {
 		const fetchCampaign = async () => {
 			if (campaignId) {
@@ -68,7 +65,7 @@ function CampaignPage({}: Props) {
 					campaign={campaign}
 				/>
 			)}
-			{isLoading ? ( // Use isLoading instead of campaignLoading
+			{campaignLoading ? (
 				<CampaignHeaderSkeleton />
 			) : campaign ? (
 				<CampaignHeader
