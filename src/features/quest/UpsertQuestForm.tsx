@@ -17,11 +17,12 @@ import {
 import classes from "../auth/auth.module.css";
 import { DateInput } from "@mantine/dates";
 import { useEffect } from "react";
-import { CreateStep, Quest, Step } from "../../shared/types/quest.types";
+import { Quest } from "../../shared/types/quest.types";
 import useQuestStore from "../../stores/useQuestStore";
 import { PriorityLevel } from "../../shared/types/prioty.types";
 import { Trash2 } from "lucide-react";
 import useMemberStore from "../../stores/useMemberStore";
+import { CreateStep, Step } from "../../shared/types/step.types";
 
 type UpsertQuestProps = {
 	quest?: Quest;

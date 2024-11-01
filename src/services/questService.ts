@@ -1,12 +1,12 @@
 import apiClient from "../api/apiClient";
 import endpoints from "../api/endpoints";
+import { QueryParams } from "../shared/types/query-params.types";
 import {
 	PaginatedQuests,
 	Quest,
 	CreateQuest,
 	UpdateQuest,
 } from "../shared/types/quest.types";
-import { QueryParams } from "../stores/useQuestStore";
 
 const getAllQuests = async (
 	campaignId: number,
@@ -73,7 +73,7 @@ const updateQuest = async (
 	).data;
 	if (!response.isSuccess) throw new Error();
 
-	console.log("Updated quest response: ", response)
+	console.log("Updated quest response: ", response);
 
 	return response.result;
 };

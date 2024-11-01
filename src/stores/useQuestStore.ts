@@ -6,14 +6,9 @@ import {
 	CreateQuest,
 	UpdateQuest,
 } from "../shared/types/quest.types";
-
-export type QueryParams = {
-	searchValue?: string;
-	orderBy?: string;
-	orderOn?: string;
-	pageNumber?: number;
-	pageSize?: number;
-};
+import { UpdateStep } from "../shared/types/step.types";
+import stepService from "../services/stepService";
+import { QueryParams } from "../shared/types/query-params.types";
 
 type QuestState = {
 	paginatedQuests: PaginatedQuests;
@@ -32,6 +27,11 @@ type QuestState = {
 		updatedDetails: UpdateQuest,
 	) => Promise<Quest>;
 	deleteQuest: (campaignId: string, id: string) => Promise<void>;
+	updateStep: (
+		questId: string,
+		stepId: number,
+		updatedStepDetails: UpdateStep,
+	) => Promise<void>;
 };
 
 export const useQuestStore = create<QuestState>((set) => ({
@@ -146,7 +146,7 @@ export const useQuestStore = create<QuestState>((set) => ({
 				return {
 					paginatedQuests: {
 						...state.paginatedQuests,
-						items: updatedItems, 
+						items: updatedItems,
 					},
 					quest:
 						state.quest?.id === Number(questId)
@@ -180,6 +180,40 @@ export const useQuestStore = create<QuestState>((set) => ({
 			}));
 		} catch (error) {
 			set({ error: "Failed to delete quest", loading: false });
+			throw error;
+		}
+	},
+	updateStep: async (
+		questId: string,
+		stepId: number,
+		updatedStepDetails: UpdateStep,
+	) => {
+		set({ loading: true, error: null });
+		try {
+			const updatedStep = await stepService.updateStep(updatedStepDetails);
+
+			set((state) => {
+				const updatedQuests = state.paginatedQuests.items.map((quest) =>
+					quest.id === +questId
+						? {
+								...quest,
+								steps: quest.steps.map((step) =>
+									step.id === stepId ? { ...step, ...updatedStep } : step,
+								),
+						  }
+						: quest,
+				);
+
+				return {
+					paginatedQuests: {
+						...state.paginatedQuests,
+						items: updatedQuests,
+					},
+					loading: false,
+				};
+			});
+		} catch (error) {
+			set({ error: "Failed to update step", loading: false });
 			throw error;
 		}
 	},

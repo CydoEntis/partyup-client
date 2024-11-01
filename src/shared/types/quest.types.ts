@@ -1,5 +1,6 @@
 import { Member } from "./member.types";
 import { PriorityLevel } from "./prioty.types";
+import { CreateStep, Step } from "./step.types";
 
 export type Quest = {
 	id: number;
@@ -46,24 +47,3 @@ export type UpdateQuest = {
 	memberIds: Number[];
 	steps: Step[];
 };
-
-export type Step = {
-	id: number;
-	description: string;
-	isCompleted: boolean;
-	createdAt: Date;
-	updatedAt: Date;
-};
-
-export type CreateStep = {
-	description: string;
-};
-
-// export type UpdateQuestDetails = {
-// 	id: number;
-// } & Partial<Pick<Quest, "title" | "description" | "color" | "dueDate">>;
-
-// export type UpdateQuestLeader = {
-// 	campaignId: number;
-// 	userId: string;
-// };

@@ -51,7 +51,6 @@ function ViewQuest({ quest }: ViewQuestProps) {
 				</Stack>
 			</Box>
 
-			{/* Bottom Section (Comments pinned to bottom) */}
 			<Box>
 				<CommentList />
 				<Flex
