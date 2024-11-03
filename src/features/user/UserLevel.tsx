@@ -1,12 +1,15 @@
 import { Avatar, Group, Progress, Stack, Text } from "@mantine/core";
 import { User } from "../../shared/types/auth.types";
 import { getPercentage } from "../../shared/utils/progress-bar.utils";
+import MaleA from "../../assets/male_a.png";
+import Slime from "../../assets/slime.png";
+import Frog from "../../assets/frog.png";
 
 type UserLevelProps = {
 	user: User;
 };
 
-function UserLevel({user}: UserLevelProps) {
+function UserLevel({ user }: UserLevelProps) {
 	const percentage = getPercentage(user.currentExp, user.expToNextLevel);
 
 	return (
@@ -15,8 +18,9 @@ function UserLevel({user}: UserLevelProps) {
 			w={200}
 		>
 			<Avatar
-				src="avatar.png"
+				src={Frog}
 				alt="it's me"
+				bg="violet"
 			/>
 			<Stack gap={6}>
 				<Group

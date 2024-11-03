@@ -38,7 +38,6 @@ function Sidenav({}: Props) {
 	}, [recentCampaigns.length]);
 
 	const toggleRecentOpen = () => setIsRecentOpen((prev) => !prev);
-	console.log(loading)
 	return (
 		<>
 			<CampaignDrawer

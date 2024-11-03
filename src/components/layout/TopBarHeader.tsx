@@ -13,6 +13,8 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 	const { isLightMode } = useGetColorTheme();
 	const { user } = useAuthStore();
 
+	console.log(user);
+
 	return (
 		<AppShell.Header
 			bg="secondary"

@@ -24,7 +24,7 @@ const loginUser = async (credentials: LoginCredentials): Promise<User> => {
 
 	if (!response.isSuccess) throw new Error();
 
-	return response.result;
+	return response.result.data;
 };
 
 const logoutUser = async (tokens: Tokens): Promise<boolean> => {
