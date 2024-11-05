@@ -1,5 +1,6 @@
 import { Tooltip, Avatar } from "@mantine/core";
 import { Member } from "../../shared/types/member.types";
+import UserAvatar from "./UserAvatar";
 
 type MemberProps = {
 	members: Member[];
@@ -22,10 +23,7 @@ function Members({ members, numOfMembersToShow }: MemberProps) {
 						label={member.displayName}
 						withArrow
 					>
-						<Avatar
-							src="image.png"
-							radius="xl"
-						/>
+						<UserAvatar avatar={member.avatar} />
 					</Tooltip>
 				))}
 				{remainingMembers > 0 ? (

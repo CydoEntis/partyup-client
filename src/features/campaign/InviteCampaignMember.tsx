@@ -19,7 +19,6 @@ function InviteCampaignMember({
 				<Text>Assign to Campaign</Text>
 				<Members
 					members={members}
-					totalMembers={members.length}
 					numOfMembersToShow={5}
 				/>
 			</Group>

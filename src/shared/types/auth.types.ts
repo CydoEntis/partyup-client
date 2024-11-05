@@ -26,4 +26,7 @@ export type User = {
 	isLoggedIn: boolean;
 };
 
-export type Avatar = 1 | 2 | 3 | 4;
+export type Avatar = {
+	id: number;
+	name: string;
+}

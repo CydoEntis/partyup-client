@@ -1,10 +1,12 @@
+import { Avatar } from "./auth.types";
+
 export type Member = {
 	id: number;
 	role: string;
 	userId: string;
 	displayName: string;
 	email: string;
-	avatar: number;
+	avatar: Avatar;
 	currentLevel: number;
 	joinedOn: Date;
 };
