@@ -22,7 +22,6 @@ type QuestCardProps = {
 	onClick: () => void;
 };
 
-// Function to get badge color based on quest priority
 const getBadgeColor = (priority: PriorityLevel) => {
 	switch (priority) {
 		case PriorityLevel.CRITICAL:
@@ -46,7 +45,6 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 		onClick();
 	};
 
-	// Determine badge color based on quest priority
 	const badgeColor = getBadgeColor(quest.priority);
 
 	return (

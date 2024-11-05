@@ -90,10 +90,44 @@ const deleteQuest = async (
 	if (!response.isSuccess) throw new Error();
 };
 
+const completeQuest = async (
+	campaignId: number,
+	questId: number,
+): Promise<Quest> => {
+	const response = (
+		await apiClient.post(
+			`${endpoints.campaigns}/${campaignId}/quests/${questId}/complete`,
+		)
+	).data;
+	if (!response.isSuccess) throw new Error();
+
+	console.log("Quest marked complete: ", response);
+
+	return response.result;
+};
+
+const uncompleteQuest = async (
+	campaignId: number,
+	questId: number,
+): Promise<Quest> => {
+	const response = (
+		await apiClient.put(
+			`${endpoints.campaigns}/${campaignId}/quests/${questId}/uncomplete`,
+		)
+	).data;
+	if (!response.isSuccess) throw new Error();
+
+	console.log("Quest maked uncomplete: ", response);
+
+	return response.result;
+};
+
 export default {
 	getAllQuests,
 	getQuestById,
 	createQuest,
 	updateQuest,
 	deleteQuest,
+	completeQuest,
+	uncompleteQuest,
 };

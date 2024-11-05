@@ -9,27 +9,23 @@ import { useEffect, useState } from "react";
 
 function CampaignTabs() {
 	const { campaignId } = useParams();
-	const { getQuests, paginatedQuests, loading: storeLoading } = useQuestStore();
-	const [loading, setLoading] = useState(true); // Local loading state
+	const { getQuests, paginatedQuests, loading } = useQuestStore();
 
 	useEffect(() => {
 		const fetchCampaign = async () => {
 			if (campaignId) {
 				try {
-					// Simulate loading time
-					setTimeout(async () => {
-						await getQuests(campaignId);
-						setLoading(false); // Set loading to false after fetching
-					}, 2000); // 2-second delay for demonstration
+					await getQuests(campaignId);
 				} catch (error) {
 					console.error("Error fetching campaign or quests:", error);
-					setLoading(false); // Ensure loading is set to false on error
 				}
 			}
 		};
 
 		fetchCampaign();
 	}, [campaignId, getQuests]);
+
+	console.log("Pg: ", paginatedQuests);
 
 	const { handleViewQuest } = useQuestDrawer();
 

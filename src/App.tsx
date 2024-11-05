@@ -15,6 +15,7 @@ function App() {
 	const { restoreSession } = useAuthStore();
 
 	const theme = createTheme({
+		cursorType: "pointer",
 		colors: {
 			darkPrimary: colorsTuple("#111111"),
 			lightPrimary: colorsTuple("#F5F4F4"),

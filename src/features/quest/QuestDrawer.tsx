@@ -61,7 +61,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 
 	const handleDelete = async () => {
 		if (campaignId && questId) {
-			console.log("DELETING")
+			console.log("DELETING");
 			deleteQuest(campaignId, questId);
 			handleClose();
 		}
@@ -103,9 +103,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 						<QuestOptions options={questOptions} />
 					) : null}
 				</Group>
-				{drawerViewType === "view" && quest ? (
-					<ViewQuest quest={quest} />
-				) : null}
+				{drawerViewType === "view" ? <ViewQuest /> : null}
 				{drawerViewType === "edit" && quest ? (
 					<UpsertQuestForm
 						onClose={onClose}

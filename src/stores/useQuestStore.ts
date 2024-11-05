@@ -32,9 +32,11 @@ type QuestState = {
 		stepId: number,
 		updatedStepDetails: UpdateStep,
 	) => Promise<void>;
+	completeQuest: (campaignId: number, questId: number) => Promise<void>;
+	uncompleteQuest: (campaignId: number, questId: number) => Promise<void>;
 };
 
-export const useQuestStore = create<QuestState>((set) => ({
+export const useQuestStore = create<QuestState>((set, get) => ({
 	paginatedQuests: {
 		items: [],
 		totalCount: 0,
@@ -118,6 +120,7 @@ export const useQuestStore = create<QuestState>((set) => ({
 				Number(questId),
 				updatedDetails,
 			);
+
 			set((state) => {
 				const updatedItems = state.paginatedQuests.items.map((quest) =>
 					quest.id === Number(questId)
@@ -175,20 +178,30 @@ export const useQuestStore = create<QuestState>((set) => ({
 		stepId: number,
 		updatedStepDetails: UpdateStep,
 	) => {
-		set({ loading: true, error: null });
 		try {
 			const updatedStep = await stepService.updateStep(updatedStepDetails);
+
 			set((state) => {
-				const updatedQuests = state.paginatedQuests.items.map((quest) =>
-					quest.id === +questId
-						? {
-								...quest,
-								steps: quest.steps.map((step) =>
-									step.id === stepId ? { ...step, ...updatedStep } : step,
-								),
-						  }
-						: quest,
-				);
+				const paginatedQuests = state.paginatedQuests.items;
+
+				const updatedQuests = paginatedQuests.map((quest) => {
+					if (quest.id === Number(questId)) {
+						const updatedSteps = quest.steps.map((step) =>
+							step.id === stepId ? { ...step, ...updatedStep } : step,
+						);
+
+						const completedStepsCount = updatedSteps.filter(
+							(step) => step.isCompleted,
+						).length;
+
+						return {
+							...quest,
+							steps: updatedSteps,
+							completedSteps: completedStepsCount,
+						};
+					}
+					return quest;
+				});
 
 				return {
 					paginatedQuests: {
@@ -199,6 +212,72 @@ export const useQuestStore = create<QuestState>((set) => ({
 			});
 		} catch (error) {
 			set({ error: "Failed to update step" });
+			throw error;
+		}
+	},
+
+	completeQuest: async (campaignId: number, questId: number) => {
+		set({ loading: true, error: null });
+		try {
+			const completedQuest = await questService.completeQuest(
+				campaignId,
+				questId,
+			);
+
+			set((state) => {
+				const updatedItems = state.paginatedQuests.items.map((quest) =>
+					quest.id === completedQuest.id
+						? { ...quest, ...completedQuest }
+						: quest,
+				);
+
+				return {
+					paginatedQuests: {
+						...state.paginatedQuests,
+						items: updatedItems,
+					},
+					quest:
+						state.quest?.id === completedQuest.id
+							? { ...state.quest, ...completedQuest }
+							: state.quest,
+				};
+			});
+		} catch (error) {
+			set({ error: "Failed to complete quest" });
+			throw error;
+		} finally {
+			set({ loading: false });
+		}
+	},
+
+	uncompleteQuest: async (campaignId: number, questId: number) => {
+		set({ loading: true, error: null });
+		try {
+			const uncompletedQuest = await questService.uncompleteQuest(
+				campaignId,
+				questId,
+			);
+
+			set((state) => {
+				const updatedItems = state.paginatedQuests.items.map((quest) =>
+					quest.id === uncompletedQuest.id
+						? { ...quest, ...uncompletedQuest }
+						: quest,
+				);
+
+				return {
+					paginatedQuests: {
+						...state.paginatedQuests,
+						items: updatedItems,
+					},
+					quest:
+						state.quest?.id === uncompletedQuest.id
+							? { ...state.quest, ...uncompletedQuest }
+							: state.quest,
+				};
+			});
+		} catch (error) {
+			set({ error: "Failed to uncomplete quest" });
 			throw error;
 		} finally {
 			set({ loading: false });

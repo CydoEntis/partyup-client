@@ -132,7 +132,6 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				}),
 			};
 
-			console.log(updatedQuest);
 
 			await updateQuest(campaignId, questId, updatedQuest);
 		}

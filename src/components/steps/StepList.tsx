@@ -2,23 +2,20 @@ import { Checkbox, ScrollArea, Stack, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Step } from "../../shared/types/step.types";
 import useQuestStore from "../../stores/useQuestStore";
+import { Quest } from "../../shared/types/quest.types";
 
 type StepListProps = {
 	title: string;
-	steps: Step[];
+	quest: Quest;
 };
 
-function StepList({
-	title,
-	steps,
-	questId,
-}: StepListProps & { questId: string }) {
-	const [stepsList, setStepsList] = useState<Step[]>(steps);
+function StepList({ title, quest }: StepListProps) {
+	const [stepsList, setStepsList] = useState<Step[]>(quest.steps);
 	const { updateStep } = useQuestStore();
 
 	useEffect(() => {
-		setStepsList(steps);
-	}, [steps]);
+		setStepsList(quest.steps);
+	}, [quest.steps]);
 
 	const handleStepUpdate = async (id: number, completed: boolean) => {
 		setStepsList((prevSteps) =>
@@ -28,7 +25,10 @@ function StepList({
 		);
 
 		try {
-			await updateStep(questId, id, { id: id, isCompleted: completed });
+			await updateStep(quest.id.toString(), id, {
+				id: id,
+				isCompleted: completed,
+			});
 		} catch (error) {
 			console.error("Error updating step:", error);
 		}
@@ -53,6 +53,7 @@ function StepList({
 							onChange={(event) =>
 								handleStepUpdate(step.id, event.currentTarget.checked)
 							}
+							disabled={quest.isCompleted}
 						/>
 					))}
 				</Stack>

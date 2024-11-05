@@ -1,13 +1,31 @@
 import { Badge, Box, Button, Flex, Stack, Title, Text } from "@mantine/core";
-import { Clock, Check, X } from "lucide-react";
+import { Clock, Check } from "lucide-react";
 import CommentList from "../../components/comments/CommentList";
 import { formatDate } from "../../shared/utils/date.utils";
-import { Quest } from "../../shared/types/quest.types";
 import StepList from "../../components/steps/StepList";
+import useAuthStore from "../../stores/useAuthStore";
+import useQuestStore from "../../stores/useQuestStore";
 
-type ViewQuestProps = { quest: Quest };
+function ViewQuest() {
+	const { completeQuest, uncompleteQuest, quest } = useQuestStore();
+	const { user } = useAuthStore();
 
-function ViewQuest({ quest }: ViewQuestProps) {
+	const userRole = quest
+		? quest.members.find((member) => member.userId === user?.id)?.role
+		: null;
+
+	const handleComplete = async () => {
+		if (quest) {
+			await completeQuest(quest.campaignId, quest.id);
+		}
+	};
+
+	const handleUncomplete = async () => {
+		if (quest) {
+			await uncompleteQuest(quest.campaignId, quest.id);
+		}
+	};
+
 	return (
 		<Flex
 			direction="column"
@@ -33,20 +51,19 @@ function ViewQuest({ quest }: ViewQuestProps) {
 						color="gray"
 						leftSection={<Clock size={16} />}
 					>
-						{formatDate(quest.dueDate)}
+						{quest && formatDate(quest.dueDate)} {/* Ensure quest is defined */}
 					</Badge>
 				</Flex>
 
 				<Stack py={16}>
 					<Title size="xl">Description</Title>
-					<Text>{quest.description}</Text>
+					<Text>{quest?.description}</Text> {/* Use optional chaining */}
 				</Stack>
 
-				{/* Tasks Section */}
 				<Stack>
 					<StepList
 						title="Tasks"
-						steps={quest.steps}
+						quest={quest!}
 					/>
 				</Stack>
 			</Box>
@@ -58,24 +75,31 @@ function ViewQuest({ quest }: ViewQuestProps) {
 					w="100%"
 					py={32}
 				>
-					<Button
-						leftSection={<Check size={20} />}
-						variant="light"
-						size="md"
-						fullWidth
-						color="violet"
-					>
-						Complete
-					</Button>
-					<Button
-						leftSection={<X size={20} />}
-						variant="light"
-						size="md"
-						fullWidth
-						color="gray"
-					>
-						Cancel
-					</Button>
+					{!quest?.isCompleted ? (
+						<Button
+							leftSection={<Check size={20} />}
+							variant="light"
+							size="md"
+							fullWidth
+							color="violet"
+							onClick={handleComplete}
+						>
+							Mark Complete
+						</Button>
+					) : null}
+					{(userRole === "Owner" || userRole === "Captain") &&
+					quest?.isCompleted ? (
+						<Button
+							leftSection={<Check size={20} />}
+							variant="light"
+							size="md"
+							fullWidth
+							color="gray"
+							onClick={handleUncomplete}
+						>
+							Mark Incomplete
+						</Button>
+					) : null}
 				</Flex>
 			</Box>
 		</Flex>

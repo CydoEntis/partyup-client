@@ -15,7 +15,7 @@ export type Tokens = {
 };
 
 export type User = {
-	userId: string;
+	id: string;
 	email: string;
 	displayName: string;
 	tokens: Tokens;
