@@ -71,10 +71,6 @@ function Sidenav() {
 				onClose={closeNewCampaign}
 				drawerMode="create"
 			/>
-			<AvatarShop
-				isOpened={openedAvatarShop}
-				onClose={closeAvatarShop}
-			/>
 			<AppShell.Navbar
 				p="md"
 				bg="secondary"

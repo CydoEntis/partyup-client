@@ -1,5 +1,4 @@
 import { Flex, Paper } from "@mantine/core";
-import React from "react";
 import UserLevel from "../user/UserLevel";
 import { ChevronRight } from "lucide-react";
 import { User } from "../../shared/types/auth.types";
