@@ -3,10 +3,10 @@ import useAvatar from "../../hooks/useGetAvatar";
 import { forwardRef } from "react";
 import { Avatar } from "../../shared/types/avatar.types";
 
-type UserAvatarProps = { avatar: Avatar };
+type UserAvatarProps = { avatar: Avatar, size?: "xs" | "sm" | "md" | "lg" | "xl" };
 
 const UserAvatar = forwardRef<HTMLDivElement, UserAvatarProps>(
-	({ avatar }, ref) => {
+	({ avatar, size = "md" }, ref) => {
 		const avatarImage = useAvatar(avatar.id);
 
 		return (
@@ -15,6 +15,7 @@ const UserAvatar = forwardRef<HTMLDivElement, UserAvatarProps>(
 				src={avatarImage}
 				alt={avatar.name}
 				bg="violet"
+				size={size}
 			/>
 		);
 	},

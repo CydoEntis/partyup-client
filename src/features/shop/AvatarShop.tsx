@@ -41,10 +41,13 @@ function AvatarShop({ isOpened, onClose }: DrawerProps) {
 			size="lg"
 		>
 			<Stack>
-				<Flex justify="space-between">
+				<Flex px={20} align="center" justify="space-between">
 					<Group>
-						<UserAvatar avatar={user!.avatar} />
-						<Text>{user?.displayName}</Text>
+						<UserAvatar
+							avatar={user!.avatar}
+							size="lg"
+						/>
+						<Text size="lg">{user?.displayName}</Text>
 					</Group>
 					<Group
 						align="center"
@@ -86,21 +89,6 @@ function AvatarShop({ isOpened, onClose }: DrawerProps) {
 										<Tooltip label={avatar.displayName}>
 											<ShopAvatar avatar={avatar} />
 										</Tooltip>
-										<Group
-											align="center"
-											gap={4}
-										>
-											<Text
-												size="sm"
-												p={0}
-											>
-												{avatar.cost}
-											</Text>
-											<Image
-												src={Coin}
-												w={14}
-											/>
-										</Group>
 									</Stack>
 								))}
 							</SimpleGrid>
