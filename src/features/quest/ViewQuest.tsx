@@ -10,18 +10,20 @@ function ViewQuest() {
 	const { completeQuest, uncompleteQuest, quest } = useQuestStore();
 	const { user } = useAuthStore();
 
-	const userRole = quest
+	const memberRole = quest
 		? quest.members.find((member) => member.userId === user?.id)?.role
 		: null;
 
+	const isAssignedToQuest = memberRole !== undefined;
+
 	const handleComplete = async () => {
-		if (quest) {
+		if (quest && isAssignedToQuest) {
 			await completeQuest(quest.campaignId, quest.id);
 		}
 	};
 
 	const handleUncomplete = async () => {
-		if (quest) {
+		if (quest && isAssignedToQuest) {
 			await uncompleteQuest(quest.campaignId, quest.id);
 		}
 	};
@@ -51,13 +53,13 @@ function ViewQuest() {
 						color="gray"
 						leftSection={<Clock size={16} />}
 					>
-						{quest && formatDate(quest.dueDate)} {/* Ensure quest is defined */}
+						{quest && formatDate(quest.dueDate)}
 					</Badge>
 				</Flex>
 
 				<Stack py={16}>
 					<Title size="xl">Description</Title>
-					<Text>{quest?.description}</Text> {/* Use optional chaining */}
+					<Text>{quest?.description}</Text>
 				</Stack>
 
 				<Stack>
@@ -75,7 +77,7 @@ function ViewQuest() {
 					w="100%"
 					py={32}
 				>
-					{!quest?.isCompleted ? (
+					{!quest?.isCompleted && isAssignedToQuest ? (
 						<Button
 							leftSection={<Check size={20} />}
 							variant="light"
@@ -87,7 +89,8 @@ function ViewQuest() {
 							Mark Complete
 						</Button>
 					) : null}
-					{(userRole === "Owner" || userRole === "Captain") &&
+
+					{(memberRole === "Owner" || memberRole === "Captain") &&
 					quest?.isCompleted ? (
 						<Button
 							leftSection={<Check size={20} />}
