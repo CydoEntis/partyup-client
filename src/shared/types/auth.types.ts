@@ -1,3 +1,5 @@
+import { Avatar } from "./avatar.types";
+
 export type LoginCredentials = {
 	email: string;
 	password: string;
@@ -20,13 +22,9 @@ export type User = {
 	displayName: string;
 	tokens: Tokens;
 	avatar: Avatar;
+	currency: number;
 	currentLevel: number;
 	currentExp: number;
 	expToNextLevel: number;
 	isLoggedIn: boolean;
 };
-
-export type Avatar = {
-	id: number;
-	name: string;
-}

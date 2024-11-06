@@ -7,7 +7,13 @@ import {
 	Stack,
 	Skeleton,
 } from "@mantine/core";
-import { LayoutGrid, LogOut, PlusCircle, Users2 } from "lucide-react";
+import {
+	LayoutGrid,
+	LogOut,
+	PlusCircle,
+	ShoppingCart,
+	Users2,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
@@ -16,18 +22,33 @@ import useLogout from "../../hooks/useLogout";
 import CampaignDrawer from "../../features/campaign/CampaignDrawer";
 import useCampaignStore from "../../stores/useCampaignStore";
 import { useEffect, useState } from "react";
+import AvatarShop from "../../features/shop/AvatarShop";
+import useAvatarStore from "../../stores/useAvatarStore";
+import useAuthStore from "../../stores/useAuthStore";
 
 type Props = {};
 
 function Sidenav({}: Props) {
 	const { isLightMode } = useGetColorTheme();
 	const { getRecentCampaigns, recentCampaigns, loading } = useCampaignStore();
+	const { user } = useAuthStore();
+	const { getAvatarShop } = useAvatarStore();
 	const logoutHandler = useLogout();
 	const [isRecentOpen, setIsRecentOpen] = useState(false);
 	const [
 		openedNewCampaign,
 		{ open: openNewCampaign, close: closeNewCampaign },
 	] = useDisclosure(false);
+
+	const [openedAvatarShop, { open: openAvatarShop, close: closeAvatarShop }] =
+		useDisclosure(false);
+
+	const handleAvatarShop = async () => {
+		if (user) {
+			await getAvatarShop(user.id);
+			openAvatarShop();
+		}
+	};
 
 	useEffect(() => {
 		const fetchRecentCampaigns = async () => {
@@ -44,6 +65,10 @@ function Sidenav({}: Props) {
 				isOpened={openedNewCampaign}
 				onClose={closeNewCampaign}
 				drawerMode="create"
+			/>
+			<AvatarShop
+				isOpened={openedAvatarShop}
+				onClose={closeAvatarShop}
 			/>
 			<AppShell.Navbar
 				p="md"
@@ -147,6 +172,16 @@ function Sidenav({}: Props) {
 							/>
 						</Stack>
 						<Stack mt="auto">
+							<Button
+								justify="start"
+								leftSection={<ShoppingCart size={20} />}
+								variant="light"
+								color="violet"
+								h={40}
+								onClick={handleAvatarShop}
+							>
+								Avatar Shop
+							</Button>
 							<Button
 								justify="start"
 								leftSection={<LogOut size={20} />}
