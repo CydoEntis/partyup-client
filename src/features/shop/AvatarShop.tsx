@@ -3,6 +3,7 @@ import useAuthStore from "../../stores/useAuthStore";
 import useAvatarStore from "../../stores/useAvatarStore";
 import ShopAvatar from "../../components/avatar/ShopAvatar";
 import { AvatarShopItem } from "../../shared/types/avatar.types";
+import { useEffect } from "react";
 
 type AvatarShopProps = {
 	onUnlock: () => void;
@@ -10,7 +11,17 @@ type AvatarShopProps = {
 
 function AvatarShop({ onUnlock }: AvatarShopProps) {
 	const { user } = useAuthStore();
-	const { avatars } = useAvatarStore();
+	const { avatars, getAvatarShop } = useAvatarStore();
+
+	useEffect(() => {
+		const loadAvatarShop = async () => {
+			if (user) {
+				await getAvatarShop(user.id);
+			}
+		};
+
+		loadAvatarShop();
+	}, [getAvatarShop]);
 
 	const groupedByTier =
 		avatars?.reduce((acc, avatar) => {
@@ -40,19 +51,12 @@ function AvatarShop({ onUnlock }: AvatarShopProps) {
 							spacing="md"
 						>
 							{avatarsByTier.map((avatar) => (
-								<Stack
+								<ShopAvatar
 									key={avatar.id}
-									justify="center"
-									align="center"
-								>
-									<Tooltip label={avatar.displayName}>
-										<ShopAvatar
-											avatar={avatar}
-											user={user!}
-											onClick={onUnlock}
-										/>
-									</Tooltip>
-								</Stack>
+									avatar={avatar}
+									user={user!}
+									onClick={onUnlock}
+								/>
 							))}
 						</SimpleGrid>
 					</Box>

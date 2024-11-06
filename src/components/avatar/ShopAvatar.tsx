@@ -4,6 +4,7 @@ import {
 	Text,
 	Group,
 	Image,
+	Stack,
 } from "@mantine/core";
 import useAvatar from "../../hooks/useGetAvatar";
 import { forwardRef } from "react";
@@ -23,9 +24,13 @@ const ShopAvatar = forwardRef<HTMLDivElement, ShopAvatarProps>(
 		const avatarImage = useAvatar(avatar.id);
 
 		return (
-			<Box>
+			<Stack
+				justify="center"
+				align="center"
+				gap={4}
+			>
 				<Box
-					className={`relative `}
+					className={`relative ${!avatar.isUnlocked ? "cursor-pointer" : ""}`}
 					onClick={
 						!avatar.isUnlocked && user.currentLevel >= avatar.unlockLevel
 							? onClick
@@ -42,38 +47,45 @@ const ShopAvatar = forwardRef<HTMLDivElement, ShopAvatarProps>(
 					/>
 					{!avatar.isUnlocked ? (
 						<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-							<Lock />
+							<Lock className="text-white" />
 						</div>
 					) : null}
 				</Box>
-				{avatar.isUnlocked ? (
-					<Text
-						size="xs"
-						ta="center"
-						pt={4}
-					>
-						Unlocked
-					</Text>
-				) : (
-					<Group
-						pt={4}
-						align="center"
-						justify="center"
-						gap={4}
-					>
+				<Stack
+					gap={0}
+					justify="center"
+					align="center"
+				>
+					<Text size="xs">{avatar.displayName}</Text>
+					{avatar.isUnlocked ? (
 						<Text
-							size="sm"
-							p={0}
+							size="xs"
+							ta="center"
+							pt={4}
 						>
-							{avatar.cost}
+							Unlocked
 						</Text>
-						<Image
-							src={Coin}
-							w={14}
-						/>
-					</Group>
-				)}
-			</Box>
+					) : (
+						<Group
+							pt={4}
+							align="center"
+							justify="center"
+							gap={4}
+						>
+							<Text
+								size="sm"
+								p={0}
+							>
+								{avatar.cost}
+							</Text>
+							<Image
+								src={Coin}
+								w={14}
+							/>
+						</Group>
+					)}
+				</Stack>
+			</Stack>
 		);
 	},
 );
