@@ -16,7 +16,7 @@ import { User } from "../../shared/types/auth.types";
 type ShopAvatarProps = {
 	avatar: AvatarShopItem;
 	user: User;
-	onClick: () => void;
+	onClick?: () => void;
 };
 
 const ShopAvatar = forwardRef<HTMLDivElement, ShopAvatarProps>(
