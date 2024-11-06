@@ -25,7 +25,6 @@ function CampaignTabs() {
 		fetchCampaign();
 	}, [campaignId, getQuests]);
 
-	console.log("Pg: ", paginatedQuests);
 
 	const { handleViewQuest } = useQuestDrawer();
 

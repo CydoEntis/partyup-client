@@ -9,6 +9,7 @@ import {
 import { UpdateStep } from "../shared/types/step.types";
 import stepService from "../services/stepService";
 import { QueryParams } from "../shared/types/query-params.types";
+import { useAuthStore } from "./useAuthStore";
 
 type QuestState = {
 	paginatedQuests: PaginatedQuests;
@@ -224,6 +225,9 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 				questId,
 			);
 
+			const { getUser, user } = useAuthStore.getState();
+			await getUser(user!.id);
+
 			set((state) => {
 				const updatedItems = state.paginatedQuests.items.map((quest) =>
 					quest.id === completedQuest.id
@@ -257,6 +261,9 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 				campaignId,
 				questId,
 			);
+
+			const { getUser, user } = useAuthStore.getState();
+			await getUser(user!.id);
 
 			set((state) => {
 				const updatedItems = state.paginatedQuests.items.map((quest) =>

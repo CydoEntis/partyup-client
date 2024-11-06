@@ -7,6 +7,7 @@ import {
 } from "../shared/types/auth.types";
 import authService from "../services/authService";
 import localStorageService from "../services/localStorageService";
+import userService from "../services/userService";
 
 type AuthState = {
 	user: User | null;
@@ -17,6 +18,7 @@ type AuthState = {
 	register: (credentials: RegisterCredentials) => Promise<void>;
 	login: (credentials: LoginCredentials) => Promise<void>;
 	logout: () => Promise<void>;
+	getUser: (userId: string) => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -111,6 +113,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			}
 		} catch (error) {
 			set({ error: "Failed to log out" });
+			throw error;
+		} finally {
+			set({ loading: false });
+		}
+	},
+
+	getUser: async (userId: string) => {
+		set({ loading: true, error: null });
+		try {
+			const userData = await userService.getUser(userId);
+			set({
+				user: {
+					...(get().user || {}),
+					...userData,
+				},
+			});
+			localStorageService.setItem("questLog", {
+				...(get().user || {}),
+				...userData,
+			});
+		} catch (error) {
+			set({ error: "Failed to fetch user data" });
 			throw error;
 		} finally {
 			set({ loading: false });

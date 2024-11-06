@@ -101,8 +101,6 @@ const completeQuest = async (
 	).data;
 	if (!response.isSuccess) throw new Error();
 
-	console.log("Quest marked complete: ", response);
-
 	return response.result;
 };
 
@@ -117,7 +115,6 @@ const uncompleteQuest = async (
 	).data;
 	if (!response.isSuccess) throw new Error();
 
-	console.log("Quest maked uncomplete: ", response);
 
 	return response.result;
 };

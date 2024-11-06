@@ -42,4 +42,6 @@ const refreshTokens = async (tokens: Tokens): Promise<Tokens> => {
 	return response.result;
 };
 
+
+
 export default { registerUser, loginUser, logoutUser, refreshTokens };
