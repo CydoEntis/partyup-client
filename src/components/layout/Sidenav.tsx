@@ -6,8 +6,13 @@ import {
 	NavLink as MantineNavLink,
 	Stack,
 	Skeleton,
+	Box,
+	Paper,
+	Group,
+	Burger,
 } from "@mantine/core";
 import {
+	ChevronRight,
 	LayoutGrid,
 	LogOut,
 	PlusCircle,
@@ -25,10 +30,10 @@ import { useEffect, useState } from "react";
 import AvatarShop from "../../features/shop/AvatarShop";
 import useAvatarStore from "../../stores/useAvatarStore";
 import useAuthStore from "../../stores/useAuthStore";
+import UserLevel from "../../features/user/UserLevel";
+import AccountInfo from "../../features/account/AccountInfo";
 
-type Props = {};
-
-function Sidenav({}: Props) {
+function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
 	const { getRecentCampaigns, recentCampaigns, loading } = useCampaignStore();
 	const { user } = useAuthStore();
@@ -110,12 +115,14 @@ function Sidenav({}: Props) {
 				) : (
 					<Stack style={{ flexGrow: 1 }}>
 						<Stack gap={8}>
+							<AccountInfo user={user!} />
 							<Button
 								color="violet"
 								variant="light"
 								rightSection={<PlusCircle size={20} />}
 								h={40}
 								onClick={openNewCampaign}
+								my={20}
 							>
 								New Campaign
 							</Button>
@@ -172,16 +179,6 @@ function Sidenav({}: Props) {
 							/>
 						</Stack>
 						<Stack mt="auto">
-							<Button
-								justify="start"
-								leftSection={<ShoppingCart size={20} />}
-								variant="light"
-								color="violet"
-								h={40}
-								onClick={handleAvatarShop}
-							>
-								Avatar Shop
-							</Button>
 							<Button
 								justify="start"
 								leftSection={<LogOut size={20} />}

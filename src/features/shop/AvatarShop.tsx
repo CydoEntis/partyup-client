@@ -1,23 +1,11 @@
-import {
-	Modal,
-	Text,
-	SimpleGrid,
-	Box,
-	Stack,
-	Divider,
-	Image,
-	Group,
-	Tooltip,
-	Flex,
-} from "@mantine/core";
+import { Modal, SimpleGrid, Box, Stack, Divider, Tooltip } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 import useAuthStore from "../../stores/useAuthStore";
 import useAvatarStore from "../../stores/useAvatarStore";
 import ShopAvatar from "../../components/avatar/ShopAvatar";
 import { AvatarShopItem } from "../../shared/types/avatar.types";
-
-import Coin from "../../assets/coin.png";
-import UserAvatar from "../../components/avatar/UserAvatar";
+import ShopHeader from "./ShopHeader";
+import { useDisclosure } from "@mantine/hooks";
 
 function AvatarShop({ isOpened, onClose }: DrawerProps) {
 	const { user } = useAuthStore();
@@ -32,71 +20,60 @@ function AvatarShop({ isOpened, onClose }: DrawerProps) {
 			return acc;
 		}, {} as { [tier: number]: AvatarShopItem[] }) || {};
 
+	const unlockHandler = () => {
+		open();
+		console.log("Can Unlock");
+	};
+  const [opened, { open, close }] = useDisclosure(false);
 	return (
-		<Modal
-			opened={isOpened}
-			onClose={onClose}
-			title="Purchase an Avatar"
-			centered
-			size="lg"
-		>
-			<Stack>
-				<Flex px={20} align="center" justify="space-between">
-					<Group>
-						<UserAvatar
-							avatar={user!.avatar}
-							size="lg"
-						/>
-						<Text size="lg">{user?.displayName}</Text>
-					</Group>
-					<Group
-						align="center"
-						gap={12}
-					>
-						<Text
-							size="xl"
-							p={0}
-						>
-							{user?.currency}
-						</Text>
-						<Image
-							src={Coin}
-							w={20}
-						/>
-					</Group>
-				</Flex>
+		<>
+			<Modal
+				opened={isOpened}
+				onClose={onClose}
+				title="Purchase an Avatar"
+				centered
+				size="lg"
+			>
+				<Stack>
+					<ShopHeader user={user!} />
+					{Object.keys(groupedByTier).map((tier) => {
+						const avatarsByTier = groupedByTier[+tier];
+						const unlockLevel = avatarsByTier[0]?.unlockLevel;
 
-				{Object.keys(groupedByTier).map((tier) => {
-					const avatarsByTier = groupedByTier[+tier];
-					return (
-						<Box key={tier}>
-							<Divider
-								my="xs"
-								label={`Tier ${tier}`}
-								labelPosition="center"
-							/>
+						return (
+							<Box key={tier}>
+								<Divider
+									my="xs"
+									label={`Tier ${tier} (unlocked at level ${unlockLevel})`}
+									labelPosition="center"
+								/>
 
-							<SimpleGrid
-								cols={4}
-								spacing="md"
-							>
-								{avatarsByTier.map((avatar) => (
-									<Stack
-										key={avatar.id}
-										justify="center"
-										align="center"
-									>
-										<Tooltip label={avatar.displayName}>
-											<ShopAvatar avatar={avatar} />
-										</Tooltip>
-									</Stack>
-								))}
-							</SimpleGrid>
-						</Box>
-					);
-				})}
-			</Stack>
-		</Modal>
+								<SimpleGrid
+									cols={4}
+									spacing="md"
+								>
+									{avatarsByTier.map((avatar) => (
+										<Stack
+											key={avatar.id}
+											justify="center"
+											align="center"
+										>
+											<Tooltip label={avatar.displayName}>
+												<ShopAvatar
+													avatar={avatar}
+													user={user!}
+													onClick={unlockHandler}
+												/>
+											</Tooltip>
+										</Stack>
+									))}
+								</SimpleGrid>
+							</Box>
+						);
+					})}
+				</Stack>
+			</Modal>
+		</>
 	);
 }
 

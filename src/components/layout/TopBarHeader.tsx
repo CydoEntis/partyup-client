@@ -2,7 +2,6 @@ import { AppShell, Burger, Button, Flex, Group } from "@mantine/core";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import { NavLink } from "react-router-dom";
 import useAuthStore from "../../stores/useAuthStore";
-import UserLevel from "../../features/user/UserLevel";
 
 type TopBarHeaderProps = {
 	opened: boolean;
@@ -12,7 +11,6 @@ type TopBarHeaderProps = {
 function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 	const { isLightMode } = useGetColorTheme();
 	const { user } = useAuthStore();
-
 
 	return (
 		<AppShell.Header
@@ -29,21 +27,14 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 				h="100%"
 				px={16}
 			>
-				<Group
-					h="100%"
-					px="md"
-				>
-					<Burger
-						opened={opened}
-						onClick={toggle}
-						hiddenFrom="sm"
-						size="sm"
-					/>
-				</Group>
+				<Burger
+					opened={opened}
+					onClick={toggle}
+					hiddenFrom="sm"
+					size="sm"
+				/>
 
-				{user ? (
-					<UserLevel user={user} />
-				) : (
+				{user ? null : (
 					<Group>
 						<Button
 							component={NavLink}

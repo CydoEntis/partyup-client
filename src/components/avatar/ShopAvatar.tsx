@@ -1,19 +1,37 @@
-import { Box, Avatar as MantineAvatar, Text, Group, Image } from "@mantine/core";
+import {
+	Box,
+	Avatar as MantineAvatar,
+	Text,
+	Group,
+	Image,
+} from "@mantine/core";
 import useAvatar from "../../hooks/useGetAvatar";
 import { forwardRef } from "react";
 import { AvatarShopItem } from "../../shared/types/avatar.types";
 import { Lock } from "lucide-react";
 import Coin from "../../assets/coin.png";
+import { User } from "../../shared/types/auth.types";
 
-type ShopAvatarProps = { avatar: AvatarShopItem };
+type ShopAvatarProps = {
+	avatar: AvatarShopItem;
+	user: User;
+	onClick: () => void;
+};
 
 const ShopAvatar = forwardRef<HTMLDivElement, ShopAvatarProps>(
-	({ avatar }, ref) => {
+	({ avatar, user, onClick }, ref) => {
 		const avatarImage = useAvatar(avatar.id);
 
 		return (
 			<Box>
-				<Box className="relative">
+				<Box
+					className={`relative `}
+					onClick={
+						!avatar.isUnlocked && user.currentLevel >= avatar.unlockLevel
+							? onClick
+							: undefined
+					}
+				>
 					<MantineAvatar
 						ref={ref}
 						src={avatarImage}

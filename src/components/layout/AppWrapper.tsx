@@ -1,6 +1,5 @@
 import { AppShell } from "@mantine/core";
 import  { ReactNode } from "react";
-import useGetColorTheme from "../../hooks/useGetColorTheme";
 
 type AppWrapperProps = {
 	opened: boolean;
@@ -8,10 +7,9 @@ type AppWrapperProps = {
 };
 
 function AppWrapper({ opened, children }: AppWrapperProps) {
-	const { isLightMode } = useGetColorTheme();
 	return (
 		<AppShell
-			header={{ height: { base: 60, md: 70 } }}
+			header={{ height: { base: 60} }}
 			navbar={{
 				width: { base: 200, md: 300 },
 				breakpoint: "sm",
