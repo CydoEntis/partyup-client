@@ -37,7 +37,7 @@ type QuestState = {
 	uncompleteQuest: (partyId: number, questId: number) => Promise<void>;
 };
 
-export const useQuestStore = create<QuestState>((set, get) => ({
+export const useQuestStore = create<QuestState>((set) => ({
 	paginatedQuests: {
 		items: [],
 		totalCount: 0,
@@ -82,16 +82,10 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		}
 	},
 
-	createQuest: async (
-		partyId: string,
-		quest: CreateQuest,
-	): Promise<Quest> => {
+	createQuest: async (partyId: string, quest: CreateQuest): Promise<Quest> => {
 		set({ loading: true, error: null });
 		try {
-			const newQuest = await questService.createQuest(
-				Number(partyId),
-				quest,
-			);
+			const newQuest = await questService.createQuest(Number(partyId), quest);
 			set((state) => ({
 				paginatedQuests: {
 					...state.paginatedQuests,
@@ -220,10 +214,7 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 	completeQuest: async (partyId: number, questId: number) => {
 		set({ loading: true, error: null });
 		try {
-			const completedQuest = await questService.completeQuest(
-				partyId,
-				questId,
-			);
+			const completedQuest = await questService.completeQuest(partyId, questId);
 
 			const { getUser, user } = useAuthStore.getState();
 			await getUser(user!.id);

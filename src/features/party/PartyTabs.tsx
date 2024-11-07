@@ -11,8 +11,10 @@ function PartyTabs() {
 	const { partyId } = useParams();
 	const { getQuests, paginatedQuests, loading } = useQuestStore();
 
+	console.log(paginatedQuests)
+
 	useEffect(() => {
-		const fetchParty = async () => {
+		const fetchQuests = async () => {
 			if (partyId) {
 				try {
 					await getQuests(partyId);
@@ -22,7 +24,7 @@ function PartyTabs() {
 			}
 		};
 
-		fetchParty();
+		fetchQuests();
 	}, [partyId, getQuests]);
 
 	const { handleViewQuest } = useQuestDrawer();

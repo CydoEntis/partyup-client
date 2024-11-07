@@ -4,6 +4,7 @@ import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import PartiesPage from "../pages/party/PartiesPage";
 import AccountPage from "../pages/account/AccountPage";
+import PartyPage from "../pages/party/PartyPage";
 
 const router = createBrowserRouter([
 	{
@@ -36,11 +37,11 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "parties/:partyId/quests",
-				element: <PartiesPage />,
+				element: <PartyPage />,
 				children: [
 					{
 						path: ":questId",
-						element: <PartiesPage />,
+						element: <PartyPage />,
 					},
 				],
 			},
