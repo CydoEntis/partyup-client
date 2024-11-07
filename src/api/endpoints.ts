@@ -4,7 +4,7 @@ const endpoints = {
 	auth: "/auth",
 	user: "/user",
 	avatars: "/avatars",
-	campaigns: "/campaigns",
+	parties: "/parties",
 	steps: "/steps",
 };
 

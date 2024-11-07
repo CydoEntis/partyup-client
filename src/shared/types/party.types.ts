@@ -14,7 +14,7 @@ export type Party = {
 	dueDate: Date;
 };
 
-export type PaginatedPartys = {
+export type PaginatedParties = {
 	items: Party[];
 	totalCount: number;
 	totalPages: number;

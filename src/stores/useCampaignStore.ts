@@ -5,7 +5,7 @@ import {
 	PaginatedCampaigns,
 	UpdateCampaign,
 } from "../shared/types/party.types";
-import campaignService from "../services/campaignService";
+import campaignService from "../services/partyService";
 import { QueryParams } from "../shared/types/query-params.types";
 
 type CampaignState = {

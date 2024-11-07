@@ -1,10 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import Test from "../pages/Test";
-import CampaignPage from "../pages/campaign/PartyPage";
+import CampaignPage from "../pages/party/PartyPage";
 import AppLayout from "../components/layout/AppLayout";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
-import PartiesPage from "../pages/campaign/PartiesPage";
+import PartiesPage from "../pages/party/PartiesPage";
 import AccountPage from "../pages/account/AccountPage";
 
 const router = createBrowserRouter([
@@ -26,7 +25,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "dashboard",
-				element: <Test />,
+				element: <div>Will be a dashboard</div>,
 			},
 			{
 				path: "parties",

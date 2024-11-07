@@ -1,17 +1,17 @@
 import apiClient from "../api/apiClient";
 import endpoints from "../api/endpoints";
 import {
-	Campaign,
-	CreateCampaign,
-	PaginatedCampaigns,
-	UpdateCampaign,
-	UpdateCampaignLeader,
+	Party,
+	CreateParty,
+	PaginatedParties,
+	UpdateParty,
+	UpdatePartyLeader,
 } from "../shared/types/party.types";
 import { QueryParams } from "../shared/types/query-params.types";
 
-const getAllCampaigns = async (
+const getAllParties = async (
 	params?: QueryParams,
-): Promise<PaginatedCampaigns> => {
+): Promise<PaginatedParties> => {
 	const queryParams = new URLSearchParams();
 
 	if (params) {
@@ -26,36 +26,36 @@ const getAllCampaigns = async (
 	}
 
 	const response = (
-		await apiClient.get(`${endpoints.campaigns}?${queryParams.toString()}`)
+		await apiClient.get(`${endpoints.parties}?${queryParams.toString()}`)
 	).data;
 
 	if (!response.isSuccess) throw new Error();
 	return response.result;
 };
 
-const getCampaignById = async (campaignId: number): Promise<Campaign> => {
-	const response = (await apiClient.get(`${endpoints.campaigns}/${campaignId}`))
+const getPartyById = async (partyId: number): Promise<Party> => {
+	const response = (await apiClient.get(`${endpoints.parties}/${partyId}`))
 		.data;
 	if (!response.isSuccess) throw new Error();
 	return response.result;
 };
 
-const createCampaign = async (campaign: CreateCampaign): Promise<Campaign> => {
-	const response = (await apiClient.post(`${endpoints.campaigns}`, campaign))
+const createParty = async (party: CreateParty): Promise<Party> => {
+	const response = (await apiClient.post(`${endpoints.parties}`, party))
 		.data;
 	if (!response.isSuccess) throw new Error();
 
 	return response.result;
 };
 
-const updateCampaign = async (
-	campaignId: number,
-	updatedCampaignDetails: UpdateCampaign,
-): Promise<Campaign> => {
+const updateParty = async (
+	partyId: number,
+	updatedPartyDetails: UpdateParty,
+): Promise<Party> => {
 	const response = (
 		await apiClient.put(
-			`${endpoints.campaigns}/${campaignId}/details`,
-			updatedCampaignDetails,
+			`${endpoints.parties}/${partyId}/details`,
+			updatedPartyDetails,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
@@ -65,32 +65,32 @@ const updateCampaign = async (
 	return response.result;
 };
 
-const updateCampaignLeader = async (
-	campaignId: number,
-	newCampaignLeader: UpdateCampaignLeader,
-): Promise<UpdateCampaignLeader> => {
+const updatePartyLeader = async (
+	partyId: number,
+	newPartyLeader: UpdatePartyLeader,
+): Promise<UpdatePartyLeader> => {
 	const response = (
 		await apiClient.put(
-			`${endpoints.campaigns}/${campaignId}/leader`,
-			newCampaignLeader,
+			`${endpoints.parties}/${partyId}/leader`,
+			newPartyLeader,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
 	return response.result;
 };
 
-const deleteCampaign = async (campaignId: number): Promise<void> => {
+const deleteParty = async (partyId: number): Promise<void> => {
 	const response = (
-		await apiClient.delete(`${endpoints.campaigns}/${campaignId}`)
+		await apiClient.delete(`${endpoints.parties}/${partyId}`)
 	).data;
 	if (!response.isSuccess) throw new Error();
 };
 
 export default {
-	getAllCampaigns,
-	getCampaignById,
-	createCampaign,
-	updateCampaign,
-	updateCampaignLeader,
-	deleteCampaign,
+	getAllParties,
+	getPartyById,
+	createParty,
+	updateParty,
+	updatePartyLeader,
+	deleteParty,
 };
