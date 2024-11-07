@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import useCampaignStore from "../../stores/useCampaignStore";
+import useCampaignStore from "../../stores/usePartyStore";
 import { Link } from "react-router-dom";
 import { Stack } from "@mantine/core";
 

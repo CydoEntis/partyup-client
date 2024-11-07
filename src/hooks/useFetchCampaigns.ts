@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
-import useCampaignStore from "../stores/useCampaignStore";
+import useCampaignStore from "../stores/usePartyStore";
 import { AxiosError } from "axios";
 
 function useFetchRecentCampaigns() {

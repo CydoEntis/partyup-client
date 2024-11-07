@@ -25,7 +25,7 @@ import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
 import useLogout from "../../hooks/useLogout";
 import CampaignDrawer from "../../features/party/PartyDrawer";
-import useCampaignStore from "../../stores/useCampaignStore";
+import useCampaignStore from "../../stores/usePartyStore";
 import { useEffect, useState } from "react";
 import AvatarShop from "../../features/shop/AvatarShop";
 import useAvatarStore from "../../stores/useAvatarStore";
