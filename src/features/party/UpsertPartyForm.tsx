@@ -14,12 +14,12 @@ import {
 import classes from "../auth/auth.module.css";
 import { DateInput } from "@mantine/dates";
 import { useEffect, useState } from "react";
-import useCampaignStore from "../../stores/useCampaignStore";
+import usePartyStore from "../../stores/usePartyStore";
 import { Color } from "../../shared/types/color.types";
 import { Check } from "lucide-react";
-import { Campaign } from "../../shared/types/party.types";
+import { Party } from "../../shared/types/party.types";
 
-const createCampaignSchema = z.object({
+const createPartySchema = z.object({
 	title: z
 		.string()
 		.min(3, "Name must be more than 3 characters")
@@ -42,18 +42,18 @@ const createCampaignSchema = z.object({
 	),
 });
 
-type CampaignData = z.infer<typeof createCampaignSchema>;
+type PartyData = z.infer<typeof createPartySchema>;
 
-type UpsertCampaignProps = {
-	campaign?: Campaign;
+type UpsertPartyProps = {
+	party?: Party;
 	onClose: () => void;
 };
 
-function UpsertCampaignForm({ campaign, onClose }: UpsertCampaignProps) {
-	const { campaignId } = useParams();
-	const { createCampaign, updateCampaign } = useCampaignStore();
+function UpsertPartyForm({ party, onClose }: UpsertPartyProps) {
+	const { partyId } = useParams();
+	const { createParty, updateParty } = usePartyStore();
 	const navigate = useNavigate();
-	const [selectedColor, setSelectedColor] = useState(campaign?.color || "red");
+	const [selectedColor, setSelectedColor] = useState(party?.color || "red");
 	const colors = [
 		{ name: "red", value: "#E03131" },
 		{ name: "pink", value: "#C2255C" },
@@ -69,48 +69,48 @@ function UpsertCampaignForm({ campaign, onClose }: UpsertCampaignProps) {
 		{ name: "orange", value: "#E8590C" },
 	];
 
-	const form = useForm<CampaignData>({
-		validate: zodResolver(createCampaignSchema),
+	const form = useForm<PartyData>({
+		validate: zodResolver(createPartySchema),
 		initialValues: {
-			title: campaign?.title || "",
-			description: campaign?.description || "",
-			dueDate: campaign?.dueDate ? new Date(campaign.dueDate) : new Date(),
+			title: party?.title || "",
+			description: party?.description || "",
+			dueDate: party?.dueDate ? new Date(party.dueDate) : new Date(),
 		},
 	});
 
-	const createNewCampaign = async (data: CampaignData) => {
-		const newCampaign = {
-			campaignId: Number(campaignId),
+	const createNewParty = async (data: PartyData) => {
+		const newParty = {
+			partyId: Number(partyId),
 			title: data.title,
 			description: data.description,
 			dueDate: data.dueDate,
 			color: selectedColor as Color,
 		};
 
-		const createdCampaign = await createCampaign(newCampaign);
-		return createdCampaign;
+		const createdParty = await createParty(newParty);
+		return createdParty;
 	};
 
-	const updateExistingCampaign = async (data: CampaignData) => {
-		const updatedCampaign = {
-			id: Number(campaignId),
+	const updateExistingParty = async (data: PartyData) => {
+		const updatedParty = {
+			id: Number(partyId),
 			title: data.title,
 			description: data.description,
 			dueDate: data.dueDate,
 			color: selectedColor as Color,
 		};
-		if (campaignId) {
-			await updateCampaign(campaignId, updatedCampaign);
+		if (partyId) {
+			await updateParty(partyId, updatedParty);
 		}
 	};
 
-	async function onSubmit(data: CampaignData) {
+	async function onSubmit(data: PartyData) {
 		try {
-			if (campaign) {
-				updateExistingCampaign(data);
+			if (party) {
+				updateExistingParty(data);
 			} else {
-				const newCampaign = await createNewCampaign(data);
-				navigate(`/campaigns/${newCampaign.id}/quests`);
+				const newParty = await createNewParty(data);
+				navigate(`/partys/${newParty.id}/quests`);
 			}
 
 			form.reset();
@@ -133,22 +133,22 @@ function UpsertCampaignForm({ campaign, onClose }: UpsertCampaignProps) {
 	}
 
 	useEffect(() => {
-		if (campaign) {
+		if (party) {
 			form.setValues({
-				title: campaign.title,
-				description: campaign.description,
-				dueDate: new Date(campaign.dueDate),
+				title: party.title,
+				description: party.description,
+				dueDate: new Date(party.dueDate),
 			});
-			setSelectedColor(campaign.color);
+			setSelectedColor(party.color);
 		}
-	}, [campaign, campaignId]);
+	}, [party, partyId]);
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
 			<Stack gap={8}>
 				<TextInput
 					label="Title"
-					placeholder="Name of your Campaign?"
+					placeholder="Name of your Party?"
 					classNames={{
 						input: classes.input,
 					}}
@@ -156,7 +156,7 @@ function UpsertCampaignForm({ campaign, onClose }: UpsertCampaignProps) {
 				/>
 				<Textarea
 					label="Description"
-					placeholder="Describe your campaign"
+					placeholder="Describe your party"
 					autosize
 					{...form.getInputProps("description")}
 				/>
@@ -191,10 +191,10 @@ function UpsertCampaignForm({ campaign, onClose }: UpsertCampaignProps) {
 				variant="light"
 				type="submit"
 			>
-				{campaign ? "Update Campaign" : "Create Campaign"}
+				{party ? "Update Party" : "Create Party"}
 			</Button>
 		</form>
 	);
 }
 
-export default UpsertCampaignForm;
+export default UpsertPartyForm;

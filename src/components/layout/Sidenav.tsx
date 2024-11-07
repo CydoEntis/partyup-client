@@ -24,7 +24,7 @@ import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
 import useLogout from "../../hooks/useLogout";
-import CampaignDrawer from "../../features/campaign/CampaignDrawer";
+import CampaignDrawer from "../../features/party/PartyDrawer";
 import useCampaignStore from "../../stores/useCampaignStore";
 import { useEffect, useState } from "react";
 import AvatarShop from "../../features/shop/AvatarShop";

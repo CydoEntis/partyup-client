@@ -1,20 +1,20 @@
 import { Box, Drawer, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 
-import { Campaign } from "../../shared/types/party.types";
-import UpsertCampaignForm from "./UpsertCampaignForm";
+import { Party } from "../../shared/types/party.types";
+import UpsertPartyForm from "./UpsertPartyForm";
 
-type CampaignDrawerProps = DrawerProps & {
-	campaign?: Campaign;
+type PartyDrawerProps = DrawerProps & {
+	party?: Party;
 	drawerMode: "create" | "edit";
 };
 
-function CampaignDrawer({
+function PartyDrawer({
 	isOpened,
 	onClose,
 	drawerMode,
-	campaign,
-}: CampaignDrawerProps) {
+	party,
+}: PartyDrawerProps) {
 	return (
 		<Drawer
 			size="xl"
@@ -28,11 +28,11 @@ function CampaignDrawer({
 			>
 				<Title size="2rem">
 					{drawerMode === "create"
-						? "Create a Campaign"
-						: `Editing: ${campaign?.title} `}
+						? "Create a Party"
+						: `Editing: ${party?.title} `}
 				</Title>
-				<UpsertCampaignForm
-					campaign={campaign}
+				<UpsertPartyForm
+					party={party}
 					onClose={onClose}
 				/>
 			</Box>
@@ -40,4 +40,4 @@ function CampaignDrawer({
 	);
 }
 
-export default CampaignDrawer;
+export default PartyDrawer;

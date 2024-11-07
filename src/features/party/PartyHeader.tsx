@@ -1,23 +1,23 @@
-import InviteCampaignMember from "./InviteCampaignMember";
+import InvitePartyMember from "./InvitePartyMember";
 import { ActionIcon, Box, Button, Flex, Group, Title } from "@mantine/core";
 import { Edit, Plus } from "lucide-react";
 import { Member } from "../../shared/types/member.types";
 
-type CampaignHeaderProps = {
+type PartyHeaderProps = {
 	title: string;
 	members: Member[];
-	handleEditCampaign: () => void;
+	handleEditParty: () => void;
 	handleNewQuest: () => void;
 	openMemberInvite: () => void;
 };
 
-function CampaignHeader({
+function PartyHeader({
 	title,
 	members,
-	handleEditCampaign,
+	handleEditParty,
 	handleNewQuest,
 	openMemberInvite,
-}: CampaignHeaderProps) {
+}: PartyHeaderProps) {
 	return (
 		<Box
 			bg="secondary"
@@ -39,7 +39,7 @@ function CampaignHeader({
 						<ActionIcon
 							variant="transparent"
 							color="violet"
-							onClick={handleEditCampaign}
+							onClick={handleEditParty}
 						>
 							<Edit size={20} />
 						</ActionIcon>
@@ -54,7 +54,7 @@ function CampaignHeader({
 					</Button>
 				</Group>
 			</Flex>
-			<InviteCampaignMember
+			<InvitePartyMember
 				members={members}
 				onOpenHandler={openMemberInvite}
 			/>
@@ -62,4 +62,4 @@ function CampaignHeader({
 	);
 }
 
-export default CampaignHeader;
+export default PartyHeader;

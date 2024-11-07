@@ -5,26 +5,25 @@ import QuestCard from "../quest/QuestCard";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-function CampaignTabs() {
-	const { campaignId } = useParams();
+function PartyTabs() {
+	const { partyId } = useParams();
 	const { getQuests, paginatedQuests, loading } = useQuestStore();
 
 	useEffect(() => {
-		const fetchCampaign = async () => {
-			if (campaignId) {
+		const fetchParty = async () => {
+			if (partyId) {
 				try {
-					await getQuests(campaignId);
+					await getQuests(partyId);
 				} catch (error) {
-					console.error("Error fetching campaign or quests:", error);
+					console.error("Error fetching party or quests:", error);
 				}
 			}
 		};
 
-		fetchCampaign();
-	}, [campaignId, getQuests]);
-
+		fetchParty();
+	}, [partyId, getQuests]);
 
 	const { handleViewQuest } = useQuestDrawer();
 
@@ -82,4 +81,4 @@ function CampaignTabs() {
 	);
 }
 
-export default CampaignTabs;
+export default PartyTabs;

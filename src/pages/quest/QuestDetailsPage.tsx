@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import CampaignTabs from "../../features/campaign/CampaignTabs";
+import CampaignTabs from "../../features/party/PartyTabs";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useDisclosure } from "@mantine/hooks";
