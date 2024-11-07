@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import useCampaignStore from "../../stores/useCampaignStore";
 import { Color } from "../../shared/types/color.types";
 import { Check } from "lucide-react";
-import { Campaign } from "../../shared/types/campaign.types";
+import { Campaign } from "../../shared/types/party.types";
 
 const createCampaignSchema = z.object({
 	title: z

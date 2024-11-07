@@ -1,7 +1,7 @@
 import { Box, Drawer, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 
-import { Campaign } from "../../shared/types/campaign.types";
+import { Campaign } from "../../shared/types/party.types";
 import UpsertCampaignForm from "./UpsertCampaignForm";
 
 type CampaignDrawerProps = DrawerProps & {

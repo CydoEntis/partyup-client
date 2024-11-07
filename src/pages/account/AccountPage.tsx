@@ -46,6 +46,8 @@ function AccountPage() {
 		loadAvatarShop();
 	}, [user, getAvatarShop]);
 
+	// TODO Add a modal that will open up when edit avatar is clicked and lets u set your avatar.
+	// TODO When edit button in account details is clicked display a form so the user can update their info.
 	return (
 		<>
 			<Modal

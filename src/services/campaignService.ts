@@ -6,7 +6,7 @@ import {
 	PaginatedCampaigns,
 	UpdateCampaign,
 	UpdateCampaignLeader,
-} from "../shared/types/campaign.types";
+} from "../shared/types/party.types";
 import { QueryParams } from "../shared/types/query-params.types";
 
 const getAllCampaigns = async (

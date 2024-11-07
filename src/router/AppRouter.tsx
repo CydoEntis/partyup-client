@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Test from "../pages/Test";
-import CampaignPage from "../pages/campaign/CampaignPage";
+import CampaignPage from "../pages/campaign/PartyPage";
 import AppLayout from "../components/layout/AppLayout";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";

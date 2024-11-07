@@ -1,7 +1,7 @@
 import { Color } from "./color.types";
 import { Member } from "./member.types";
 
-export type Campaign = {
+export type Party = {
 	id: number;
 	title: string;
 	description: string;
@@ -14,8 +14,8 @@ export type Campaign = {
 	dueDate: Date;
 };
 
-export type PaginatedCampaigns = {
-	items: Campaign[];
+export type PaginatedPartys = {
+	items: Party[];
 	totalCount: number;
 	totalPages: number;
 	currentPage: number;
@@ -24,14 +24,14 @@ export type PaginatedCampaigns = {
 	pageRange: number[];
 };
 
-export type CreateCampaign = {
+export type CreateParty = {
 	title: string;
 	description: string;
 	color: Color;
 	dueDate: Date;
 };
 
-export type UpdateCampaign = {
+export type UpdateParty = {
 	id: number;
 	title: string;
 	description: string;
@@ -39,7 +39,7 @@ export type UpdateCampaign = {
 	dueDate: Date;
 };
 
-export type UpdateCampaignLeader = {
-	campaignId: number;
+export type UpdatePartyLeader = {
+	partyId: number;
 	userId: string;
 };

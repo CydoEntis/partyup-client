@@ -4,7 +4,7 @@ import {
 	CreateCampaign,
 	PaginatedCampaigns,
 	UpdateCampaign,
-} from "../shared/types/campaign.types";
+} from "../shared/types/party.types";
 import campaignService from "../services/campaignService";
 import { QueryParams } from "../shared/types/query-params.types";
 
