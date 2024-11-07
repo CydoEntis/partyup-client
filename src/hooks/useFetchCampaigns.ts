@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
-import useCampaignStore from "../stores/usePartyStore";
 import { AxiosError } from "axios";
+import usePartyStore from "../stores/usePartyStore";
 
-function useFetchRecentCampaigns() {
-	const { getCampaigns, campaigns } = useCampaignStore();
-	const { campaignId } = useParams();
+function useFetchRecentParties() {
+	const { getParties, parties } = usePartyStore();
+	const { partyId } = useParams();
 	const [searchParams] = useSearchParams();
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
 
 	useEffect(() => {
-		const fetchCampaigns = async () => {
+		const fetchParties = async () => {
 			setLoading(true);
 			setError(null);
 			try {
@@ -20,7 +20,7 @@ function useFetchRecentCampaigns() {
 				searchParams.forEach((value, key) => {
 					queryParams[key] = value;
 				});
-				await getCampaigns(queryParams);
+				await getParties(queryParams);
 			} catch (error) {
 				if (error instanceof AxiosError) {
 					setError(error);
@@ -32,10 +32,10 @@ function useFetchRecentCampaigns() {
 			}
 		};
 
-		fetchCampaigns();
-	}, [searchParams, getCampaigns, campaignId]);
+		fetchParties();
+	}, [searchParams, getParties, partyId]);
 
-	return { campaigns, loading, error };
+	return { parties, loading, error };
 }
 
-export default useFetchRecentCampaigns;
+export default useFetchRecentParties;

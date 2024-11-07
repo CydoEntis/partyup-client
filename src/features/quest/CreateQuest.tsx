@@ -20,7 +20,8 @@ import { DateInput } from "@mantine/dates";
 import useMemberStore from "../../stores/useMemberStore";
 import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
-import { CreateTask } from "../../shared/types/quest.types";
+import { PriorityLevel } from "../../shared/types/prioty.types";
+import { CreateStep } from "../../shared/types/step.types";
 
 type CreateQuestProps = {
 	onClose: () => void;
@@ -51,13 +52,13 @@ const createQuestSchema = z.object({
 	members: z
 		.array(z.string())
 		.min(1, "At least one member must be assigned to the quest"),
-	tasks: z.array(z.string().min(1, "Task cannot be empty")).max(10).optional(),
+	steps: z.array(z.string().min(1, "Step cannot be empty")).max(10).optional(),
 });
 
 type CreateQuestData = z.infer<typeof createQuestSchema>;
 
 function CreateQuest({ onClose }: CreateQuestProps) {
-	const { campaignId } = useParams();
+	const { partyId } = useParams();
 	const { createQuest } = useQuestStore();
 	const { getMembers, members } = useMemberStore();
 
@@ -69,39 +70,39 @@ function CreateQuest({ onClose }: CreateQuestProps) {
 			dueDate: new Date(),
 			priority: PriorityLevel.LOW,
 			members: [],
-			tasks: [],
+			steps: [],
 		},
 	});
 
-	const handleAddTask = () => {
-		if (form.values.tasks) {
-			if (form.values.tasks.length < 10) {
-				form.insertListItem("tasks", "");
+	const handleAddStep = () => {
+		if (form.values.steps) {
+			if (form.values.steps.length < 10) {
+				form.insertListItem("steps", "");
 			}
 		}
 	};
 
-	const handleRemoveTask = (index: number) => {
-		form.removeListItem("tasks", index);
+	const handleRemoveStep = (index: number) => {
+		form.removeListItem("steps", index);
 	};
 
 	async function onSubmit(data: CreateQuestData) {
 		try {
 			const newQuest = {
-				campaignId: Number(campaignId),
-				name: data.name,
+				partyId: Number(partyId),
+				title: data.name,
 				priority: data.priority,
 				description: data.description,
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
-				tasks: (data.tasks || []).map((task) => ({
-					description: task,
-				})) as CreateTask[],
+				steps: (data.steps || []).map((step) => ({
+					description: step,
+				})) as CreateStep[],
 			};
 
 			console.log("Create quest: ", newQuest);
 
-			await createQuest(campaignId, newQuest);
+			await createQuest(partyId!, newQuest);
 			onClose();
 			form.reset();
 		} catch (error) {
@@ -122,8 +123,8 @@ function CreateQuest({ onClose }: CreateQuestProps) {
 	}
 
 	useEffect(() => {
-		getMembers(Number(campaignId), { pageSize: 99999999 });
-	}, [campaignId]);
+		getMembers(Number(partyId), { pageSize: 99999999 });
+	}, [partyId]);
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
@@ -176,26 +177,26 @@ function CreateQuest({ onClose }: CreateQuestProps) {
 					gap={8}
 					py={8}
 				>
-					<Text size="sm">Tasks</Text>
-					{form.values.tasks && form.values.tasks.length === 0 ? (
-						<Text>You can optionally add up to 10 tasks</Text>
+					<Text size="sm">Steps</Text>
+					{form.values.steps && form.values.steps.length === 0 ? (
+						<Text>You can optionally add up to 10 steps</Text>
 					) : (
-						(form.values.tasks || []).map((_, index) => (
+						(form.values.steps || []).map((_, index) => (
 							<Flex
 								key={index}
 								w="100%"
 								gap={8}
 							>
 								<TextInput
-									placeholder="Task description"
-									{...form.getInputProps(`tasks.${index}`)}
+									placeholder="Step description"
+									{...form.getInputProps(`steps.${index}`)}
 									classNames={{ input: classes.input }}
 									w="100%"
 								/>
 								<ActionIcon
 									color="red"
 									variant="light"
-									onClick={() => handleRemoveTask(index)}
+									onClick={() => handleRemoveStep(index)}
 									h={37}
 									w={37}
 								>
@@ -204,14 +205,14 @@ function CreateQuest({ onClose }: CreateQuestProps) {
 							</Flex>
 						))
 					)}
-					{form.values.tasks && form.values.tasks.length >= 10 ? null : (
+					{form.values.steps && form.values.steps.length >= 10 ? null : (
 						<Group justify="flex-start">
 							<Button
 								color="violet"
 								variant="light"
-								onClick={handleAddTask}
+								onClick={handleAddStep}
 							>
-								Add Task
+								Add Step
 							</Button>
 						</Group>
 					)}

@@ -6,69 +6,45 @@ import {
 	NavLink as MantineNavLink,
 	Stack,
 	Skeleton,
-	Box,
-	Paper,
-	Group,
-	Burger,
 } from "@mantine/core";
-import {
-	ChevronRight,
-	LayoutGrid,
-	LogOut,
-	PlusCircle,
-	ShoppingCart,
-	Users2,
-} from "lucide-react";
+import { LayoutGrid, LogOut, PlusCircle, Users2 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import ThemeToggle from "../../features/theme/ThemeToggle";
 import useLogout from "../../hooks/useLogout";
-import CampaignDrawer from "../../features/party/PartyDrawer";
-import useCampaignStore from "../../stores/usePartyStore";
+import PartyDrawer from "../../features/party/PartyDrawer";
+
 import { useEffect, useState } from "react";
-import AvatarShop from "../../features/shop/AvatarShop";
 import useAvatarStore from "../../stores/useAvatarStore";
 import useAuthStore from "../../stores/useAuthStore";
-import UserLevel from "../../features/user/UserLevel";
 import AccountInfo from "../../features/account/AccountInfo";
+import usePartyStore from "../../stores/usePartyStore";
 
 function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
-	const { getRecentCampaigns, recentCampaigns, loading } = useCampaignStore();
+	const { getRecentParties, recentParties, loading } = usePartyStore();
 	const { user } = useAuthStore();
-	const { getAvatarShop } = useAvatarStore();
 	const logoutHandler = useLogout();
 	const [isRecentOpen, setIsRecentOpen] = useState(false);
-	const [
-		openedNewCampaign,
-		{ open: openNewCampaign, close: closeNewCampaign },
-	] = useDisclosure(false);
-
-	const [openedAvatarShop, { open: openAvatarShop, close: closeAvatarShop }] =
+	const [openedNewParty, { open: openNewParty, close: closeNewParty }] =
 		useDisclosure(false);
 
-	const handleAvatarShop = async () => {
-		if (user) {
-			await getAvatarShop(user.id);
-			openAvatarShop();
-		}
-	};
 
 	useEffect(() => {
-		const fetchRecentCampaigns = async () => {
-			await getRecentCampaigns();
-			setIsRecentOpen(recentCampaigns.length > 0);
+		const fetchRecentParties = async () => {
+			await getRecentParties();
+			setIsRecentOpen(recentParties.length > 0);
 		};
-		fetchRecentCampaigns();
-	}, [recentCampaigns.length]);
+		fetchRecentParties();
+	}, [recentParties.length]);
 
 	const toggleRecentOpen = () => setIsRecentOpen((prev) => !prev);
 	return (
 		<>
-			<CampaignDrawer
-				isOpened={openedNewCampaign}
-				onClose={closeNewCampaign}
+			<PartyDrawer
+				isOpened={openedNewParty}
+				onClose={closeNewParty}
 				drawerMode="create"
 			/>
 			<AppShell.Navbar
@@ -117,10 +93,10 @@ function Sidenav() {
 								variant="light"
 								rightSection={<PlusCircle size={20} />}
 								h={40}
-								onClick={openNewCampaign}
+								onClick={openNewParty}
 								my={20}
 							>
-								New Campaign
+								New Party
 							</Button>
 							<MantineNavLink
 								component={NavLink}
@@ -139,11 +115,11 @@ function Sidenav() {
 								opened={isRecentOpen}
 								onClick={toggleRecentOpen}
 							>
-								{recentCampaigns?.map((campaign) => (
+								{recentParties?.map((party) => (
 									<MantineNavLink
-										key={campaign.id}
+										key={party.id}
 										component={NavLink}
-										to={`/campaigns/${campaign.id}/quests`}
+										to={`/parties/${party.id}/quests`}
 										label={
 											<Flex
 												align="center"
@@ -152,10 +128,10 @@ function Sidenav() {
 											>
 												<Indicator
 													inline
-													color={campaign.color}
+													color={party.color}
 													size={8}
 												/>
-												{campaign.title}
+												{party.title}
 											</Flex>
 										}
 										color="violet"

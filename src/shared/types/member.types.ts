@@ -1,4 +1,4 @@
-import { Avatar } from "./auth.types";
+import { Avatar } from "./avatar.types";
 
 export type Member = {
 	id: number;

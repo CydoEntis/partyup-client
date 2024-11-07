@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import CampaignPage from "../pages/party/PartyPage";
 import AppLayout from "../components/layout/AppLayout";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
@@ -33,15 +32,15 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "account",
-				element: <AccountPage />
+				element: <AccountPage />,
 			},
 			{
-				path: "campaigns/:campaignId/quests",
-				element: <CampaignPage />,
+				path: "parties/:partyId/quests",
+				element: <PartiesPage />,
 				children: [
 					{
 						path: ":questId",
-						element: <CampaignPage />,
+						element: <PartiesPage />,
 					},
 				],
 			},

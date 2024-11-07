@@ -17,24 +17,24 @@ type QuestState = {
 	loading: boolean;
 	error: string | null;
 	getQuests: (
-		campaignId: string,
+		partyId: string,
 		params?: QueryParams,
 	) => Promise<PaginatedQuests>;
-	getQuest: (campaignId: string, questId: string) => Promise<Quest>;
-	createQuest: (campaignId: string, quest: CreateQuest) => Promise<Quest>;
+	getQuest: (partyId: string, questId: string) => Promise<Quest>;
+	createQuest: (partyId: string, quest: CreateQuest) => Promise<Quest>;
 	updateQuest: (
-		campaignId: string,
+		partyId: string,
 		questId: string,
 		updatedDetails: UpdateQuest,
 	) => Promise<Quest>;
-	deleteQuest: (campaignId: string, id: string) => Promise<void>;
+	deleteQuest: (partyId: string, id: string) => Promise<void>;
 	updateStep: (
 		questId: string,
 		stepId: number,
 		updatedStepDetails: UpdateStep,
 	) => Promise<void>;
-	completeQuest: (campaignId: number, questId: number) => Promise<void>;
-	uncompleteQuest: (campaignId: number, questId: number) => Promise<void>;
+	completeQuest: (partyId: number, questId: number) => Promise<void>;
+	uncompleteQuest: (partyId: number, questId: number) => Promise<void>;
 };
 
 export const useQuestStore = create<QuestState>((set, get) => ({
@@ -51,11 +51,11 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 	loading: false,
 	error: null,
 
-	getQuests: async (campaignId: string, params?: QueryParams) => {
+	getQuests: async (partyId: string, params?: QueryParams) => {
 		set({ loading: true, error: null });
 		try {
 			const paginatedQuests = await questService.getAllQuests(
-				Number(campaignId),
+				Number(partyId),
 				params,
 			);
 			set({ paginatedQuests });
@@ -68,10 +68,10 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		}
 	},
 
-	getQuest: async (campaignId: string, questId: string) => {
+	getQuest: async (partyId: string, questId: string) => {
 		set({ loading: true, error: null });
 		try {
-			const quest = await questService.getQuestById(+campaignId, +questId);
+			const quest = await questService.getQuestById(+partyId, +questId);
 			set({ quest });
 			return quest;
 		} catch (error) {
@@ -83,13 +83,13 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 	},
 
 	createQuest: async (
-		campaignId: string,
+		partyId: string,
 		quest: CreateQuest,
 	): Promise<Quest> => {
 		set({ loading: true, error: null });
 		try {
 			const newQuest = await questService.createQuest(
-				Number(campaignId),
+				Number(partyId),
 				quest,
 			);
 			set((state) => ({
@@ -110,14 +110,14 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 	},
 
 	updateQuest: async (
-		campaignId: string,
+		partyId: string,
 		questId: string,
 		updatedDetails: UpdateQuest,
 	): Promise<Quest> => {
 		set({ loading: true, error: null });
 		try {
 			const updatedQuest = await questService.updateQuest(
-				Number(campaignId),
+				Number(partyId),
 				Number(questId),
 				updatedDetails,
 			);
@@ -153,10 +153,10 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		}
 	},
 
-	deleteQuest: async (campaignId: string, questId: string) => {
+	deleteQuest: async (partyId: string, questId: string) => {
 		set({ loading: true, error: null });
 		try {
-			await questService.deleteQuest(+campaignId, +questId);
+			await questService.deleteQuest(+partyId, +questId);
 			set((state) => ({
 				paginatedQuests: {
 					...state.paginatedQuests,
@@ -217,11 +217,11 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		}
 	},
 
-	completeQuest: async (campaignId: number, questId: number) => {
+	completeQuest: async (partyId: number, questId: number) => {
 		set({ loading: true, error: null });
 		try {
 			const completedQuest = await questService.completeQuest(
-				campaignId,
+				partyId,
 				questId,
 			);
 
@@ -254,11 +254,11 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		}
 	},
 
-	uncompleteQuest: async (campaignId: number, questId: number) => {
+	uncompleteQuest: async (partyId: number, questId: number) => {
 		set({ loading: true, error: null });
 		try {
 			const uncompletedQuest = await questService.uncompleteQuest(
-				campaignId,
+				partyId,
 				questId,
 			);
 

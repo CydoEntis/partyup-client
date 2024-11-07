@@ -1,30 +1,30 @@
-import React, { useEffect } from "react";
-import useCampaignStore from "../../stores/usePartyStore";
+import { useEffect } from "react";
+import usePartytore from "../../stores/usePartyStore";
 import { Link } from "react-router-dom";
 import { Stack } from "@mantine/core";
 
 type Props = {};
 
 function PartiesPage({}: Props) {
-	const { getCampaigns, campaigns } = useCampaignStore();
+	const { getParties, parties } = usePartytore();
 
 	useEffect(() => {
-		const fetchCampaigns = async () => {
-			await getCampaigns();
+		const fetchParty = async () => {
+			await getParties();
 		};
-		fetchCampaigns();
+		fetchParty();
 	}, []);
 
 	return (
 		<div className="p-8">
 			<Stack gap={8}>
-				{campaigns &&
-					campaigns.items.map((campaign) => (
+				{parties &&
+					parties.items.map((party) => (
 						<Link
-							key={campaign.id}
-							to={`/campaigns/${campaign.id}/quests`}
+							key={party.id}
+							to={`/party/${party.id}/quests`}
 						>
-							{campaign.title}
+							{party.title}
 						</Link>
 					))}
 			</Stack>

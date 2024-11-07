@@ -3,20 +3,20 @@ import { Users2, Plus } from "lucide-react";
 import Members from "../../components/avatar/Members";
 import { Member } from "../../shared/types/member.types";
 
-type InviteCampaignMemberProps = {
+type InvitePartyMemberProps = {
 	onOpenHandler: () => void;
 	members: Member[];
 };
 
-function InviteCampaignMember({
+function InvitePartyMember({
 	onOpenHandler,
 	members,
-}: InviteCampaignMemberProps) {
+}: InvitePartyMemberProps) {
 	return (
 		<Group>
 			<Group align="center">
 				<Users2 size={20} />
-				<Text>Assign to Campaign</Text>
+				<Text>Assign to Party</Text>
 				<Members
 					members={members}
 					numOfMembersToShow={5}
@@ -35,4 +35,4 @@ function InviteCampaignMember({
 	);
 }
 
-export default InviteCampaignMember;
+export default InvitePartyMember;

@@ -9,7 +9,7 @@ import {
 import { QueryParams } from "../shared/types/query-params.types";
 
 const getAllMembers = async (
-	campaignId: number,
+	partyId: number,
 	params?: QueryParams,
 ): Promise<PaginatedMembers> => {
 	const queryParams = new URLSearchParams();
@@ -27,7 +27,7 @@ const getAllMembers = async (
 
 	const response = (
 		await apiClient.get(
-			`${endpoints.campaigns}/${campaignId}/members?${queryParams.toString()}`,
+			`${endpoints.parties}/${partyId}/members?${queryParams.toString()}`,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
@@ -35,12 +35,12 @@ const getAllMembers = async (
 };
 
 const getMemberById = async (
-	campaignId: number,
+	partyId: number,
 	memberId: number,
 ): Promise<Member> => {
 	const response = (
 		await apiClient.get(
-			`${endpoints.campaigns}/${campaignId}/,members/${memberId}`,
+			`${endpoints.parties}/${partyId}/,members/${memberId}`,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
@@ -48,7 +48,7 @@ const getMemberById = async (
 };
 
 const createMember = async (member: CreateMember): Promise<Member> => {
-	const response = (await apiClient.post(`${endpoints.campaigns}`, member))
+	const response = (await apiClient.post(`${endpoints.parties}`, member))
 		.data;
 	if (!response.isSuccess) throw new Error();
 	return response.result;
@@ -59,7 +59,7 @@ const updateMemberRole = async (
 	updatedMemberRole: UpdateMemberRole,
 ): Promise<Member> => {
 	const response = (
-		await apiClient.put(`${endpoints.campaigns}/${memberId}`, updatedMemberRole)
+		await apiClient.put(`${endpoints.parties}/${memberId}`, updatedMemberRole)
 	).data;
 	if (!response.isSuccess) throw new Error();
 	return response.result;
@@ -67,15 +67,15 @@ const updateMemberRole = async (
 
 const deleteMember = async (memberId: number): Promise<void> => {
 	const response = (
-		await apiClient.delete(`${endpoints.campaigns}/${memberId}`)
+		await apiClient.delete(`${endpoints.parties}/${memberId}`)
 	).data;
 	if (!response.isSuccess) throw new Error();
 };
 
-const generateInviteToken = async (campaignId: string): Promise<string> => {
+const generateInviteToken = async (partyId: string): Promise<string> => {
 	const response = (
 		await apiClient.get(
-			`${endpoints.campaigns}/${Number(campaignId)}/members/invite`,
+			`${endpoints.parties}/${Number(partyId)}/members/invite`,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();

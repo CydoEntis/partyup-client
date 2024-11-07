@@ -9,22 +9,22 @@ type UseFetchQuestsResult = {
 };
 
 function useFetchQuests(): UseFetchQuestsResult {
-	const { campaignId, questId } = useParams();
+	const { partyId, questId } = useParams();
 	const { getQuests, paginatedQuests, loading } = useQuestStore();
 
 	useEffect(() => {
-		const fetchCampaign = async () => {
-			if (campaignId) {
+		const fetchParty = async () => {
+			if (partyId) {
 				try {
-					await getQuests(campaignId);
+					await getQuests(partyId);
 				} catch (error) {
-					console.error("Error fetching campaign or quests:", error);
+					console.error("Error fetching party or quests:", error);
 				}
 			}
 		};
 
-		fetchCampaign();
-	}, [campaignId, getQuests, questId]);
+		fetchParty();
+	}, [partyId, getQuests, questId]);
 
 	return { paginatedQuests, loading };
 }

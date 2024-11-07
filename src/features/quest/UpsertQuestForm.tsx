@@ -30,7 +30,7 @@ type UpsertQuestProps = {
 };
 
 function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
-	const { campaignId, questId } = useParams();
+	const { partyId, questId } = useParams();
 	const { createQuest, updateQuest } = useQuestStore();
 	const { getMembers, members } = useMemberStore();
 	const navigate = useNavigate();
@@ -95,9 +95,9 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 	};
 
 	const createNewQuest = async (data: QuestData) => {
-		if (campaignId) {
+		if (partyId) {
 			const newQuest = {
-				campaignId: Number(campaignId),
+				partyId: Number(partyId),
 				title: data.title,
 				priority: data.priority,
 				description: data.description,
@@ -108,16 +108,16 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				})) as CreateStep[],
 			};
 
-			const createdQuest = await createQuest(campaignId, newQuest);
+			const createdQuest = await createQuest(partyId, newQuest);
 			return createdQuest;
 		}
 	};
 
 	const updateExistingQuest = async (data: QuestData) => {
-		if (campaignId && questId) {
+		if (partyId && questId) {
 			const updatedQuest = {
 				id: Number(questId),
-				campaignId: Number(campaignId),
+				partyId: Number(partyId),
 				title: data.title,
 				priority: data.priority,
 				description: data.description,
@@ -133,7 +133,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			};
 
 
-			await updateQuest(campaignId, questId, updatedQuest);
+			await updateQuest(partyId, questId, updatedQuest);
 		}
 	};
 
@@ -144,7 +144,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			} else {
 				await createNewQuest(data);
 			}
-			navigate(`/campaigns/${campaignId}/quests`);
+			navigate(`/parties/${partyId}/quests`);
 			form.reset();
 			onClose();
 		} catch (error) {
@@ -177,15 +177,15 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 	}, [quest, questId]);
 
 	useEffect(() => {
-		getMembers(Number(campaignId), { pageSize: 99999999 });
-	}, [campaignId]);
+		getMembers(Number(partyId), { pageSize: 99999999 });
+	}, [partyId]);
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
 			<Stack gap={8}>
 				<TextInput
 					label="Title"
-					placeholder="Name of your Campaign?"
+					placeholder="Name of your Party?"
 					classNames={{
 						input: classes.input,
 					}}
@@ -193,7 +193,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				/>
 				<Textarea
 					label="Description"
-					placeholder="Describe your campaign"
+					placeholder="Describe your party"
 					autosize
 					{...form.getInputProps("description")}
 				/>

@@ -1,6 +1,6 @@
 import { Skeleton, Group, Flex, Box } from "@mantine/core"; // Adjust the import based on your actual library
 
-const CampaignHeaderSkeleton = () => {
+const PartyHeaderSkeleton = () => {
 	return (
 		<Box
 			bg="secondary"
@@ -59,4 +59,4 @@ const CampaignHeaderSkeleton = () => {
 	);
 };
 
-export default CampaignHeaderSkeleton;
+export default PartyHeaderSkeleton;

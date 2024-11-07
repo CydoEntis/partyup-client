@@ -11,7 +11,7 @@ export type Quest = {
 	updatedAt: Date;
 	dueDate: Date;
 	priority: PriorityLevel;
-	campaignId: number;
+	partyId: number;
 	members: Member[];
 	steps: Step[];
 	completedSteps: number;
@@ -28,7 +28,7 @@ export type PaginatedQuests = {
 };
 
 export type CreateQuest = {
-	campaignId: number;
+	partyId: number;
 	title: string;
 	description: string;
 	priority: PriorityLevel;
@@ -39,7 +39,7 @@ export type CreateQuest = {
 
 export type UpdateQuest = {
 	id: number;
-	campaignId: number;
+	partyId: number;
 	title: string;
 	description: string;
 	priority: PriorityLevel;

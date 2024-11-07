@@ -16,16 +16,16 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function InviteMemberModal({ isOpened, onClose }: DrawerProps) {
-	const { campaignId } = useParams();
+	const { partyId } = useParams();
 	const [inviteLink, setInviteLink] = useState("");
 	const [countdown, setCountdown] = useState(0);
 	const expirationTime = 900; // 15 minutes
 
 	const generateInviteLink = async () => {
-		if (campaignId) {
-			const token = await memberService.generateInviteToken(campaignId);
+		if (partyId) {
+			const token = await memberService.generateInviteToken(partyId);
 			setInviteLink(
-				`http://localhost:5173/campaigns/1/accept-invite?invite=${token}`,
+				`http://localhost:5173/parties/1/accept-invite?invite=${token}`,
 			);
 			setCountdown(expirationTime);
 		}

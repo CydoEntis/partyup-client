@@ -2,7 +2,6 @@ import { Flex, Group, Progress, Stack, Text } from "@mantine/core";
 import { User } from "../../shared/types/auth.types";
 import { getPercentage } from "../../shared/utils/progress-bar.utils";
 import UserAvatar from "../../components/avatar/UserAvatar";
-import { ChevronDown } from "lucide-react";
 
 type UserLevelProps = {
 	user: User;

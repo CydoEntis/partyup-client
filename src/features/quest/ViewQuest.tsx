@@ -18,13 +18,13 @@ function ViewQuest() {
 
 	const handleComplete = async () => {
 		if (quest && isAssignedToQuest) {
-			await completeQuest(quest.campaignId, quest.id);
+			await completeQuest(quest.partyId, quest.id);
 		}
 	};
 
 	const handleUncomplete = async () => {
 		if (quest && isAssignedToQuest) {
-			await uncompleteQuest(quest.campaignId, quest.id);
+			await uncompleteQuest(quest.partyId, quest.id);
 		}
 	};
 

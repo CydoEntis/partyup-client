@@ -1,11 +1,10 @@
-import { Box, Drawer, Group, Menu, Title } from "@mantine/core";
+import { Box, Drawer, Group, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 import { useNavigate, useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
 import { Quest } from "../../shared/types/quest.types";
 import ViewQuest from "./ViewQuest";
-import ToggleEdit from "../../components/toggle/ToggleEdit";
 import useDrawerTypeHandler from "../../hooks/useDrawerData";
 import UpsertQuestForm from "./UpsertQuestForm";
 import QuestOptions from "./QuestOptions";
@@ -14,7 +13,7 @@ import { Edit, Trash2 } from "lucide-react";
 export type QuestDrawerType = "create" | "edit" | "view";
 
 function QuestDrawer({ isOpened, onClose }: DrawerProps) {
-	const { campaignId, questId } = useParams();
+	const { partyId, questId } = useParams();
 	const { getQuest, deleteQuest } = useQuestStore();
 	const [quest, setQuest] = useState<Quest | null>();
 	const { setDrawer, drawerTitle, drawerViewType } = useDrawerTypeHandler({
@@ -24,8 +23,8 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const navigate = useNavigate();
 
 	const fetchQuest = async () => {
-		if (campaignId && questId) {
-			const fetchedQuest = await getQuest(campaignId, questId);
+		if (partyId && questId) {
+			const fetchedQuest = await getQuest(partyId, questId);
 
 			if (fetchedQuest) {
 				setQuest(fetchedQuest);
@@ -40,12 +39,12 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 		if (questId) {
 			fetchQuest();
 		}
-	}, [campaignId, questId]);
+	}, [partyId, questId]);
 
 	const handleClose = () => {
 		setDrawer("create", "Create Quest");
 		setQuest(null);
-		navigate(`/campaigns/${campaignId}/quests`);
+		navigate(`/parties/${partyId}/quests`);
 		onClose();
 	};
 
@@ -60,9 +59,9 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	};
 
 	const handleDelete = async () => {
-		if (campaignId && questId) {
+		if (partyId && questId) {
 			console.log("DELETING");
-			deleteQuest(campaignId, questId);
+			deleteQuest(partyId, questId);
 			handleClose();
 		}
 	};

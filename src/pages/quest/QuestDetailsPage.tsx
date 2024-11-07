@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import CampaignTabs from "../../features/party/PartyTabs";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useDisclosure } from "@mantine/hooks";
@@ -11,19 +10,19 @@ import QuestCard from "../../features/quest/QuestCard";
 type Props = {};
 
 function QuestsPage({}: Props) {
-	const { campaignId } = useParams();
+	const { partyId } = useParams();
 	const { getQuests, paginatedQuests } = useQuestStore();
 	const [openedViewQuest, { open: openViewQuest, close: closeViewQuest }] =
 		useDisclosure(false);
 
 	useEffect(() => {
 		const fetchQuests = async () => {
-			if (campaignId) {
-				const quests = getQuests(Number(campaignId));
+			if (partyId) {
+				await getQuests(partyId);
 			}
 		};
 		fetchQuests();
-	}, [campaignId]);
+	}, [partyId]);
 
 	return (
 		<>
@@ -46,8 +45,6 @@ function QuestsPage({}: Props) {
 				</SimpleGridLayout>
 			</Tabs.Panel>
 			<Tabs.Panel value="list">List Tab View</Tabs.Panel>
-
-
 		</>
 	);
 }

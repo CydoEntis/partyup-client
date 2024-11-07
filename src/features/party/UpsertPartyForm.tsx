@@ -14,10 +14,10 @@ import {
 import classes from "../auth/auth.module.css";
 import { DateInput } from "@mantine/dates";
 import { useEffect, useState } from "react";
-import usePartyStore from "../../stores/usePartyStore";
 import { Color } from "../../shared/types/color.types";
 import { Check } from "lucide-react";
 import { Party } from "../../shared/types/party.types";
+import usePartyStore from "../../stores/usePartyStore";
 
 const createPartySchema = z.object({
 	title: z

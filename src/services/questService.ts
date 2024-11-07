@@ -9,7 +9,7 @@ import {
 } from "../shared/types/quest.types";
 
 const getAllQuests = async (
-	campaignId: number,
+	partyId: number,
 	params?: QueryParams,
 ): Promise<PaginatedQuests> => {
 	const queryParams = new URLSearchParams();
@@ -27,7 +27,7 @@ const getAllQuests = async (
 
 	const response = (
 		await apiClient.get(
-			`${endpoints.campaigns}/${campaignId}/quests?${queryParams.toString()}`,
+			`${endpoints.parties}/${partyId}/quests?${queryParams.toString()}`,
 		)
 	).data;
 
@@ -36,12 +36,12 @@ const getAllQuests = async (
 };
 
 const getQuestById = async (
-	campaignId: number,
+	partyId: number,
 	questId: number,
 ): Promise<Quest> => {
 	const response = (
 		await apiClient.get(
-			`${endpoints.campaigns}/${campaignId}/quests/${questId}`,
+			`${endpoints.parties}/${partyId}/quests/${questId}`,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
@@ -49,11 +49,11 @@ const getQuestById = async (
 };
 
 const createQuest = async (
-	campaignId: number,
+	partyId: number,
 	quest: CreateQuest,
 ): Promise<Quest> => {
 	const response = (
-		await apiClient.post(`${endpoints.campaigns}/${campaignId}/quests`, quest)
+		await apiClient.post(`${endpoints.parties}/${partyId}/quests`, quest)
 	).data;
 	if (!response.isSuccess) throw new Error();
 
@@ -61,13 +61,13 @@ const createQuest = async (
 };
 
 const updateQuest = async (
-	campaignId: number,
+	partyId: number,
 	questId: number,
 	updatedQuest: UpdateQuest,
 ): Promise<Quest> => {
 	const response = (
 		await apiClient.put(
-			`${endpoints.campaigns}/${campaignId}/quests/${questId}`,
+			`${endpoints.parties}/${partyId}/quests/${questId}`,
 			updatedQuest,
 		)
 	).data;
@@ -79,24 +79,24 @@ const updateQuest = async (
 };
 
 const deleteQuest = async (
-	campaignId: number,
+	partyId: number,
 	questId: number,
 ): Promise<void> => {
 	const response = (
 		await apiClient.delete(
-			`${endpoints.campaigns}/${campaignId}/quests/${questId}`,
+			`${endpoints.parties}/${partyId}/quests/${questId}`,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
 };
 
 const completeQuest = async (
-	campaignId: number,
+	partyId: number,
 	questId: number,
 ): Promise<Quest> => {
 	const response = (
 		await apiClient.post(
-			`${endpoints.campaigns}/${campaignId}/quests/${questId}/complete`,
+			`${endpoints.parties}/${partyId}/quests/${questId}/complete`,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
@@ -105,12 +105,12 @@ const completeQuest = async (
 };
 
 const uncompleteQuest = async (
-	campaignId: number,
+	partyId: number,
 	questId: number,
 ): Promise<Quest> => {
 	const response = (
 		await apiClient.put(
-			`${endpoints.campaigns}/${campaignId}/quests/${questId}/uncomplete`,
+			`${endpoints.parties}/${partyId}/quests/${questId}/uncomplete`,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();

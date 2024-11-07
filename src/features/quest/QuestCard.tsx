@@ -38,10 +38,10 @@ const getBadgeColor = (priority: PriorityLevel) => {
 
 function QuestCard({ quest, onClick }: QuestCardProps) {
 	const percent = getPercentage(quest.completedSteps, quest.steps.length);
-	const { campaignId } = useParams();
+	const { partyId } = useParams();
 	const navigate = useNavigate();
 	const test = () => {
-		navigate(`/campaigns/${campaignId}/quests/${quest.id}`);
+		navigate(`/parties/${partyId}/quests/${quest.id}`);
 		onClick();
 	};
 

@@ -13,8 +13,8 @@ type MemberState = {
 	member: Member | null;
 	loading: boolean;
 	error: string | null;
-	getMembers: (campaignId: number, queryParams: QueryParams) => Promise<void>;
-	getMember: (campaignId: number, memberId: number) => Promise<void>;
+	getMembers: (partyId: number, queryParams: QueryParams) => Promise<void>;
+	getMember: (partyId: number, memberId: number) => Promise<void>;
 	createMember: (member: CreateMember) => Promise<number>;
 	updateMemberRole: (
 		id: number,
@@ -29,11 +29,11 @@ export const useMemberStore = create<MemberState>((set) => ({
 	loading: false,
 	error: null,
 
-	getMembers: async (campaignId: number, queryParams: QueryParams) => {
+	getMembers: async (partyId: number, queryParams: QueryParams) => {
 		set({ loading: true, error: null });
 		try {
 			const members = await memberService.getAllMembers(
-				campaignId,
+				partyId,
 				queryParams,
 			);
 			set({ members, loading: false });
@@ -43,10 +43,10 @@ export const useMemberStore = create<MemberState>((set) => ({
 		}
 	},
 
-	getMember: async (campaignId: number, memberId: number) => {
+	getMember: async (partyId: number, memberId: number) => {
 		set({ loading: true, error: null });
 		try {
-			const member = await memberService.getMemberById(campaignId, memberId);
+			const member = await memberService.getMemberById(partyId, memberId);
 			set({ member, loading: false });
 		} catch (error) {
 			set({ error: "Failed to fetch member", loading: false });
