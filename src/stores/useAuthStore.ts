@@ -11,7 +11,14 @@ import userService from "../services/userService";
 
 type AuthState = {
 	user: User | null;
-	loading: boolean;
+	loading: {
+		session: boolean;
+		refresh: boolean;
+		register: boolean;
+		login: boolean;
+		logout: boolean;
+		getUser: boolean;
+	};
 	error: string | null;
 	restoreSession: () => void;
 	refreshTokens: (tokens: Tokens) => Promise<Tokens>;
@@ -23,11 +30,21 @@ type AuthState = {
 
 export const useAuthStore = create<AuthState>((set, get) => ({
 	user: null,
-	loading: true,
+	loading: {
+		session: false,
+		refresh: false,
+		register: false,
+		login: false,
+		logout: false,
+		getUser: false,
+	},
 	error: null,
 
 	restoreSession: () => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, session: true },
+			error: null,
+		}));
 		const storedData = localStorageService.getItem<User>("questLog");
 		if (storedData) {
 			try {
@@ -41,15 +58,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 				set({ error: "Failed to initialize authentication" });
 				throw error;
 			} finally {
-				set({ loading: false });
+				set((state) => ({
+					loading: { ...state.loading, session: false },
+					error: null,
+				}));
 			}
 		} else {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, session: false },
+				error: null,
+			}));
 		}
 	},
 
 	refreshTokens: async (tokens: Tokens): Promise<Tokens> => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, refresh: true },
+			error: null,
+		}));
 		try {
 			const newTokens = await authService.refreshTokens(tokens);
 			set((state) => ({
@@ -65,12 +91,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			set({ error: "Failed to refresh tokens" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, refresh: false },
+				error: null,
+			}));
 		}
 	},
 
 	register: async (credentials: RegisterCredentials) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, register: true },
+			error: null,
+		}));
 		try {
 			const user = await authService.registerUser(credentials);
 			localStorageService.setItem("questLog", user);
@@ -79,12 +111,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			set({ error: "Failed to register user" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, register: false },
+				error: null,
+			}));
 		}
 	},
 
 	login: async (credentials: LoginCredentials) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, login: true },
+			error: null,
+		}));
 		try {
 			const fetchedUser = await authService.loginUser(credentials);
 
@@ -98,12 +136,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			set({ error: "Failed to log in" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, login: false },
+				error: null,
+			}));
 		}
 	},
 
 	logout: async () => {
-		set({ loading: true });
+		set((state) => ({
+			loading: { ...state.loading, logout: true },
+			error: null,
+		}));
 		try {
 			const user = get().user;
 			if (user) {
@@ -115,12 +159,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			set({ error: "Failed to log out" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, logout: false },
+				error: null,
+			}));
 		}
 	},
 
 	getUser: async (userId: string) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, getUser: true },
+			error: null,
+		}));
 		try {
 			const userData = await userService.getUser(userId);
 			set({
@@ -137,7 +187,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			set({ error: "Failed to fetch user data" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, getUser: false },
+				error: null,
+			}));
 		}
 	},
 }));

@@ -4,7 +4,9 @@ import avatarService from "../services/avatarService";
 
 type AvatarShopState = {
 	avatars: AvatarShopItem[] | null;
-	loading: boolean;
+	loading: {
+		list: boolean;
+	};
 	error: string | null;
 
 	getAvatarShop: (userId: string) => Promise<void>;
@@ -12,11 +14,16 @@ type AvatarShopState = {
 
 export const useAvatarStore = create<AvatarShopState>((set) => ({
 	avatars: null,
-	loading: true,
+	loading: {
+		list: false,
+	},
 	error: null,
 
 	getAvatarShop: async (userId: string) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, list: true },
+			error: null,
+		}));
 		try {
 			const avatars = await avatarService.getAvatarShop(userId);
 			console.log("avatars: ", avatars);
@@ -25,7 +32,10 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 			set({ error: "Failed to fetch user data" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, list: false },
+				error: null,
+			}));
 		}
 	},
 }));
