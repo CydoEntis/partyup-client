@@ -11,7 +11,13 @@ import { QueryParams } from "../shared/types/query-params.types";
 type MemberState = {
 	members: PaginatedMembers | null;
 	member: Member | null;
-	loading: boolean;
+	loading: {
+		list: boolean;
+		detail: boolean;
+		create: boolean;
+		update: boolean;
+		delete: boolean;
+	};
 	error: string | null;
 	getMembers: (partyId: number, queryParams: QueryParams) => Promise<void>;
 	getMember: (partyId: number, memberId: number) => Promise<void>;
@@ -26,36 +32,56 @@ type MemberState = {
 export const useMemberStore = create<MemberState>((set) => ({
 	members: null,
 	member: null,
-	loading: false,
+	loading: {
+		list: false,
+		detail: false,
+		create: false,
+		update: false,
+		delete: false,
+	},
 	error: null,
 
 	getMembers: async (partyId: number, queryParams: QueryParams) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, list: true },
+			error: null,
+		}));
 		try {
-			const members = await memberService.getAllMembers(
-				partyId,
-				queryParams,
-			);
-			set({ members, loading: false });
+			const members = await memberService.getAllMembers(partyId, queryParams);
+			set({ members });
 		} catch (error) {
-			set({ error: "Failed to fetch members", loading: false });
 			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, list: true },
+				error: null,
+			}));
 		}
 	},
 
 	getMember: async (partyId: number, memberId: number) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, detail: true },
+			error: null,
+		}));
 		try {
 			const member = await memberService.getMemberById(partyId, memberId);
-			set({ member, loading: false });
+			set({ member });
 		} catch (error) {
-			set({ error: "Failed to fetch member", loading: false });
 			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, detail: false },
+				error: null,
+			}));
 		}
 	},
 
 	createMember: async (member: CreateMember): Promise<number> => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, create: true },
+			error: null,
+		}));
 		try {
 			const newMember = await memberService.createMember(member);
 			set((state) => ({
@@ -74,12 +100,16 @@ export const useMemberStore = create<MemberState>((set) => ({
 							hasPreviousPage: false,
 							pageRange: [],
 					  },
-				loading: false,
 			}));
 			return newMember.id;
 		} catch (error) {
-			set({ error: "Failed to create member", loading: false });
+			set({ error: "Failed to create member" });
 			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, create: false },
+				error: null,
+			}));
 		}
 	},
 
@@ -87,7 +117,10 @@ export const useMemberStore = create<MemberState>((set) => ({
 		id: number,
 		updatedMemberRole: UpdateMemberRole,
 	): Promise<void> => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, update: true },
+			error: null,
+		}));
 		try {
 			const updatedMember = await memberService.updateMemberRole(
 				id,
@@ -107,17 +140,24 @@ export const useMemberStore = create<MemberState>((set) => ({
 						state.member?.id === id
 							? { ...state.member, ...updatedMember }
 							: state.member,
-					loading: false,
 				};
 			});
 		} catch (error) {
-			set({ error: "Failed to update member details", loading: false });
+			set({ error: "Failed to update member details" });
 			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, update: false },
+				error: null,
+			}));
 		}
 	},
 
 	deleteMember: async (memberId: number) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, delete: true },
+			error: null,
+		}));
 		try {
 			await memberService.deleteMember(memberId);
 			set((state) => ({
@@ -130,11 +170,15 @@ export const useMemberStore = create<MemberState>((set) => ({
 							totalCount: state.members.totalCount - 1,
 					  }
 					: null,
-				loading: false,
 			}));
 		} catch (error) {
-			set({ error: "Failed to delete member", loading: false });
+			set({ error: "Failed to delete member" });
 			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, delete: false },
+				error: null,
+			}));
 		}
 	},
 }));
