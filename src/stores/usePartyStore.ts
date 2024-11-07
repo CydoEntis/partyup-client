@@ -12,7 +12,14 @@ type Partiestate = {
 	recentParties: Party[];
 	parties: PaginatedParties | null;
 	party: Party | null;
-	loading: boolean;
+	loading: {
+		recent: boolean;
+		list: boolean;
+		detail: boolean;
+		create: boolean;
+		update: boolean;
+		delete: boolean;
+	};
 	error: string | null;
 	getRecentParties: () => Promise<void>;
 	getParties: (params?: QueryParams) => Promise<PaginatedParties>;
@@ -26,11 +33,21 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 	recentParties: [],
 	parties: null,
 	party: null,
-	loading: false,
+	loading: {
+		recent: false,
+		list: false,
+		detail: false,
+		create: false,
+		update: false,
+		delete: false,
+	},
 	error: null,
 
 	getRecentParties: async () => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, recent: true },
+			error: null,
+		}));
 		try {
 			const queryParams = {
 				orderOn: "updatedAt",
@@ -42,12 +59,15 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 			set({ error: "Failed to fetch parties" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({ loading: { ...state.loading, recent: false } }));
 		}
 	},
 
 	getParties: async (params?: QueryParams) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, list: true },
+			error: null,
+		}));
 		try {
 			const parties = await partieservice.getAllParties(params);
 			set({ parties });
@@ -56,7 +76,7 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 			set({ error: "Failed to fetch parties" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({ loading: { ...state.loading, list: false } }));
 		}
 	},
 
@@ -69,7 +89,10 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 			return existingParty;
 		}
 
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, detail: true },
+			error: null,
+		}));
 		try {
 			const party = await partieservice.getPartyById(+partyId);
 			set({ party });
@@ -78,12 +101,15 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 			set({ error: "Failed to fetch party" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({ loading: { ...state.loading, detail: false } }));
 		}
 	},
 
 	createParty: async (party: CreateParty): Promise<Party> => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, create: true },
+			error: null,
+		}));
 		try {
 			const newParty = await partieservice.createParty(party);
 			set((state) => ({
@@ -109,7 +135,7 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 			set({ error: "Failed to create party" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({ loading: { ...state.loading, create: false } }));
 		}
 	},
 
@@ -117,7 +143,10 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 		partyId: string,
 		updatedDetails: UpdateParty,
 	): Promise<void> => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, update: true },
+			error: null,
+		}));
 		try {
 			const updatedParty = await partieservice.updateParty(
 				Number(partyId),
@@ -152,12 +181,15 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 			set({ error: "Failed to update party details" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({ loading: { ...state.loading, update: false } }));
 		}
 	},
 
 	deleteParty: async (partyId: string) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, delete: true },
+			error: null,
+		}));
 		try {
 			await partieservice.deleteParty(+partyId);
 			set((state) => ({
@@ -172,7 +204,7 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 			set({ error: "Failed to delete party" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({ loading: { ...state.loading, delete: false } }));
 		}
 	},
 }));
