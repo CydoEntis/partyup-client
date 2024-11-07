@@ -14,7 +14,13 @@ import { useAuthStore } from "./useAuthStore";
 type QuestState = {
 	paginatedQuests: PaginatedQuests;
 	quest: Quest | null;
-	loading: boolean;
+	loading: {
+		list: boolean;
+		detail: boolean;
+		create: boolean;
+		update: boolean;
+		delete: boolean;
+	};
 	error: string | null;
 	getQuests: (
 		partyId: string,
@@ -48,11 +54,20 @@ export const useQuestStore = create<QuestState>((set) => ({
 		pageRange: [],
 	},
 	quest: null,
-	loading: false,
+	loading: {
+		list: false,
+		detail: false,
+		create: false,
+		update: false,
+		delete: false,
+	},
 	error: null,
 
 	getQuests: async (partyId: string, params?: QueryParams) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, list: true },
+			error: null,
+		}));
 		try {
 			const paginatedQuests = await questService.getAllQuests(
 				Number(partyId),
@@ -64,12 +79,18 @@ export const useQuestStore = create<QuestState>((set) => ({
 			set({ error: "Failed to fetch quests" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, list: false },
+				error: null,
+			}));
 		}
 	},
 
 	getQuest: async (partyId: string, questId: string) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, detail: true },
+			error: null,
+		}));
 		try {
 			const quest = await questService.getQuestById(+partyId, +questId);
 			set({ quest });
@@ -78,12 +99,18 @@ export const useQuestStore = create<QuestState>((set) => ({
 			set({ error: "Failed to fetch quest" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, detail: false },
+				error: null,
+			}));
 		}
 	},
 
 	createQuest: async (partyId: string, quest: CreateQuest): Promise<Quest> => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, create: true },
+			error: null,
+		}));
 		try {
 			const newQuest = await questService.createQuest(Number(partyId), quest);
 			set((state) => ({
@@ -99,7 +126,10 @@ export const useQuestStore = create<QuestState>((set) => ({
 			set({ error: "Failed to create quest" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, create: false },
+				error: null,
+			}));
 		}
 	},
 
@@ -108,7 +138,10 @@ export const useQuestStore = create<QuestState>((set) => ({
 		questId: string,
 		updatedDetails: UpdateQuest,
 	): Promise<Quest> => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, update: true },
+			error: null,
+		}));
 		try {
 			const updatedQuest = await questService.updateQuest(
 				Number(partyId),
@@ -143,12 +176,18 @@ export const useQuestStore = create<QuestState>((set) => ({
 			set({ error: "Failed to update quest" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, update: false },
+				error: null,
+			}));
 		}
 	},
 
 	deleteQuest: async (partyId: string, questId: string) => {
-		set({ loading: true, error: null });
+		set((state) => ({
+			loading: { ...state.loading, delete: true },
+			error: null,
+		}));
 		try {
 			await questService.deleteQuest(+partyId, +questId);
 			set((state) => ({
@@ -164,7 +203,10 @@ export const useQuestStore = create<QuestState>((set) => ({
 			set({ error: "Failed to delete quest" });
 			throw error;
 		} finally {
-			set({ loading: false });
+			set((state) => ({
+				loading: { ...state.loading, delete: false },
+				error: null,
+			}));
 		}
 	},
 
@@ -212,7 +254,6 @@ export const useQuestStore = create<QuestState>((set) => ({
 	},
 
 	completeQuest: async (partyId: number, questId: number) => {
-		set({ loading: true, error: null });
 		try {
 			const completedQuest = await questService.completeQuest(partyId, questId);
 
@@ -240,13 +281,10 @@ export const useQuestStore = create<QuestState>((set) => ({
 		} catch (error) {
 			set({ error: "Failed to complete quest" });
 			throw error;
-		} finally {
-			set({ loading: false });
 		}
 	},
 
 	uncompleteQuest: async (partyId: number, questId: number) => {
-		set({ loading: true, error: null });
 		try {
 			const uncompletedQuest = await questService.uncompleteQuest(
 				partyId,
@@ -277,8 +315,6 @@ export const useQuestStore = create<QuestState>((set) => ({
 		} catch (error) {
 			set({ error: "Failed to uncomplete quest" });
 			throw error;
-		} finally {
-			set({ loading: false });
 		}
 	},
 }));
