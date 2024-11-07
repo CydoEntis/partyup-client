@@ -25,15 +25,13 @@ import AvatarShop from "../../features/shop/AvatarShop";
 import { useDisclosure } from "@mantine/hooks";
 import useAvatarStore from "../../stores/useAvatarStore";
 import { useEffect } from "react";
+import AccountLevel from "./AccountLevel";
+import AccountDetails from "./AccountDetails";
+import ChangePassword from "./ChangePassword";
 
 function AccountPage() {
 	const { user } = useAuthStore();
 	const { avatars, getAvatarShop } = useAvatarStore();
-
-	const percentage = user
-		? getPercentage(user.currentExp, user.expToNextLevel)
-		: 0;
-	const avatarImage = user ? useAvatar(user.avatar.id) : undefined;
 
 	const [opened, { open, close }] = useDisclosure(false);
 
@@ -95,103 +93,10 @@ function AccountPage() {
 					<Stack gap={12}>
 						{user && avatars && (
 							<>
-								<Paper
-									withBorder
-									p={16}
-								>
-									<Group pb={16}>
-										<Avatar
-											src={avatarImage}
-											alt="User's avatar"
-											bg="violet"
-											size="xl"
-										/>
-										<Text size="xl">{user.displayName}</Text>
-									</Group>
-									<Stack gap={2}>
-										<Group justify="space-between">
-											<Group>
-												<Text size="md">Level</Text>
-												<Text size="md">{user.currentLevel}</Text>
-											</Group>
-											<Text
-												ta="center"
-												size="sm"
-											>
-												{user.currentExp} exp / {user.expToNextLevel} exp
-											</Text>
-										</Group>
-										<Progress
-											value={percentage}
-											w="100%"
-											size="md"
-											animated
-											color="violet"
-										/>
-									</Stack>
-								</Paper>
+								<AccountLevel user={user} />
 								<SimpleGrid cols={2}>
-									<Paper
-										withBorder
-										p={16}
-									>
-										<Group
-											align="center"
-											justify="space-between"
-											pb={10}
-										>
-											<Title size="xl">Account Details</Title>
-											<ActionIcon
-												variant="light"
-												color="violet"
-											>
-												<Edit size={20} />
-											</ActionIcon>
-										</Group>
-										<Divider />
-										<Group
-											justify="space-between"
-											w="25%"
-											py={12}
-										>
-											<Text>Display Name</Text>
-											<Text>{user.displayName}</Text>
-										</Group>
-										<Group
-											justify="space-between"
-											w="25%"
-											py={12}
-										>
-											<Text>Email</Text>
-											<Text>{user.email}</Text>
-										</Group>
-									</Paper>
-									<Paper
-										withBorder
-										p={16}
-									>
-										<Group
-											align="center"
-											justify="space-between"
-											pb={10}
-										>
-											<Title size="xl">Change Password</Title>
-										</Group>
-										<Divider />
-										<Stack
-											gap={12}
-											py={8}
-										>
-											<Text pb={12}>Need to change your password?</Text>
-											<Button
-												variant="light"
-												color="violet"
-												fullWidth
-											>
-												Change Password
-											</Button>
-										</Stack>
-									</Paper>
+									<AccountDetails user={user} />
+									<ChangePassword />
 								</SimpleGrid>
 								<Paper
 									withBorder
