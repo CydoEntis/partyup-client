@@ -18,7 +18,7 @@ function PartyPage({}: Props) {
 	const {
 		getParty,
 		party,
-		loading: partyLoading,
+		loading: { detail },
 	} = usePartyStore();
 
 	useEffect(() => {
@@ -47,7 +47,6 @@ function PartyPage({}: Props) {
 		handleEditParty,
 	} = usePartyDrawer();
 
-
 	return (
 		<>
 			<InviteMemberModal
@@ -67,7 +66,7 @@ function PartyPage({}: Props) {
 					party={party}
 				/>
 			)}
-			{partyLoading ? (
+			{detail ? (
 				<PartyHeaderSkeleton />
 			) : party ? (
 				<PartyHeader

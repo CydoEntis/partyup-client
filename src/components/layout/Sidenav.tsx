@@ -23,13 +23,16 @@ import usePartyStore from "../../stores/usePartyStore";
 
 function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
-	const { getRecentParties, recentParties, loading } = usePartyStore();
+	const {
+		getRecentParties,
+		recentParties,
+		loading: { recent },
+	} = usePartyStore();
 	const { user } = useAuthStore();
 	const logoutHandler = useLogout();
 	const [isRecentOpen, setIsRecentOpen] = useState(false);
 	const [openedNewParty, { open: openNewParty, close: closeNewParty }] =
 		useDisclosure(false);
-
 
 	useEffect(() => {
 		const fetchRecentParties = async () => {
@@ -56,7 +59,7 @@ function Sidenav() {
 					},
 				}}
 			>
-				{loading ? (
+				{recent ? (
 					<Stack style={{ flexGrow: 1 }}>
 						<Skeleton
 							height={30}

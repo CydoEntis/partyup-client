@@ -9,9 +9,13 @@ import { useEffect } from "react";
 
 function PartyTabs() {
 	const { partyId } = useParams();
-	const { getQuests, paginatedQuests, loading } = useQuestStore();
+	const {
+		getQuests,
+		paginatedQuests,
+		loading: { list },
+	} = useQuestStore();
 
-	console.log(paginatedQuests)
+	console.log(paginatedQuests);
 
 	useEffect(() => {
 		const fetchQuests = async () => {
@@ -61,7 +65,7 @@ function PartyTabs() {
 				p={16}
 			>
 				<SimpleGridLayout cols={6}>
-					{loading
+					{list
 						? Array.from({ length: 12 }).map((_, index) => (
 								<Skeleton
 									key={index}
