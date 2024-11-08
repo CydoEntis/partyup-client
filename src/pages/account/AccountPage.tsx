@@ -33,7 +33,14 @@ function AccountPage() {
 	const { user } = useAuthStore();
 	const { avatars, getAvatarShop } = useAvatarStore();
 
-	const [opened, { open, close }] = useDisclosure(false);
+	const [
+		changeAvatarOpened,
+		{ open: openChangeAvatar, close: closeChangeAvatar },
+	] = useDisclosure(false);
+	const [
+		confirmPurchaseOpened,
+		{ open: openConfirmPurchase, close: closeConfirmPurchase },
+	] = useDisclosure(false);
 
 	useEffect(() => {
 		const loadAvatarShop = async () => {
@@ -49,8 +56,15 @@ function AccountPage() {
 	return (
 		<>
 			<Modal
-				opened={opened}
-				onClose={close}
+				opened={changeAvatarOpened}
+				onClose={closeChangeAvatar}
+				title="Change Avatar"
+				centered
+			></Modal>
+
+			<Modal
+				opened={confirmPurchaseOpened}
+				onClose={closeConfirmPurchase}
 				title="Unlock Avatar?"
 				centered
 			>
@@ -93,7 +107,10 @@ function AccountPage() {
 					<Stack gap={12}>
 						{user && avatars && (
 							<>
-								<AccountLevel user={user} />
+								<AccountLevel
+									user={user}
+									onChangeAvatar={openChangeAvatar}
+								/>
 								<SimpleGrid cols={2}>
 									<AccountDetails user={user} />
 									<ChangePassword />
@@ -117,7 +134,7 @@ function AccountPage() {
 										</Group>
 									</Group>
 									<AvatarShop
-										onUnlock={open}
+										onUnlock={openConfirmPurchase}
 										avatars={avatars}
 										user={user}
 									/>

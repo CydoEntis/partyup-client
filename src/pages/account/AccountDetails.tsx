@@ -1,10 +1,29 @@
-import { ActionIcon, Divider, Group, Paper, Title, Text } from "@mantine/core";
-import { Edit } from "lucide-react";
+import {
+	ActionIcon,
+	Divider,
+	Group,
+	Paper,
+	Title,
+	Text,
+	Flex,
+} from "@mantine/core";
+import { Edit, Save, X } from "lucide-react";
 import { User } from "../../shared/types/auth.types";
+import { useState } from "react";
+import AccountDetailsForm from "./AccountDetailsForm";
 
 type AcountDetailsProps = { user: User };
 
 function AccountDetails({ user }: AcountDetailsProps) {
+	const [isEditing, setIsEditing] = useState(false);
+
+	const handleEditing = () => {
+		if (isEditing) {
+			console.log("Saving...");
+		}
+		setIsEditing((prevState) => !prevState);
+	};
+
 	return (
 		<Paper
 			withBorder
@@ -19,27 +38,38 @@ function AccountDetails({ user }: AcountDetailsProps) {
 				<ActionIcon
 					variant="light"
 					color="violet"
+					onClick={handleEditing}
 				>
-					<Edit size={20} />
+					{isEditing ? <Save size={20} /> : <Edit size={20} />}
 				</ActionIcon>
 			</Group>
 			<Divider />
-			<Group
-				justify="space-between"
-				w="25%"
-				py={12}
-			>
-				<Text>Display Name</Text>
-				<Text>{user.displayName}</Text>
-			</Group>
-			<Group
-				justify="space-between"
-				w="25%"
-				py={12}
-			>
-				<Text>Email</Text>
-				<Text>{user.email}</Text>
-			</Group>
+			{isEditing ? (
+				<AccountDetailsForm user={user} />
+			) : (
+				<>
+					<Flex
+						justify="space-between"
+						py={12}
+					>
+						<Text w="50%" fw={700}>Display Name:</Text>
+						<Text
+							w="50%"
+							ta="left"
+						>
+							{user.displayName}
+						</Text>
+					</Flex>
+					<Group
+						justify="space-between"
+						w="25%"
+						py={12}
+					>
+						<Text fw={700}>Email:</Text>
+						<Text>{user.email}</Text>
+					</Group>
+				</>
+			)}
 		</Paper>
 	);
 }
