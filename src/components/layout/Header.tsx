@@ -3,15 +3,13 @@ import useGetColorTheme from "../../hooks/useGetColorTheme";
 import { NavLink } from "react-router-dom";
 import useAuthStore from "../../stores/useAuthStore";
 
-type TopBarHeaderProps = {
+type HeaderProps = {
 	opened: boolean;
 	toggle: () => void;
 };
 
-function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
+function Header({ opened, toggle }: HeaderProps) {
 	const { isLightMode } = useGetColorTheme();
-	const { user } = useAuthStore();
-
 	return (
 		<AppShell.Header
 			bg="secondary"
@@ -28,7 +26,6 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 				px={16}
 			>
 				<Group>
-					<Title size="2rem" >PartyUp</Title>
 					<Burger
 						opened={opened}
 						onClick={toggle}
@@ -36,29 +33,9 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 						size="sm"
 					/>
 				</Group>
-
-				{user ? null : (
-					<Group>
-						<Button
-							component={NavLink}
-							to="/login"
-							variant="outline"
-							color="violet"
-						>
-							Login
-						</Button>
-						<Button
-							component={NavLink}
-							to="/register"
-							color="violet"
-						>
-							Register
-						</Button>
-					</Group>
-				)}
 			</Flex>
 		</AppShell.Header>
 	);
 }
 
-export default TopBarHeader;
+export default Header;

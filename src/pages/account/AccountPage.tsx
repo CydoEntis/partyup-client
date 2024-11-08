@@ -17,10 +17,7 @@ import {
 	Flex,
 } from "@mantine/core";
 import useAuthStore from "../../stores/useAuthStore";
-import { getPercentage } from "../../shared/utils/progress-bar.utils";
 import Coin from "../../assets/coin.png";
-import useAvatar from "../../hooks/useGetAvatar";
-import { Edit } from "lucide-react";
 import AvatarShop from "../../features/shop/AvatarShop";
 import { useDisclosure } from "@mantine/hooks";
 import useAvatarStore from "../../stores/useAvatarStore";
@@ -28,6 +25,7 @@ import { useEffect } from "react";
 import AccountLevel from "./AccountLevel";
 import AccountDetails from "./AccountDetails";
 import ChangePassword from "./ChangePassword";
+import ChangeAvatar from "./ChangeAvatar";
 
 function AccountPage() {
 	const { user } = useAuthStore();
@@ -45,7 +43,7 @@ function AccountPage() {
 	useEffect(() => {
 		const loadAvatarShop = async () => {
 			if (user) {
-				await getAvatarShop(user.id);
+				await getAvatarShop();
 			}
 		};
 		loadAvatarShop();
@@ -55,12 +53,11 @@ function AccountPage() {
 	// TODO When edit button in account details is clicked display a form so the user can update their info.
 	return (
 		<>
-			<Modal
-				opened={changeAvatarOpened}
-				onClose={closeChangeAvatar}
-				title="Change Avatar"
-				centered
-			></Modal>
+			<ChangeAvatar
+				changedAvatarOpened={changeAvatarOpened}
+				onCloseChangeAvatar={closeChangeAvatar}
+				user={user!}
+			/>
 
 			<Modal
 				opened={confirmPurchaseOpened}

@@ -8,13 +8,13 @@ import {
 } from "@mantine/core";
 import useAvatar from "../../hooks/useGetAvatar";
 import { forwardRef } from "react";
-import { AvatarShopItem } from "../../shared/types/avatar.types";
+import { Avatar } from "../../shared/types/avatar.types";
 import { Lock } from "lucide-react";
 import Coin from "../../assets/coin.png";
 import { User } from "../../shared/types/auth.types";
 
 type ShopAvatarProps = {
-	avatar: AvatarShopItem;
+	avatar: Avatar;
 	user: User;
 	onClick?: () => void;
 };

@@ -6,7 +6,7 @@ type Props = {};
 
 function LoginPage({}: Props) {
 	return (
-		<Box mt={250}>
+		<Box >
 			<Container
 				w="100%"
 				maw={520}

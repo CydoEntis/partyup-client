@@ -1,57 +1,19 @@
-import {
-	AppShell,
-	Button,
-	Flex,
-	Indicator,
-	NavLink as MantineNavLink,
-	Stack,
-	Skeleton,
-	Box,
-} from "@mantine/core";
-import {
-	FolderClosed,
-	FolderOpen,
-	LayoutGrid,
-	LogOut,
-	PlusCircle,
-	User,
-	Users2,
-} from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { AppShell, Button, Stack, Title } from "@mantine/core";
+
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
-import ThemeToggle from "../../features/theme/ThemeToggle";
-import useLogout from "../../hooks/useLogout";
 import PartyDrawer from "../../features/party/PartyDrawer";
 
-import { useEffect, useState } from "react";
-import useAvatarStore from "../../stores/useAvatarStore";
 import useAuthStore from "../../stores/useAuthStore";
-import AccountInfo from "../../features/account/AccountInfo";
-import usePartyStore from "../../stores/usePartyStore";
+import AuthenticatedNav from "./AuthenticatedLinks";
+import { NavLink } from "react-router-dom";
 
 function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
-	const {
-		getRecentParties,
-		recentParties,
-		loading: { recent },
-	} = usePartyStore();
 	const { user } = useAuthStore();
-	const logoutHandler = useLogout();
-	const [isRecentOpen, setIsRecentOpen] = useState(false);
 	const [openedNewParty, { open: openNewParty, close: closeNewParty }] =
 		useDisclosure(false);
 
-	useEffect(() => {
-		const fetchRecentParties = async () => {
-			await getRecentParties();
-			setIsRecentOpen(recentParties.length > 0);
-		};
-		fetchRecentParties();
-	}, [recentParties.length]);
-
-	const toggleRecentOpen = () => setIsRecentOpen((prev) => !prev);
 	return (
 		<>
 			<PartyDrawer
@@ -68,114 +30,33 @@ function Sidenav() {
 					},
 				}}
 			>
-				{recent ? (
-					<Stack style={{ flexGrow: 1 }}>
-						<Skeleton
-							height={30}
-							radius="md"
-							mb="sm"
+				<Stack style={{ flexGrow: 1 }}>
+					<Title size="2rem">PartyUp</Title>
+					{user?.isLoggedIn ? (
+						<AuthenticatedNav
+							user={user}
+							onOpenNewParty={openNewParty}
 						/>
-						<Skeleton
-							height={30}
-							radius="md"
-							mb="sm"
-						/>
-						<Skeleton
-							height={30}
-							radius="md"
-							mb="sm"
-						/>
-						<Skeleton
-							height={30}
-							radius="md"
-							mb="sm"
-						/>
-						<Skeleton
-							height={30}
-							radius="md"
-							mb="sm"
-						/>
-					</Stack>
-				) : (
-					<Stack style={{ flexGrow: 1 }}>
-						<Stack gap={8}>
-							<AccountInfo user={user!} />
+					) : (
+						<>
 							<Button
+								component={NavLink}
+								to="/login"
+								variant="outline"
 								color="violet"
-								variant="light"
-								rightSection={<PlusCircle size={20} />}
-								h={40}
-								onClick={openNewParty}
-								my={20}
 							>
-								New Party
+								Login
 							</Button>
-							<MantineNavLink
-								component={NavLink}
-								to="/dashboard"
-								leftSection={<LayoutGrid size={20} />}
-								label="Dashboard"
-								className="rounded-md"
-								color="violet"
-							/>
-							<MantineNavLink
-								component={NavLink}
-								to="/parties"
-								leftSection={<FolderClosed size={20} />}
-								label="Your Parties"
-								className="rounded-md"
-								color="violet"
-							/>
-							<MantineNavLink
-								label="Most Recent"
-								className="rounded-md"
-								leftSection={<FolderOpen size={20} />}
-								variant="subtle"
-								color="gray"
-								opened={isRecentOpen}
-								onClick={toggleRecentOpen}
-							>
-								{recentParties?.map((party) => (
-									<MantineNavLink
-										key={party.id}
-										component={NavLink}
-										to={`/parties/${party.id}/quests`}
-										label={
-											<Flex
-												align="center"
-												gap={16}
-												px={10}
-											>
-												<Indicator
-													inline
-													color={party.color}
-													processing
-													size={10}
-												/>
-												{party.title}
-											</Flex>
-										}
-										color="violet"
-										className="rounded-md"
-										mt={8}
-									/>
-								))}
-							</MantineNavLink>
-						</Stack>
-						<Stack mt="auto">
 							<Button
-								justify="start"
-								leftSection={<LogOut size={20} />}
-								variant="light"
+								component={NavLink}
+								to="/register"
 								color="violet"
-								h={40}
-								onClick={logoutHandler}
 							>
-								Log out
+								Register
 							</Button>
-						</Stack>
-					</Stack>
-				)}
+						</>
+					)}
+				</Stack>
 			</AppShell.Navbar>
 		</>
 	);

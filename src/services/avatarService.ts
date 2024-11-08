@@ -1,9 +1,43 @@
 import apiClient from "../api/apiClient";
 import endpoints from "../api/endpoints";
-import { AvatarShopItem } from "../shared/types/avatar.types";
+import { Avatar } from "../shared/types/avatar.types";
 
-const getAvatarShop = async (userId: string): Promise<AvatarShopItem[]> => {
-	const response = (await apiClient.get(`${endpoints.avatars}/${userId}`)).data;
+const getAvatarShop = async (): Promise<Avatar[]> => {
+	const response = (await apiClient.get(`${endpoints.avatars}`)).data;
+	console.log("Response: ", response);
+	if (!response.isSuccess) throw new Error();
+
+	return response.result;
+};
+
+const getUnlockedAvatars = async (): Promise<Avatar[]> => {
+	const response = (await apiClient.get(`${endpoints.avatars}/unlocked`)).data;
+	console.log("Response: ", response);
+	if (!response.isSuccess) throw new Error();
+
+	return response.result;
+};
+
+const getNextTierOfAvatars = async (): Promise<Avatar[]> => {
+	const response = (await apiClient.get(`${endpoints.avatars}/next-tier`)).data;
+	console.log("Response: ", response);
+	if (!response.isSuccess) throw new Error();
+
+	return response.result;
+};
+
+const unlockAvatar = async (avatarId: number): Promise<Avatar[]> => {
+	const response = (
+		await apiClient.post(`${endpoints.avatars}/unlock`, avatarId)
+	).data;
+	console.log("Response: ", response);
+	if (!response.isSuccess) throw new Error();
+
+	return response.result;
+};
+
+const updateAvatar = async (avatarId: number): Promise<Avatar[]> => {
+	const response = (await apiClient.put(`${endpoints.avatars}`, avatarId)).data;
 	console.log("Response: ", response);
 	if (!response.isSuccess) throw new Error();
 
@@ -12,4 +46,8 @@ const getAvatarShop = async (userId: string): Promise<AvatarShopItem[]> => {
 
 export default {
 	getAvatarShop,
+	getUnlockedAvatars,
+	getNextTierOfAvatars,
+	unlockAvatar,
+	updateAvatar,
 };

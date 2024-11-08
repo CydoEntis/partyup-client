@@ -16,7 +16,6 @@ function AppWrapper({ opened, children }: AppWrapperProps) {
 				collapsed: { mobile: !opened },
 			}}
 			bg={"primary"}
-
 		>
 			{children}
 		</AppShell>
