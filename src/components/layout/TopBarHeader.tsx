@@ -1,4 +1,4 @@
-import { AppShell, Burger, Button, Flex, Group } from "@mantine/core";
+import { AppShell, Burger, Button, Flex, Group, Title } from "@mantine/core";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import { NavLink } from "react-router-dom";
 import useAuthStore from "../../stores/useAuthStore";
@@ -27,12 +27,15 @@ function TopBarHeader({ opened, toggle }: TopBarHeaderProps) {
 				h="100%"
 				px={16}
 			>
-				<Burger
-					opened={opened}
-					onClick={toggle}
-					hiddenFrom="sm"
-					size="sm"
-				/>
+				<Group>
+					<Title size="2rem" >PartyUp</Title>
+					<Burger
+						opened={opened}
+						onClick={toggle}
+						hiddenFrom="sm"
+						size="sm"
+					/>
+				</Group>
 
 				{user ? null : (
 					<Group>

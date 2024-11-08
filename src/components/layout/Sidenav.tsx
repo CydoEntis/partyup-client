@@ -6,8 +6,17 @@ import {
 	NavLink as MantineNavLink,
 	Stack,
 	Skeleton,
+	Box,
 } from "@mantine/core";
-import { LayoutGrid, LogOut, PlusCircle, Users2 } from "lucide-react";
+import {
+	FolderClosed,
+	FolderOpen,
+	LayoutGrid,
+	LogOut,
+	PlusCircle,
+	User,
+	Users2,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
@@ -109,10 +118,18 @@ function Sidenav() {
 								className="rounded-md"
 								color="violet"
 							/>
-
 							<MantineNavLink
-								label="Recent Parties"
+								component={NavLink}
+								to="/parties"
+								leftSection={<FolderClosed size={20} />}
+								label="Your Parties"
 								className="rounded-md"
+								color="violet"
+							/>
+							<MantineNavLink
+								label="Most Recent"
+								className="rounded-md"
+								leftSection={<FolderOpen size={20} />}
 								variant="subtle"
 								color="gray"
 								opened={isRecentOpen}
@@ -132,7 +149,8 @@ function Sidenav() {
 												<Indicator
 													inline
 													color={party.color}
-													size={8}
+													processing
+													size={10}
 												/>
 												{party.title}
 											</Flex>
@@ -143,15 +161,6 @@ function Sidenav() {
 									/>
 								))}
 							</MantineNavLink>
-
-							<MantineNavLink
-								component={NavLink}
-								to="/parties"
-								leftSection={<Users2 size={20} />}
-								label="Parties"
-								className="rounded-md"
-								color="violet"
-							/>
 						</Stack>
 						<Stack mt="auto">
 							<Button
@@ -164,7 +173,6 @@ function Sidenav() {
 							>
 								Log out
 							</Button>
-							<ThemeToggle />
 						</Stack>
 					</Stack>
 				)}

@@ -7,11 +7,13 @@ import {
 	Text,
 	Box,
 	Tooltip,
+	Flex,
 } from "@mantine/core";
 import { User } from "../../shared/types/auth.types";
 import { getPercentage } from "../../shared/utils/progress-bar.utils";
 import useAvatar from "../../hooks/useGetAvatar";
-import { Edit, Edit2 } from "lucide-react";
+import { Edit2 } from "lucide-react";
+import ThemeToggle from "../../features/theme/ThemeToggle";
 
 type AccountLevelProps = {
 	user: User;
@@ -29,34 +31,37 @@ function AccountLevel({ user, onChangeAvatar }: AccountLevelProps) {
 			withBorder
 			p={16}
 		>
-			<Group pb={16}>
-				<Tooltip label="Change Avatar">
-					<Box
-						className="relative"
-						onClick={onChangeAvatar}
-					>
-						<Avatar
-							src={avatarImage}
-							alt="User's avatar"
-							bg="violet"
-							size="xl"
-							className="cursor-pointer"
-						/>
-
-						<Paper
-							radius="100%"
-							bg="violet"
-							p={6}
-							withBorder
-							className="absolute -bottom-1 right-0 cursor-pointer"
+			<Flex justify="space-between">
+				<Group pb={16}>
+					<Tooltip label="Change Avatar">
+						<Box
+							className="relative"
+							onClick={onChangeAvatar}
 						>
-							<Edit2 size={14} />
-						</Paper>
-					</Box>
-				</Tooltip>
+							<Avatar
+								src={avatarImage}
+								alt="User's avatar"
+								bg="violet"
+								size="xl"
+								className="cursor-pointer"
+							/>
 
-				<Text size="xl">{user.displayName}</Text>
-			</Group>
+							<Paper
+								radius="100%"
+								bg="violet"
+								p={6}
+								withBorder
+								className="absolute -bottom-1 right-0 cursor-pointer"
+							>
+								<Edit2 size={14} />
+							</Paper>
+						</Box>
+					</Tooltip>
+
+					<Text size="xl">{user.displayName}</Text>
+				</Group>
+				<ThemeToggle />
+			</Flex>
 			<Stack gap={2}>
 				<Group justify="space-between">
 					<Group>
