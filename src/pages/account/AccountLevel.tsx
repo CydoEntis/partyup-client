@@ -6,11 +6,12 @@ import {
 	Stack,
 	Text,
 	Box,
+	Tooltip,
 } from "@mantine/core";
 import { User } from "../../shared/types/auth.types";
 import { getPercentage } from "../../shared/utils/progress-bar.utils";
 import useAvatar from "../../hooks/useGetAvatar";
-import { Edit } from "lucide-react";
+import { Edit, Edit2 } from "lucide-react";
 
 type AccountLevelProps = {
 	user: User;
@@ -29,22 +30,30 @@ function AccountLevel({ user, onChangeAvatar }: AccountLevelProps) {
 			p={16}
 		>
 			<Group pb={16}>
-				<Box
-					className="relative group"
-					onClick={onChangeAvatar}
-				>
-					<Avatar
-						src={avatarImage}
-						alt="User's avatar"
-						bg="violet"
-						size="xl"
-						className="group-hover:brightness-75 transition-all duration-300 cursor-pointer"
-					/>
-					<Edit
-						size={40}
-						className="invisible group-hover:visible absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 cursor-pointer"
-					/>
-				</Box>
+				<Tooltip label="Change Avatar">
+					<Box
+						className="relative"
+						onClick={onChangeAvatar}
+					>
+						<Avatar
+							src={avatarImage}
+							alt="User's avatar"
+							bg="violet"
+							size="xl"
+							className="cursor-pointer"
+						/>
+
+						<Paper
+							radius="100%"
+							bg="violet"
+							p={6}
+							withBorder
+							className="absolute -bottom-1 right-0 cursor-pointer"
+						>
+							<Edit2 size={14} />
+						</Paper>
+					</Box>
+				</Tooltip>
 
 				<Text size="xl">{user.displayName}</Text>
 			</Group>
