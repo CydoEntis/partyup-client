@@ -14,6 +14,10 @@ function UnlockAvatarModal({
 	onCloseUnlockAvatar,
 	avatarToUnlock,
 }: UnlockAvatarModal) {
+	const unlockAvatarHandler = () => {
+		onCloseUnlockAvatar();
+	};
+
 	return (
 		<Modal
 			opened={isUnlockAvatarOpen}
@@ -40,9 +44,7 @@ function UnlockAvatarModal({
 					w="100%"
 					variant="light"
 					color="violet"
-					onClick={() => {
-						onCloseUnlockAvatar();
-					}}
+					onClick={unlockAvatarHandler}
 				>
 					Confirm
 				</Button>
@@ -50,7 +52,7 @@ function UnlockAvatarModal({
 					w="100%"
 					variant="light"
 					color="gray"
-					onClick={close}
+					onClick={onCloseUnlockAvatar}
 				>
 					Cancel
 				</Button>
