@@ -7,14 +7,13 @@ import {
 	Text,
 	Flex,
 } from "@mantine/core";
-import { Edit, Save, X } from "lucide-react";
-import { User } from "../../shared/types/auth.types";
+import { Edit, Save } from "lucide-react";
 import { useState } from "react";
 import AccountDetailsForm from "./AccountDetailsForm";
+import useAuthStore from "../../stores/useAuthStore";
 
-type AcountDetailsProps = { user: User };
-
-function AccountDetails({ user }: AcountDetailsProps) {
+function AccountDetails() {
+	const { user } = useAuthStore();
 	const [isEditing, setIsEditing] = useState(false);
 
 	const handleEditing = () => {
@@ -44,31 +43,37 @@ function AccountDetails({ user }: AcountDetailsProps) {
 				</ActionIcon>
 			</Group>
 			<Divider />
-			{isEditing ? (
+			{isEditing && user ? (
 				<AccountDetailsForm user={user} />
 			) : (
-				<>
-					<Flex
-						justify="space-between"
-						py={12}
-					>
-						<Text w="50%" fw={700}>Display Name:</Text>
-						<Text
-							w="50%"
-							ta="left"
+				user && (
+					<>
+						<Flex
+							justify="space-between"
+							py={12}
 						>
-							{user.displayName}
-						</Text>
-					</Flex>
-					<Group
-						justify="space-between"
-						w="25%"
-						py={12}
-					>
-						<Text fw={700}>Email:</Text>
-						<Text>{user.email}</Text>
-					</Group>
-				</>
+							<Text
+								w="50%"
+								fw={700}
+							>
+								Display Name:
+							</Text>
+							<Text
+								w="50%"
+								ta="left"
+							>
+								{user.displayName}
+							</Text>
+						</Flex>
+						<Flex
+							justify="space-between"
+							py={12}
+						>
+							<Text fw={700}>Email:</Text>
+							<Text>{user.email}</Text>
+						</Flex>
+					</>
+				)
 			)}
 		</Paper>
 	);

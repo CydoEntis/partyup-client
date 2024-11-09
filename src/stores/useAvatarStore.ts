@@ -14,7 +14,7 @@ type AvatarShopState = {
 	};
 	error: string | null;
 
-	getAvatarShop: () => Promise<void>;
+	getAvatars: () => Promise<void>;
 	getUnlockedAvatars: () => Promise<void>;
 	getNextUnlockableTier: () => Promise<void>;
 	unlockAvatar: (avatarId: number) => Promise<void>;
@@ -33,13 +33,13 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 	error: null,
 
 	// Fetch all avatars for the shop
-	getAvatarShop: async () => {
+	getAvatars: async () => {
 		set((state) => ({
 			loading: { ...state.loading, list: true },
 			error: null,
 		}));
 		try {
-			const avatars = await avatarService.getAvatarShop();
+			const avatars = await avatarService.getAvatars();
 			set({ avatars });
 		} catch (error) {
 			set({ error: "Failed to fetch avatars" });

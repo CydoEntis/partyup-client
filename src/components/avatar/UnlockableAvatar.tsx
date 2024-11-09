@@ -13,15 +13,17 @@ import { Lock } from "lucide-react";
 import Coin from "../../assets/coin.png";
 import { User } from "../../shared/types/auth.types";
 
-type ShopAvatarProps = {
+type UnlockabeAvatarProps = {
 	avatar: Avatar;
 	user: User;
 	onClick?: () => void;
 };
 
-const ShopAvatar = forwardRef<HTMLDivElement, ShopAvatarProps>(
+const UnlockableAvatar = forwardRef<HTMLDivElement, UnlockabeAvatarProps>(
 	({ avatar, user, onClick }, ref) => {
 		const avatarImage = useAvatar(avatar.id);
+
+		console.log(avatar);
 
 		return (
 			<Stack
@@ -40,7 +42,7 @@ const ShopAvatar = forwardRef<HTMLDivElement, ShopAvatarProps>(
 					<MantineAvatar
 						ref={ref}
 						src={avatarImage}
-						alt={avatar.name}
+						alt={avatar.displayName}
 						bg="violet"
 						size="lg"
 						className={!avatar.isUnlocked ? "brightness-50" : ""}
@@ -90,4 +92,4 @@ const ShopAvatar = forwardRef<HTMLDivElement, ShopAvatarProps>(
 	},
 );
 
-export default ShopAvatar;
+export default UnlockableAvatar;

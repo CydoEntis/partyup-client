@@ -2,7 +2,7 @@ import apiClient from "../api/apiClient";
 import endpoints from "../api/endpoints";
 import { Avatar } from "../shared/types/avatar.types";
 
-const getAvatarShop = async (): Promise<Avatar[]> => {
+const getAvatars = async (): Promise<Avatar[]> => {
 	const response = (await apiClient.get(`${endpoints.avatars}`)).data;
 	console.log("Response: ", response);
 	if (!response.isSuccess) throw new Error();
@@ -39,7 +39,7 @@ const unlockAvatar = async (avatarId: number): Promise<Avatar> => {
 
 
 export default {
-	getAvatarShop,
+	getAvatars,
 	getUnlockedAvatars,
 	getNextTierOfAvatars,
 	unlockAvatar,
