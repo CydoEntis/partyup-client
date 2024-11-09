@@ -39,6 +39,7 @@ function App() {
 				light: "lightCard",
 			}),
 		},
+		fontFamily: "Happy Monkey, sans-serif",
 	});
 
 	useEffect(() => {

@@ -25,6 +25,8 @@ function Header({ opened, toggle }: HeaderProps) {
 				h="100%"
 				px={16}
 			>
+				<h1 className="title text-4xl">Party Up</h1>
+
 				<Group>
 					<Burger
 						opened={opened}

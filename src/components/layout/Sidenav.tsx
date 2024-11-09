@@ -1,4 +1,4 @@
-import { AppShell, Button, Stack, Title } from "@mantine/core";
+import { AppShell, Button, Stack, Image, Flex } from "@mantine/core";
 
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
@@ -7,6 +7,9 @@ import PartyDrawer from "../../features/party/PartyDrawer";
 import useAuthStore from "../../stores/useAuthStore";
 import AuthenticatedNav from "./AuthenticatedLinks";
 import { NavLink } from "react-router-dom";
+
+import PartyUpLogo from "../../assets/party-up-logo.png";
+import PartyUpLogo2 from "../../assets/partyup-logo.png";
 
 function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
@@ -31,7 +34,6 @@ function Sidenav() {
 				}}
 			>
 				<Stack style={{ flexGrow: 1 }}>
-					<Title size="2rem">PartyUp</Title>
 					{user?.isLoggedIn ? (
 						<AuthenticatedNav
 							user={user}
