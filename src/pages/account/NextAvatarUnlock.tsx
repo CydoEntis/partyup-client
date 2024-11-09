@@ -17,8 +17,13 @@ function NextUnlock({}: NextUnlockProps) {
 
 	useEffect(() => {
 		const loadNextTierOfAvatars = async () => {
-			await getNextUnlockableTier();
+			try {
+				await getNextUnlockableTier();
+			} catch (error) {
+				console.error("Error loading next unlockable tier:", error);
+			}
 		};
+
 		loadNextTierOfAvatars();
 	}, [getNextUnlockableTier]);
 
@@ -27,11 +32,6 @@ function NextUnlock({}: NextUnlockProps) {
 			pos="relative"
 			p={20}
 		>
-			<Divider
-				my="xs"
-				label={`Unlocked at tier ${nextUnlockableTierOfAvatars![0].tier}`}
-				labelPosition="center"
-			/>
 			{nextTier ? (
 				<p>Loading...</p>
 			) : (
@@ -53,15 +53,17 @@ function NextUnlock({}: NextUnlockProps) {
 						/>
 					</Center>
 					<SimpleGrid cols={12}>
-						{nextUnlockableTierOfAvatars &&
-							user &&
+						{nextUnlockableTierOfAvatars?.length && user ? (
 							nextUnlockableTierOfAvatars.map((avatar) => (
 								<UnlockableAvatar
 									key={avatar.id}
 									avatar={avatar}
 									user={user}
 								/>
-							))}
+							))
+						) : (
+							<p>No avatars available to unlock.</p>
+						)}
 					</SimpleGrid>
 				</>
 			)}

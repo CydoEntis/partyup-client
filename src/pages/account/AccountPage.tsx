@@ -3,25 +3,31 @@ import AccountLevel from "./AccountLevel";
 import AccountDetails from "./AccountDetails";
 import ChangePassword from "./ChangePassword";
 import AccountAvatars from "./AccountAvatars";
+import useAuthStore from "../../stores/useAuthStore";
 
 function AccountPage() {
+	const { user } = useAuthStore();
 
 	return (
 		<>
-			<Box p={32}>
-				<Container size="90%">
-					<Stack gap={12}>
-						<>
-							<AccountLevel />
-							<SimpleGrid cols={2}>
-								<AccountDetails />
-								<ChangePassword />
-								<AccountAvatars />
-							</SimpleGrid>
-						</>
-					</Stack>
-				</Container>
-			</Box>
+			{user ? (
+				<Box p={32}>
+					<Container size="90%">
+						<Stack gap={12}>
+							<>
+								<AccountLevel user={user} />
+								<SimpleGrid cols={2}>
+									<AccountDetails user={user} />
+									<ChangePassword />
+									<AccountAvatars />
+								</SimpleGrid>
+							</>
+						</Stack>
+					</Container>
+				</Box>
+			) : (
+				<p>Loading...</p>
+			)}
 		</>
 	);
 }

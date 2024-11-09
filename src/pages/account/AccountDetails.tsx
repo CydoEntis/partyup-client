@@ -10,10 +10,13 @@ import {
 import { Edit, Save } from "lucide-react";
 import { useState } from "react";
 import AccountDetailsForm from "./AccountDetailsForm";
-import useAuthStore from "../../stores/useAuthStore";
+import { User } from "../../shared/types/auth.types";
 
-function AccountDetails() {
-	const { user } = useAuthStore();
+type AccountDetailsProps = {
+	user: User;
+};
+
+function AccountDetails({ user }: AccountDetailsProps) {
 	const [isEditing, setIsEditing] = useState(false);
 
 	const handleEditing = () => {

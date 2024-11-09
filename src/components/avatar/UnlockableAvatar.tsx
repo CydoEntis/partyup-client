@@ -23,8 +23,6 @@ const UnlockableAvatar = forwardRef<HTMLDivElement, UnlockabeAvatarProps>(
 	({ avatar, user, onClick }, ref) => {
 		const avatarImage = useAvatar(avatar.id);
 
-		console.log(avatar);
-
 		return (
 			<Stack
 				justify="center"
@@ -58,7 +56,12 @@ const UnlockableAvatar = forwardRef<HTMLDivElement, UnlockabeAvatarProps>(
 					justify="center"
 					align="center"
 				>
-					<Text ta="center" size="xs">{avatar.displayName}</Text>
+					<Text
+						ta="center"
+						size="xs"
+					>
+						{avatar.displayName}
+					</Text>
 					{avatar.isUnlocked ? null : (
 						<Group
 							pt={4}

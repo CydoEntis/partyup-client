@@ -110,7 +110,10 @@ function UpsertPartyForm({ party, onClose }: UpsertPartyProps) {
 				updateExistingParty(data);
 			} else {
 				const newParty = await createNewParty(data);
-				navigate(`/partys/${newParty.id}/quests`);
+
+				console.log(newParty);
+
+				navigate(`/parties/${newParty.id}/quests`);
 			}
 
 			form.reset();

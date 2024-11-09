@@ -15,7 +15,6 @@ function PartyTabs() {
 		loading: { list },
 	} = useQuestStore();
 
-	console.log(paginatedQuests);
 
 	useEffect(() => {
 		const fetchQuests = async () => {

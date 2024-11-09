@@ -16,21 +16,23 @@ import ThemeToggle from "../../features/theme/ThemeToggle";
 import ChangeAvatar from "./ChangeAvatar";
 import { useDisclosure } from "@mantine/hooks";
 import useAuthStore from "../../stores/useAuthStore";
+import { User } from "../../shared/types/auth.types";
 
-function AccountLevel() {
-	const { user } = useAuthStore();
+type AccountLevelProps = {
+	user: User;
+};
 
+function AccountLevel({ user }: AccountLevelProps) {
+	const avatarImage = user ? useAvatar(user.avatar.id) : undefined;
 	const percentage = user
 		? getPercentage(user.currentExp, user.expToNextLevel)
 		: 0;
-	const avatarImage = user ? useAvatar(user.avatar.id) : undefined;
 
 	const [
 		changeAvatarOpened,
 		{ open: openChangeAvatar, close: closeChangeAvatar },
 	] = useDisclosure(false);
 
-	// Return null if user is not defined to avoid accessing undefined properties
 	if (!user) return null;
 
 	return (
