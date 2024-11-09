@@ -58,16 +58,8 @@ const UnlockableAvatar = forwardRef<HTMLDivElement, UnlockabeAvatarProps>(
 					justify="center"
 					align="center"
 				>
-					<Text size="xs">{avatar.displayName}</Text>
-					{avatar.isUnlocked ? (
-						<Text
-							size="xs"
-							ta="center"
-							pt={4}
-						>
-							Unlocked
-						</Text>
-					) : (
+					<Text ta="center" size="xs">{avatar.displayName}</Text>
+					{avatar.isUnlocked ? null : (
 						<Group
 							pt={4}
 							align="center"

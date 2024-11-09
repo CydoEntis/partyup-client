@@ -76,6 +76,7 @@ function UnlockableAvatars() {
 								<Box
 									key={tier}
 									pos="relative"
+									px={16}
 								>
 									<Divider
 										my="xs"
@@ -84,7 +85,7 @@ function UnlockableAvatars() {
 									/>
 
 									<SimpleGrid
-										cols={12}
+										cols={10}
 										spacing="md"
 									>
 										{avatarsByTier.map((avatar) => (
