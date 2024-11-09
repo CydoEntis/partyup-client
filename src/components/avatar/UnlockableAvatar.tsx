@@ -16,12 +16,23 @@ import { User } from "../../shared/types/auth.types";
 type UnlockabeAvatarProps = {
 	avatar: Avatar;
 	user: User;
-	onClick?: () => void;
+	onSelectAvatar?: (avatar: Avatar) => void;
 };
 
 const UnlockableAvatar = forwardRef<HTMLDivElement, UnlockabeAvatarProps>(
-	({ avatar, user, onClick }, ref) => {
+	({ avatar, user, onSelectAvatar }, ref) => {
 		const avatarImage = useAvatar(avatar.id);
+
+		const handleClick = () => {
+			console.log("Clicked")
+			if (
+				!avatar.isUnlocked &&
+				user.currentLevel >= avatar.unlockLevel &&
+				onSelectAvatar
+			) {
+				onSelectAvatar(avatar);
+			}
+		};
 
 		return (
 			<Stack
@@ -33,7 +44,7 @@ const UnlockableAvatar = forwardRef<HTMLDivElement, UnlockabeAvatarProps>(
 					className={`relative ${!avatar.isUnlocked ? "cursor-pointer" : ""}`}
 					onClick={
 						!avatar.isUnlocked && user.currentLevel >= avatar.unlockLevel
-							? onClick
+							? handleClick
 							: undefined
 					}
 				>

@@ -18,6 +18,7 @@ import Coin from "../../assets/coin.png";
 import { useDisclosure } from "@mantine/hooks";
 import UnlockAvatarModal from "../avatar/UnlockAvatarModal";
 import { User } from "../../shared/types/auth.types";
+import { useState } from "react";
 
 type UnlockableAvatarsProps = {
 	user: User;
@@ -30,6 +31,8 @@ function UnlockableAvatars({ user, avatars }: UnlockableAvatarsProps) {
 		{ open: openUnlockAvatar, close: closeUnlockAvatar },
 	] = useDisclosure(false);
 
+	const [avatarToUnlock, setAvatarToUnlock] = useState<Avatar | null>(null);
+
 	const groupedByTier =
 		avatars?.reduce((acc, avatar) => {
 			if (!acc[avatar.tier]) {
@@ -39,12 +42,17 @@ function UnlockableAvatars({ user, avatars }: UnlockableAvatarsProps) {
 			return acc;
 		}, {} as { [tier: number]: Avatar[] }) || {};
 
+	const avatarSelectionHandler = (avatar: Avatar) => {
+		setAvatarToUnlock(avatar);
+		openUnlockAvatar();
+	};
 
 	return (
 		<>
 			<UnlockAvatarModal
 				isUnlockAvatarOpen={confirmUnlockOpened}
 				onCloseUnlockAvatar={closeUnlockAvatar}
+				avatarToUnlock={avatarToUnlock}
 			/>
 			{user ? (
 				<Paper>
@@ -85,7 +93,9 @@ function UnlockableAvatars({ user, avatars }: UnlockableAvatarsProps) {
 												key={avatar.id}
 												avatar={avatar}
 												user={user}
-												onClick={isTierLocked ? undefined : openUnlockAvatar}
+												onSelectAvatar={
+													isTierLocked ? undefined : avatarSelectionHandler
+												}
 											/>
 										))}
 									</SimpleGrid>
