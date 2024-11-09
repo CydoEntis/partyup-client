@@ -44,7 +44,10 @@ function AccountDetails({ user }: AccountDetailsProps) {
 			</Group>
 			<Divider />
 			{isEditing && user ? (
-				<AccountDetailsForm user={user} />
+				<AccountDetailsForm
+					user={user}
+					onClose={() => setIsEditing(false)}
+				/>
 			) : (
 				user && (
 					<>
@@ -69,8 +72,18 @@ function AccountDetails({ user }: AccountDetailsProps) {
 							justify="space-between"
 							py={12}
 						>
-							<Text fw={700}>Email:</Text>
-							<Text>{user.email}</Text>
+							<Text
+								w="50%"
+								fw={700}
+							>
+								Email:
+							</Text>
+							<Text
+								w="50% "
+								ta="left"
+							>
+								{user.email}
+							</Text>
 						</Flex>
 					</>
 				)

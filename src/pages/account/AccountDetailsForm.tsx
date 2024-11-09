@@ -7,7 +7,7 @@ import { Button, Stack, TextInput } from "@mantine/core";
 import classes from "../../features/auth/auth.module.css";
 import useAuthStore from "../../stores/useAuthStore";
 
-type AccountDetailsFormProps = { user: User };
+type AccountDetailsFormProps = { user: User; onClose: () => void };
 
 const accountDetailsSchema = z.object({
 	displayName: z
@@ -19,7 +19,7 @@ const accountDetailsSchema = z.object({
 
 type AccountDetails = z.infer<typeof accountDetailsSchema>;
 
-function AccountDetailsForm({ user }: AccountDetailsFormProps) {
+function AccountDetailsForm({ user, onClose }: AccountDetailsFormProps) {
 	const { updateUserDisplayName } = useAuthStore();
 
 	const form = useForm<AccountDetails>({
@@ -36,12 +36,15 @@ function AccountDetailsForm({ user }: AccountDetailsFormProps) {
 
 	async function onSubmit(data: AccountDetails) {
 		try {
+			console.log("Submitting")
 			if (user) {
 				updateAccountDetails(data);
+
+				console.log(form.errors);
 			}
 
 			form.reset();
-			// onClose();
+			onClose();
 		} catch (error) {
 			if (error instanceof AxiosError && error.response?.data?.errors) {
 				console.error(error.response?.data?.errors);
@@ -90,6 +93,7 @@ function AccountDetailsForm({ user }: AccountDetailsFormProps) {
 				<Button
 					variant="light"
 					color="violet"
+					type="submit"
 				>
 					Update
 				</Button>
