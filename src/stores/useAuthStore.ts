@@ -8,6 +8,7 @@ import {
 import authService from "../services/authService";
 import localStorageService from "../services/localStorageService";
 import userService from "../services/userService";
+import avatarService from "../services/avatarService";
 
 type AuthState = {
 	user: User | null;
@@ -26,6 +27,7 @@ type AuthState = {
 	login: (credentials: LoginCredentials) => Promise<void>;
 	logout: () => Promise<void>;
 	getUser: (userId: string) => Promise<void>;
+	updateAvatar: (avatarId: number) => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -189,6 +191,46 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 		} finally {
 			set((state) => ({
 				loading: { ...state.loading, getUser: false },
+				error: null,
+			}));
+		}
+	},
+
+	updateAvatar: async (avatarId: number) => {
+		set((state) => ({
+			loading: { ...state.loading, avatar: true },
+			error: null,
+		}));
+		try {
+			const updatedAvatar = await userService.updateAvatar(avatarId);
+
+			const currentUser = get().user;
+
+			if (currentUser) {
+				const updatedUser = {
+					...currentUser,
+					avatar: updatedAvatar,
+				};
+
+				set({
+					user: updatedUser,
+				});
+
+				const storedUser = localStorageService.getItem<User>("questLog");
+
+				if (storedUser) {
+					localStorageService.setItem("questLog", {
+						...storedUser,
+						avatar: updatedAvatar,
+					});
+				}
+			}
+		} catch (error) {
+			set({ error: "Failed to update avatar" });
+			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, avatar: false },
 				error: null,
 			}));
 		}

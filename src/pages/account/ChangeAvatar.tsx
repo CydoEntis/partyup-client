@@ -15,7 +15,10 @@ function ChangeAvatar({
 	onCloseChangeAvatar,
 	user,
 }: ChangeAvatarProps) {
-	const { getUnlockedAvatars, unlockedAvatars } = useAvatarStore();
+	const {
+		getUnlockedAvatars,
+		unlockedAvatars,
+	} = useAvatarStore();
 
 	useEffect(() => {
 		const fetchUnlockedAvatars = async () => {

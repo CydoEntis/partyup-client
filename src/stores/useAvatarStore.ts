@@ -4,12 +4,13 @@ import avatarService from "../services/avatarService";
 
 type AvatarShopState = {
 	avatars: Avatar[] | null;
-	unlockedAvatars: Avatar[] | null;
-	nextUnlockableTierOfAvatars: Avatar[] | null;
+	unlockedAvatars: Avatar[] | null; // Array of unlocked avatars
+	nextUnlockableTierOfAvatars: Avatar[] | null; // Array for next tier avatars
 	loading: {
 		list: boolean;
 		unlocked: boolean;
 		nextTier: boolean;
+		unlock: boolean;
 	};
 	error: string | null;
 
@@ -27,9 +28,11 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 		list: false,
 		unlocked: false,
 		nextTier: false,
+		unlock: false,
 	},
 	error: null,
 
+	// Fetch all avatars for the shop
 	getAvatarShop: async () => {
 		set((state) => ({
 			loading: { ...state.loading, list: true },
@@ -37,19 +40,18 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 		}));
 		try {
 			const avatars = await avatarService.getAvatarShop();
-			console.log("avatars: ", avatars);
 			set({ avatars });
 		} catch (error) {
-			set({ error: "Failed to fetch user data" });
+			set({ error: "Failed to fetch avatars" });
 			throw error;
 		} finally {
 			set((state) => ({
 				loading: { ...state.loading, list: false },
-				error: null,
 			}));
 		}
 	},
 
+	// Fetch all unlocked avatars
 	getUnlockedAvatars: async () => {
 		set((state) => ({
 			loading: { ...state.loading, unlocked: true },
@@ -59,16 +61,16 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 			const unlockedAvatars = await avatarService.getUnlockedAvatars();
 			set({ unlockedAvatars });
 		} catch (error) {
-			set({ error: "Failed to fetch user data" });
+			set({ error: "Failed to fetch unlocked avatars" });
 			throw error;
 		} finally {
 			set((state) => ({
 				loading: { ...state.loading, unlocked: false },
-				error: null,
 			}));
 		}
 	},
 
+	// Fetch next unlockable tier avatars
 	getNextUnlockableTier: async () => {
 		set((state) => ({
 			loading: { ...state.loading, nextTier: true },
@@ -79,12 +81,11 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 				await avatarService.getNextTierOfAvatars();
 			set({ nextUnlockableTierOfAvatars });
 		} catch (error) {
-			set({ error: "Failed to fetch user data" });
+			set({ error: "Failed to fetch next unlockable tier" });
 			throw error;
 		} finally {
 			set((state) => ({
 				loading: { ...state.loading, nextTier: false },
-				error: null,
 			}));
 		}
 	},
@@ -95,7 +96,6 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 			error: null,
 		}));
 		try {
-			// Unlock the avatar using the service
 			const unlockedAvatar = await avatarService.unlockAvatar(avatarId);
 
 			set((state) => {
@@ -104,10 +104,9 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 				);
 
 				const updatedUnlockedAvatars = state.unlockedAvatars
-					? [...state.unlockedAvatars, unlockedAvatar] // Add the unlocked avatar to the existing array
-					: [unlockedAvatar]; // If no unlocked avatars, initialize with the unlocked avatar
+					? [...state.unlockedAvatars, unlockedAvatar]
+					: [unlockedAvatar];
 
-				// Update the next unlockable tier (remove the unlocked avatar)
 				const updatedNextUnlockableTier =
 					state.nextUnlockableTierOfAvatars?.filter(
 						(avatar) => avatar.id !== avatarId,
@@ -115,7 +114,7 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 
 				return {
 					avatars: updatedAvatars,
-					unlockedAvatars: updatedUnlockedAvatars, // Ensure it's an array of Avatar objects (Avatar[])
+					unlockedAvatars: updatedUnlockedAvatars,
 					nextUnlockableTierOfAvatars: updatedNextUnlockableTier,
 				};
 			});
@@ -125,7 +124,6 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 		} finally {
 			set((state) => ({
 				loading: { ...state.loading, unlock: false },
-				error: null,
 			}));
 		}
 	},

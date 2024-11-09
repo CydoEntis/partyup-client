@@ -10,6 +10,8 @@ import useAvatar from "../../hooks/useGetAvatar";
 import { Avatar } from "../../shared/types/avatar.types";
 import { User } from "../../shared/types/auth.types";
 import { Check } from "lucide-react";
+import { useState } from "react";
+import useAuthStore from "../../stores/useAuthStore";
 
 type UnlockedAvatarProps = {
 	user: User;
@@ -18,11 +20,11 @@ type UnlockedAvatarProps = {
 
 const UnlockedAvatar = ({ user, avatar }: UnlockedAvatarProps) => {
 	const avatarImage = useAvatar(avatar.id);
+	const {updateAvatar} = useAuthStore();
 
 	const handleSetAvatar = async () => {
-		// await updateAvatar(avatar.id)
-	} 
-
+		await updateAvatar(avatar.id);
+	};
 
 	return (
 		<Stack

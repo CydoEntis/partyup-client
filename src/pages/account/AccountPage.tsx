@@ -4,13 +4,9 @@ import {
 	Stack,
 	Group,
 	Paper,
-	Avatar,
 	SimpleGrid,
 	Title,
 	Container,
-	Progress,
-	ActionIcon,
-	Divider,
 	Button,
 	Image,
 	Modal,
@@ -37,7 +33,7 @@ function AccountPage() {
 	] = useDisclosure(false);
 	const [
 		confirmPurchaseOpened,
-		{ open: openConfirmPurchase, close: closeConfirmPurchase },
+		{ open: openUnlockAvatar, close: closeUnlockAvatar },
 	] = useDisclosure(false);
 
 	useEffect(() => {
@@ -49,8 +45,7 @@ function AccountPage() {
 		loadAvatarShop();
 	}, [user, getAvatarShop]);
 
-	// TODO Add a modal that will open up when edit avatar is clicked and lets u set your avatar.
-	// TODO When edit button in account details is clicked display a form so the user can update their info.
+
 	return (
 		<>
 			<ChangeAvatar
@@ -61,7 +56,7 @@ function AccountPage() {
 
 			<Modal
 				opened={confirmPurchaseOpened}
-				onClose={closeConfirmPurchase}
+				onClose={closeUnlockAvatar}
 				title="Unlock Avatar?"
 				centered
 			>
@@ -106,7 +101,7 @@ function AccountPage() {
 							<>
 								<AccountLevel
 									user={user}
-									onChangeAvatar={openChangeAvatar}
+									onOpenChangeAvatar={openChangeAvatar}
 								/>
 								<SimpleGrid cols={2}>
 									<AccountDetails user={user} />
@@ -131,7 +126,7 @@ function AccountPage() {
 										</Group>
 									</Group>
 									<AvatarShop
-										onUnlock={openConfirmPurchase}
+										onUnlockAvatar={openUnlockAvatar}
 										avatars={avatars}
 										user={user}
 									/>

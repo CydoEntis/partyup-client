@@ -17,10 +17,10 @@ import ThemeToggle from "../../features/theme/ThemeToggle";
 
 type AccountLevelProps = {
 	user: User;
-	onChangeAvatar: () => void;
+	onOpenChangeAvatar: () => void;
 };
 
-function AccountLevel({ user, onChangeAvatar }: AccountLevelProps) {
+function AccountLevel({ user, onOpenChangeAvatar }: AccountLevelProps) {
 	const percentage = user
 		? getPercentage(user.currentExp, user.expToNextLevel)
 		: 0;
@@ -36,7 +36,7 @@ function AccountLevel({ user, onChangeAvatar }: AccountLevelProps) {
 					<Tooltip label="Change Avatar">
 						<Box
 							className="relative"
-							onClick={onChangeAvatar}
+							onClick={onOpenChangeAvatar}
 						>
 							<Avatar
 								src={avatarImage}

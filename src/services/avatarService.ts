@@ -26,7 +26,7 @@ const getNextTierOfAvatars = async (): Promise<Avatar[]> => {
 	return response.result;
 };
 
-const unlockAvatar = async (avatarId: number): Promise<Avatar[]> => {
+const unlockAvatar = async (avatarId: number): Promise<Avatar> => {
 	const response = (
 		await apiClient.post(`${endpoints.avatars}/unlock`, avatarId)
 	).data;
@@ -36,18 +36,11 @@ const unlockAvatar = async (avatarId: number): Promise<Avatar[]> => {
 	return response.result;
 };
 
-const updateAvatar = async (avatarId: number): Promise<Avatar[]> => {
-	const response = (await apiClient.put(`${endpoints.avatars}`, avatarId)).data;
-	console.log("Response: ", response);
-	if (!response.isSuccess) throw new Error();
 
-	return response.result;
-};
 
 export default {
 	getAvatarShop,
 	getUnlockedAvatars,
 	getNextTierOfAvatars,
 	unlockAvatar,
-	updateAvatar,
 };

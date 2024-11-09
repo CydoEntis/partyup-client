@@ -3,24 +3,21 @@ import {
 	Box,
 	Stack,
 	Divider,
-	Tooltip,
 	Overlay,
 	Center,
-	Text,
 } from "@mantine/core";
 import { Lock } from "lucide-react";
-import useAuthStore from "../../stores/useAuthStore";
 import ShopAvatar from "../../components/avatar/ShopAvatar";
-import { AvatarShopItem } from "../../shared/types/avatar.types";
+import { Avatar } from "../../shared/types/avatar.types";
 import { User } from "../../shared/types/auth.types";
 
 type AvatarShopProps = {
-	onUnlock: () => void;
-	avatars: AvatarShopItem[];
+	onUnlockAvatar: (avatar: Avatar) => void;
+	avatars: Avatar[];
 	user: User;
 };
 
-function AvatarShop({ onUnlock, avatars, user }: AvatarShopProps) {
+function AvatarShop({ onUnlockAvatar, avatars, user }: AvatarShopProps) {
 	const groupedByTier =
 		avatars?.reduce((acc, avatar) => {
 			if (!acc[avatar.tier]) {
@@ -28,7 +25,7 @@ function AvatarShop({ onUnlock, avatars, user }: AvatarShopProps) {
 			}
 			acc[avatar.tier].push(avatar);
 			return acc;
-		}, {} as { [tier: number]: AvatarShopItem[] }) || {};
+		}, {} as { [tier: number]: Avatar[] }) || {};
 
 	return (
 		<Stack>
@@ -57,7 +54,9 @@ function AvatarShop({ onUnlock, avatars, user }: AvatarShopProps) {
 									key={avatar.id}
 									avatar={avatar}
 									user={user}
-									onClick={isTierLocked ? undefined : onUnlock}
+									onClick={
+										isTierLocked ? undefined : () => onUnlockAvatar(avatar)
+									}
 								/>
 							))}
 						</SimpleGrid>
