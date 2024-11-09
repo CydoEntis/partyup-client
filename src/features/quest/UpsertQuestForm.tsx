@@ -239,7 +239,9 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 								key={index}
 								w="100%"
 								gap={8}
+								align="center"
 							>
+								<Text>#{index + 1}.</Text>
 								<TextInput
 									placeholder="Task description"
 									{...form.getInputProps(`steps.${index}`)}
