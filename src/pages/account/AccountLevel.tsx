@@ -19,10 +19,11 @@ import useAuthStore from "../../stores/useAuthStore";
 import { User } from "../../shared/types/auth.types";
 
 type AccountLevelProps = {
-	user: User;
-};
+	user: User
+}
 
-function AccountLevel({ user }: AccountLevelProps) {
+function AccountLevel({user}: AccountLevelProps) {
+
 	const avatarImage = user ? useAvatar(user.avatar.id) : undefined;
 	const percentage = user
 		? getPercentage(user.currentExp, user.expToNextLevel)

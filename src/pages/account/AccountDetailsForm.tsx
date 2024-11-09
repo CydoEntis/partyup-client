@@ -3,8 +3,9 @@ import { User } from "../../shared/types/auth.types";
 import { useForm, zodResolver } from "@mantine/form";
 import { useEffect } from "react";
 import { AxiosError } from "axios";
-import { TextInput } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import classes from "../../features/auth/auth.module.css";
+import useAuthStore from "../../stores/useAuthStore";
 
 type AccountDetailsFormProps = { user: User };
 
@@ -19,6 +20,8 @@ const accountDetailsSchema = z.object({
 type AccountDetails = z.infer<typeof accountDetailsSchema>;
 
 function AccountDetailsForm({ user }: AccountDetailsFormProps) {
+	const { updateUserDisplayName } = useAuthStore();
+
 	const form = useForm<AccountDetails>({
 		validate: zodResolver(accountDetailsSchema),
 		initialValues: {
@@ -28,11 +31,7 @@ function AccountDetailsForm({ user }: AccountDetailsFormProps) {
 	});
 
 	const updateAccountDetails = async (data: AccountDetails) => {
-		const updatedAccountDetails = {
-			id: user.id,
-			displayName: data.displayName,
-		};
-		// await updateUserDisplayName(updatedAccountDetails);
+		await updateUserDisplayName(data.displayName);
 	};
 
 	async function onSubmit(data: AccountDetails) {
@@ -70,23 +69,31 @@ function AccountDetailsForm({ user }: AccountDetailsFormProps) {
 
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
-			<TextInput
-				label="Display Name"
-				placeholder="New Display Name"
-				classNames={{
-					input: classes.input,
-				}}
-				{...form.getInputProps("displayName")}
-			/>
-			<TextInput
-				label="Email"
-				placeholder="New Email"
-				classNames={{
-					input: classes.input,
-				}}
-				disabled
-				{...form.getInputProps("email")}
-			/>
+			<Stack gap={12}>
+				<TextInput
+					label="Display Name"
+					placeholder="New Display Name"
+					classNames={{
+						input: classes.input,
+					}}
+					{...form.getInputProps("displayName")}
+				/>
+				<TextInput
+					label="Email"
+					placeholder="New Email"
+					classNames={{
+						input: classes.input,
+					}}
+					disabled
+					{...form.getInputProps("email")}
+				/>
+				<Button
+					variant="light"
+					color="violet"
+				>
+					Update
+				</Button>
+			</Stack>
 		</form>
 	);
 }

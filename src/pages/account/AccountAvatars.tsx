@@ -3,10 +3,16 @@ import { useState } from "react";
 import { Unlock } from "lucide-react";
 import NextAvatarUnlock from "./NextAvatarUnlock";
 import UnlockableAvatars from "../../features/shop/UnlockableAvatars";
+import { User } from "../../shared/types/auth.types";
+import { Avatar } from "../../shared/types/avatar.types";
 
-type AccountAvatarsProps = {};
+type AccountAvatarsProps = {
+	user: User;
+	avatars: Avatar[];
+	tierOfAvatars: Avatar[];
+};
 
-function AccountAvatars({}: AccountAvatarsProps) {
+function AccountAvatars({ user, avatars, tierOfAvatars }: AccountAvatarsProps) {
 	const [isShowingAllUnlocks, setIsShowingAllUnlocks] = useState(false);
 
 	return (
@@ -34,7 +40,17 @@ function AccountAvatars({}: AccountAvatarsProps) {
 				pos="relative"
 				p={20}
 			>
-				{isShowingAllUnlocks ? <UnlockableAvatars /> : <NextAvatarUnlock />}
+				{isShowingAllUnlocks ? (
+					<UnlockableAvatars
+						user={user}
+						avatars={avatars}
+					/>
+				) : (
+					<NextAvatarUnlock
+						user={user}
+						tierOfAvatars={tierOfAvatars}
+					/>
+				)}
 			</Box>
 		</Paper>
 	);

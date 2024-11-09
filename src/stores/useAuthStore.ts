@@ -28,6 +28,7 @@ type AuthState = {
 	logout: () => Promise<void>;
 	getUser: (userId: string) => Promise<void>;
 	updateAvatar: (avatarId: number) => Promise<void>;
+	updateUserDisplayName: (displayName: string) => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -222,6 +223,46 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 					localStorageService.setItem("questLog", {
 						...storedUser,
 						avatar: updatedAvatar,
+					});
+				}
+			}
+		} catch (error) {
+			set({ error: "Failed to update avatar" });
+			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, avatar: false },
+				error: null,
+			}));
+		}
+	},
+
+	updateUserDisplayName: async (displayName: string) => {
+		set((state) => ({
+			loading: { ...state.loading, avatar: true },
+			error: null,
+		}));
+		try {
+			await userService.updateDisplayName(displayName);
+
+			const currentUser = get().user;
+
+			if (currentUser) {
+				const updatedUser = {
+					...currentUser,
+					displayName, // Only update display name
+				};
+
+				set({
+					user: updatedUser,
+				});
+
+				const storedUser = localStorageService.getItem<User>("questLog");
+
+				if (storedUser) {
+					localStorageService.setItem("questLog", {
+						...storedUser,
+						displayName,
 					});
 				}
 			}

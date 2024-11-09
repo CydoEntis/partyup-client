@@ -8,23 +8,23 @@ import {
 	Paper,
 	Group,
 	Image,
-	Text,
 	Title,
 } from "@mantine/core";
 import { Lock } from "lucide-react";
 import UnlockableAvatar from "../../components/avatar/UnlockableAvatar";
 import { Avatar } from "../../shared/types/avatar.types";
 import Coin from "../../assets/coin.png";
-import useAvatarStore from "../../stores/useAvatarStore";
-import useAuthStore from "../../stores/useAuthStore";
-import { useEffect } from "react";
+
 import { useDisclosure } from "@mantine/hooks";
 import UnlockAvatarModal from "../avatar/UnlockAvatarModal";
+import { User } from "../../shared/types/auth.types";
 
-function UnlockableAvatars() {
-	const { avatars, getAvatars } = useAvatarStore();
-	const { user } = useAuthStore();
+type UnlockableAvatarsProps = {
+	user: User;
+	avatars: Avatar[];
+};
 
+function UnlockableAvatars({ user, avatars }: UnlockableAvatarsProps) {
 	const [
 		confirmUnlockOpened,
 		{ open: openUnlockAvatar, close: closeUnlockAvatar },
@@ -39,14 +39,6 @@ function UnlockableAvatars() {
 			return acc;
 		}, {} as { [tier: number]: Avatar[] }) || {};
 
-	useEffect(() => {
-		const loadNextTierOfAvatars = async () => {
-			if (user) {
-				await getAvatars();
-			}
-		};
-		loadNextTierOfAvatars();
-	}, [user, getAvatars]);
 
 	return (
 		<>

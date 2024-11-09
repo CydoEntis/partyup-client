@@ -7,22 +7,19 @@ import {
 	Text,
 	Flex,
 } from "@mantine/core";
-import { Edit, Save } from "lucide-react";
+import { Edit, Save, X } from "lucide-react";
 import { useState } from "react";
 import AccountDetailsForm from "./AccountDetailsForm";
 import { User } from "../../shared/types/auth.types";
 
 type AccountDetailsProps = {
-	user: User;
+	user: User | null;
 };
 
 function AccountDetails({ user }: AccountDetailsProps) {
 	const [isEditing, setIsEditing] = useState(false);
 
 	const handleEditing = () => {
-		if (isEditing) {
-			console.log("Saving...");
-		}
 		setIsEditing((prevState) => !prevState);
 	};
 
@@ -42,7 +39,7 @@ function AccountDetails({ user }: AccountDetailsProps) {
 					color="violet"
 					onClick={handleEditing}
 				>
-					{isEditing ? <Save size={20} /> : <Edit size={20} />}
+					{isEditing ? <X size={20} /> : <Edit size={20} />}
 				</ActionIcon>
 			</Group>
 			<Divider />

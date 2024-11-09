@@ -23,7 +23,16 @@ const updateAvatar = async (avatarId: number): Promise<Avatar> => {
 	return response.result;
 };
 
+const updateDisplayName = async (displayName: string): Promise<void> => {
+	const response = (
+		await apiClient.put(`${endpoints.user}/display-name`, { displayName })
+	).data;
+	console.log("Response: ", response);
+	if (!response.isSuccess) throw new Error();
+};
+
 export default {
 	getUser,
+	updateDisplayName,
 	updateAvatar,
 };
