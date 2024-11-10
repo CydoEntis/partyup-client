@@ -20,6 +20,7 @@ function ChangeAvatar({
 		unlockedAvatars,
 	} = useAvatarStore();
 
+
 	useEffect(() => {
 		const fetchUnlockedAvatars = async () => {
 			await getUnlockedAvatars();

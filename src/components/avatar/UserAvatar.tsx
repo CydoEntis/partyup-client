@@ -8,7 +8,7 @@ type UserAvatarProps = { avatar: Avatar, size?: "xs" | "sm" | "md" | "lg" | "xl"
 const UserAvatar = forwardRef<HTMLDivElement, UserAvatarProps>(
 	({ avatar, size = "md" }, ref) => {
 		const avatarImage = useAvatar(avatar.id);
-
+		
 		return (
 			<MantineAvatar
 				ref={ref} // Add the ref to the MantineAvatar

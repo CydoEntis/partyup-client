@@ -206,7 +206,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 		}));
 		try {
 			const updatedAvatar = await userService.updateAvatar(avatarId);
-
+			console.log("Updated Avatar: ", updatedAvatar);
 			const currentUser = get().user;
 
 			if (currentUser) {

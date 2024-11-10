@@ -102,6 +102,8 @@ export const useAvatarStore = create<AvatarShopState>((set, get) => ({
 			const { updateUserAvatarAndCurrency } = useAuthStore.getState();
 			updateUserAvatarAndCurrency(unlockedAvatar);
 
+			console.log("Unlocked Avatar: ", unlockedAvatar)
+
 			set((state) => {
 				const updatedAvatars = state.avatars?.map((avatar) =>
 					avatar.id === avatarId ? { ...avatar, isUnlocked: true } : avatar,

@@ -4,7 +4,7 @@ import { Avatar } from "../shared/types/avatar.types";
 
 const getAvatars = async (): Promise<Avatar[]> => {
 	const response = (await apiClient.get(`${endpoints.avatars}`)).data;
-	console.log("Response: ", response);
+	console.log("All Avatars: ", response.result);
 	if (!response.isSuccess) throw new Error();
 
 	return response.result;
@@ -12,7 +12,7 @@ const getAvatars = async (): Promise<Avatar[]> => {
 
 const getUnlockedAvatars = async (): Promise<Avatar[]> => {
 	const response = (await apiClient.get(`${endpoints.avatars}/unlocked`)).data;
-	console.log("Response: ", response);
+	console.log("Unlocked Avatars: ", response);
 	if (!response.isSuccess) throw new Error();
 
 	return response.result;

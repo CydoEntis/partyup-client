@@ -31,6 +31,7 @@ const UnlockedAvatar = ({ user, avatar }: UnlockedAvatarProps) => {
 			align="center"
 			gap={4}
 		>
+			<p>{avatar.id}</p>
 			<Tooltip label={avatar.name}>
 				<Box
 					className="cursor-pointer relative hover:brightness-75 duration-300 ease-in-out transition-all"
