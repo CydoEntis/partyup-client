@@ -1,56 +1,61 @@
-import { ActionIcon, Flex, Group, Progress, Stack, Text } from "@mantine/core";
-import { Edit } from "lucide-react";
+import { ActionIcon, Box, Flex, Stack } from "@mantine/core";
+import { Edit, Save } from "lucide-react";
 import { User } from "../../shared/types/auth.types";
-import { getPercentage } from "../../shared/utils/progress-bar.utils";
 import { useState } from "react";
+import AccountLevel from "../account/AccountLevel";
+import AccountDisplayName from "../account/AccountDisplayName";
+import UpdateDisplayNameForm from "../../pages/account/UpdateDisplayNameForm";
 
 type UserDetailsProps = { user: User };
 
 function UserDetails({ user }: UserDetailsProps) {
 	const [isEditing, setIsEditing] = useState(false);
-	const percentage = user
-		? getPercentage(user.currentExp, user.expToNextLevel)
-		: 0;
+
+	const editHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		setIsEditing(true);
+	};
+
+	const updateHandler = () => {
+		setIsEditing(false);
+	};
+
 	return (
 		<Stack
 			gap={12}
 			w="100%"
 		>
-			<Flex
-				justify="space-between"
-			>
-				<Stack gap={0}>
-					<Text size="xs">Display Name</Text>
-					<Text size="xl">{user.displayName}</Text>
-				</Stack>
-				<ActionIcon
-					variant="light"
-					color="violet"
-				>
-					<Edit />
-				</ActionIcon>
+			<Flex justify="space-between">
+				{isEditing ? (
+					<>
+						<UpdateDisplayNameForm
+							user={user}
+							onClose={updateHandler}
+						/>
+						<ActionIcon
+							variant="light"
+							color="violet"
+							type="submit"
+							form="updateDisplayNameForm"
+						>
+							<Save size={20} />
+						</ActionIcon>
+					</>
+				) : (
+					<>
+						<AccountDisplayName user={user} />
+						<ActionIcon
+							variant="light"
+							color="violet"
+							type="button"
+							onClick={editHandler}
+						>
+							<Edit size={20} />
+						</ActionIcon>
+					</>
+				)}
 			</Flex>
-			<Stack gap={2}>
-				<Group justify="space-between">
-					<Group>
-						<Text size="md">Level</Text>
-						<Text size="md">{user.currentLevel}</Text>
-					</Group>
-					<Text
-						ta="center"
-						size="sm"
-					>
-						{user.expToNextLevel - user.currentExp}xp till level up
-					</Text>
-				</Group>
-				<Progress
-					value={percentage}
-					w="100%"
-					size="md"
-					animated
-					color="violet"
-				/>
-			</Stack>
+			<AccountLevel user={user} />
 		</Stack>
 	);
 }

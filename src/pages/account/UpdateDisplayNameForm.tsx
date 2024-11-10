@@ -3,48 +3,46 @@ import { User } from "../../shared/types/auth.types";
 import { useForm, zodResolver } from "@mantine/form";
 import { useEffect } from "react";
 import { AxiosError } from "axios";
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Stack, TextInput } from "@mantine/core";
 import classes from "../../features/auth/auth.module.css";
 import useAuthStore from "../../stores/useAuthStore";
 
-type AccountDetailsFormProps = { user: User; onClose: () => void };
+type UpdateDisplayNameFormProps = { user: User, onClose: () => void; };
 
-const accountDetailsSchema = z.object({
+const updateDisplayNameSchema = z.object({
 	displayName: z
 		.string()
 		.min(3, "Name must be more than 3 characters")
 		.max(50, "Name cannot exceed 50 characters"),
-	email: z.string().email("Please enter a valid email"),
 });
 
-type AccountDetails = z.infer<typeof accountDetailsSchema>;
+type UpdateDisplayName = z.infer<typeof updateDisplayNameSchema>;
 
-function AccountDetailsForm({ user, onClose }: AccountDetailsFormProps) {
+function UpdateDisplayNameForm({ user, onClose }: UpdateDisplayNameFormProps) {
 	const { updateUserDisplayName } = useAuthStore();
 
-	const form = useForm<AccountDetails>({
-		validate: zodResolver(accountDetailsSchema),
+	const form = useForm<UpdateDisplayName>({
+		validate: zodResolver(updateDisplayNameSchema),
 		initialValues: {
 			displayName: user?.displayName || "",
-			email: user?.email || "",
 		},
 	});
 
-	const updateAccountDetails = async (data: AccountDetails) => {
+	const updateUpdateDisplayName = async (data: UpdateDisplayName) => {
 		await updateUserDisplayName(data.displayName);
 	};
 
-	async function onSubmit(data: AccountDetails) {
+	async function onSubmit(data: UpdateDisplayName) {
 		try {
-			console.log("Submitting")
+			console.log("Submitting");
 			if (user) {
-				updateAccountDetails(data);
+				updateUpdateDisplayName(data);
 
 				console.log(form.errors);
 			}
 
-			form.reset();
 			onClose();
+			form.reset();
 		} catch (error) {
 			if (error instanceof AxiosError && error.response?.data?.errors) {
 				console.error(error.response?.data?.errors);
@@ -71,7 +69,10 @@ function AccountDetailsForm({ user, onClose }: AccountDetailsFormProps) {
 	}, [user]);
 
 	return (
-		<form onSubmit={form.onSubmit(onSubmit)}>
+		<form
+			id="updateDisplayNameForm"
+			onSubmit={form.onSubmit(onSubmit)}
+		>
 			<Stack gap={12}>
 				<TextInput
 					label="Display Name"
@@ -80,26 +81,11 @@ function AccountDetailsForm({ user, onClose }: AccountDetailsFormProps) {
 						input: classes.input,
 					}}
 					{...form.getInputProps("displayName")}
+					w={300}
 				/>
-				<TextInput
-					label="Email"
-					placeholder="New Email"
-					classNames={{
-						input: classes.input,
-					}}
-					disabled
-					{...form.getInputProps("email")}
-				/>
-				<Button
-					variant="light"
-					color="violet"
-					type="submit"
-				>
-					Update
-				</Button>
 			</Stack>
 		</form>
 	);
 }
 
-export default AccountDetailsForm;
+export default UpdateDisplayNameForm;

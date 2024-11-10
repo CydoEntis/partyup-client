@@ -7,9 +7,9 @@ import {
 	Text,
 	Flex,
 } from "@mantine/core";
-import { Edit, Save, X } from "lucide-react";
+import { Edit,  X } from "lucide-react";
 import { useState } from "react";
-import AccountDetailsForm from "./AccountDetailsForm";
+import AccountDetailsForm from "./UpdateDisplayNameForm";
 import { User } from "../../shared/types/auth.types";
 
 type AccountDetailsProps = {
