@@ -4,9 +4,7 @@ import {
 	Indicator,
 	NavLink as MantineNavLink,
 	Stack,
-	Skeleton,
 } from "@mantine/core";
-import AccountInfo from "../../features/account/AccountInfo";
 
 import {
 	FolderClosed,
@@ -21,6 +19,9 @@ import useLogout from "../../hooks/useLogout";
 import { useEffect, useState } from "react";
 import { User } from "../../shared/types/auth.types";
 import SideNavSkeleton from "../../features/loading-skeletons/SideNavSkeleton";
+import AccountDetails from "../../pages/account/AccountDetails";
+import { useDisclosure } from "@mantine/hooks";
+import AccountInfo from "../../features/account/AccountInfo";
 
 type AuthenticatedNavProps = { user: User; onOpenNewParty: () => void };
 
@@ -42,15 +43,26 @@ function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
 	}, [recentParties.length]);
 
 	const toggleRecentOpen = () => setIsRecentOpen((prev) => !prev);
-
+	const [
+		accountDetailsOpened,
+		{ open: openAccountDetails, close: closeAccountDetails },
+	] = useDisclosure(false);
 	return (
 		<>
+			<AccountDetails
+				isOpened={accountDetailsOpened}
+				onClose={closeAccountDetails}
+			/>
+
 			{recent ? (
 				<SideNavSkeleton />
 			) : (
 				<>
 					<Stack gap={8}>
-						<AccountInfo user={user!} />
+						<AccountInfo
+							user={user!}
+							onOpen={openAccountDetails}
+						/>
 						<Button
 							color="violet"
 							variant="light"

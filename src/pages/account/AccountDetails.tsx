@@ -1,94 +1,24 @@
-import {
-	ActionIcon,
-	Divider,
-	Group,
-	Paper,
-	Title,
-	Text,
-	Flex,
-} from "@mantine/core";
-import { Edit, Save, X } from "lucide-react";
-import { useState } from "react";
-import AccountDetailsForm from "./AccountDetailsForm";
-import { User } from "../../shared/types/auth.types";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import React from "react";
+import AccountLevel from "./AccountLevel";
+import useAuthStore from "../../stores/useAuthStore";
+import AccountOverview from "../../features/user/AccountOverview";
 
-type AccountDetailsProps = {
-	user: User | null;
-};
+type AccountDetailsProps = { isOpened: boolean; onClose: () => void };
 
-function AccountDetails({ user }: AccountDetailsProps) {
-	const [isEditing, setIsEditing] = useState(false);
-
-	const handleEditing = () => {
-		setIsEditing((prevState) => !prevState);
-	};
-
+function AccountDetails({ isOpened, onClose }: AccountDetailsProps) {
+	const { user } = useAuthStore();
 	return (
-		<Paper
-			withBorder
-			p={16}
+		<Modal
+			opened={isOpened}
+			onClose={onClose}
+			title="Account Overview"
+			yOffset="10vh"
+			size="lg"
 		>
-			<Group
-				align="center"
-				justify="space-between"
-				pb={10}
-			>
-				<Title size="xl">Account Details</Title>
-				<ActionIcon
-					variant="light"
-					color="violet"
-					onClick={handleEditing}
-				>
-					{isEditing ? <X size={20} /> : <Edit size={20} />}
-				</ActionIcon>
-			</Group>
-			<Divider />
-			{isEditing && user ? (
-				<AccountDetailsForm
-					user={user}
-					onClose={() => setIsEditing(false)}
-				/>
-			) : (
-				user && (
-					<>
-						<Flex
-							justify="space-between"
-							py={12}
-						>
-							<Text
-								w="50%"
-								fw={700}
-							>
-								Display Name:
-							</Text>
-							<Text
-								w="50%"
-								ta="left"
-							>
-								{user.displayName}
-							</Text>
-						</Flex>
-						<Flex
-							justify="space-between"
-							py={12}
-						>
-							<Text
-								w="50%"
-								fw={700}
-							>
-								Email:
-							</Text>
-							<Text
-								w="50% "
-								ta="left"
-							>
-								{user.email}
-							</Text>
-						</Flex>
-					</>
-				)
-			)}
-		</Paper>
+			<AccountOverview user={user!} />
+		</Modal>
 	);
 }
 

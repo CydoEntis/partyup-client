@@ -3,7 +3,7 @@ import useAuthStore from "../../stores/useAuthStore";
 import { useEffect } from "react";
 import useAvatarStore from "../../stores/useAvatarStore";
 import AccountLevel from "../../pages/account/AccountLevel";
-import AccountDetails from "../../pages/account/AccountDetails";
+import AccountDetails from "./AccountDetails2";
 import ChangePassword from "../../pages/account/ChangePassword";
 import AccountAvatars from "../../pages/account/AccountAvatars";
 

@@ -1,23 +1,31 @@
 import { Overlay, Center, SimpleGrid, Box } from "@mantine/core";
 import UnlockableAvatar from "../../components/avatar/UnlockableAvatar";
 import { Lock } from "lucide-react";
-import { Avatar } from "../../shared/types/avatar.types";
 import { User } from "../../shared/types/auth.types";
+import useAvatarStore from "../../stores/useAvatarStore";
+import { useEffect } from "react";
 
 type NextUnlockProps = {
 	user: User;
-	tierOfAvatars: Avatar[];
 };
 
-function NextUnlock({
-	user, tierOfAvatars
-}: NextUnlockProps) {
+function NextUnlock({ user }: NextUnlockProps) {
+	const { getNextUnlockableTier, nextUnlockableTierOfAvatars } =
+		useAvatarStore();
+
+	useEffect(() => {
+		const getNextUnlock = async () => {
+			try {
+				await getNextUnlockableTier();
+			} catch (error) {
+				console.error("Error loading next unlockable tier:", error);
+			}
+		};
+		getNextUnlock();
+	}, [getNextUnlockableTier]);
 
 	return (
-		<Box
-			pos="relative"
-			p={20}
-		>
+		<Box pos="relative" px={16} py={8}>
 			<>
 				<Overlay
 					color="gray"
@@ -36,8 +44,8 @@ function NextUnlock({
 					/>
 				</Center>
 				<SimpleGrid cols={12}>
-					{tierOfAvatars?.length && user ? (
-						tierOfAvatars.map((avatar) => (
+					{nextUnlockableTierOfAvatars?.length && user ? (
+						nextUnlockableTierOfAvatars.map((avatar) => (
 							<UnlockableAvatar
 								key={avatar.id}
 								avatar={avatar}
