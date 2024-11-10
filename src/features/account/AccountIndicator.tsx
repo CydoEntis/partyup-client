@@ -1,14 +1,11 @@
-import { Button, Flex, Menu, Paper } from "@mantine/core";
+import { Flex, Paper } from "@mantine/core";
 import UserLevel from "../user/UserLevel";
 import { ChevronRight } from "lucide-react";
 import { User } from "../../shared/types/auth.types";
-import { NavLink } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
-import AccountDetails from "../../pages/account/AccountDetails";
 
-type AccountInfoProps = { user: User; onOpen: () => void };
+type AccountIndicatorProps = { user: User; onOpen: () => void };
 
-function AccountInfo({ user, onOpen }: AccountInfoProps) {
+function AccountIndicator({ user, onOpen }: AccountIndicatorProps) {
 	return (
 		<>
 			<Paper
@@ -29,4 +26,4 @@ function AccountInfo({ user, onOpen }: AccountInfoProps) {
 	);
 }
 
-export default AccountInfo;
+export default AccountIndicator;

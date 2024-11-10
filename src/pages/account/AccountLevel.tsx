@@ -19,7 +19,7 @@ import ThemeToggle from "../../features/theme/ThemeToggle";
 import { useDisclosure } from "@mantine/hooks";
 import useAuthStore from "../../stores/useAuthStore";
 import { User } from "../../shared/types/auth.types";
-import Test from "../../features/user/AccountOverview";
+import Test from "../../features/account/AccountManagement";
 import { useEffect } from "react";
 import useAvatarStore from "../../stores/useAvatarStore";
 import UnlockedAvatar from "../../components/avatar/UnlockedAvatar";

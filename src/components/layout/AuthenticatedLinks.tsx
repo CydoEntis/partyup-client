@@ -19,9 +19,9 @@ import useLogout from "../../hooks/useLogout";
 import { useEffect, useState } from "react";
 import { User } from "../../shared/types/auth.types";
 import SideNavSkeleton from "../../features/loading-skeletons/SideNavSkeleton";
-import AccountDetails from "../../pages/account/AccountDetails";
 import { useDisclosure } from "@mantine/hooks";
-import AccountInfo from "../../features/account/AccountInfo";
+import AccountIndicator from "../../features/account/AccountIndicator";
+import AccountManagementModal from "../../features/account/AccountManagementModal";
 
 type AuthenticatedNavProps = { user: User; onOpenNewParty: () => void };
 
@@ -49,7 +49,7 @@ function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
 	] = useDisclosure(false);
 	return (
 		<>
-			<AccountDetails
+			<AccountManagementModal
 				isOpened={accountDetailsOpened}
 				onClose={closeAccountDetails}
 			/>
@@ -59,7 +59,7 @@ function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
 			) : (
 				<>
 					<Stack gap={8}>
-						<AccountInfo
+						<AccountIndicator
 							user={user!}
 							onOpen={openAccountDetails}
 						/>

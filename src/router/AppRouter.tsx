@@ -32,10 +32,6 @@ const router = createBrowserRouter([
 				element: <PartiesPage />,
 			},
 			{
-				path: "account",
-				element: <AccountPage />,
-			},
-			{
 				path: "parties/:partyId/quests",
 				element: <PartyPage />,
 				children: [

@@ -1,9 +1,9 @@
 import { Avatar, Box, Modal, Paper, Popover, ScrollArea, SimpleGrid, Tooltip } from "@mantine/core";
 import { useEffect } from "react";
 import useAvatarStore from "../../stores/useAvatarStore";
-import UnlockedAvatar from "../../components/avatar/UnlockedAvatar";
+import UnlockedAvatar from "./UnlockedAvatar";
 import { User } from "../../shared/types/auth.types";
-import Test from "../../features/user/AccountOverview";
+import Test from "../../features/account/AccountManagement";
 import { Edit2 } from "lucide-react";
 import useAvatar from "../../hooks/useGetAvatar";
 

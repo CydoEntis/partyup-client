@@ -1,5 +1,5 @@
-import { Overlay, Center, SimpleGrid, Box } from "@mantine/core";
-import UnlockableAvatar from "../../components/avatar/UnlockableAvatar";
+import { Overlay, Center, SimpleGrid, Box, Divider } from "@mantine/core";
+import UnlockableAvatar from "./UnlockableAvatar";
 import { Lock } from "lucide-react";
 import { User } from "../../shared/types/auth.types";
 import useAvatarStore from "../../stores/useAvatarStore";
@@ -25,12 +25,13 @@ function NextUnlock({ user }: NextUnlockProps) {
 	}, [getNextUnlockableTier]);
 
 	return (
-		<Box pos="relative" px={16} py={8}>
+		<Box pos="relative" px={32} py={16}>
 			<>
+			<Divider label={`Your next unlocks`} labelPosition="center" pb={8}/>
 				<Overlay
 					color="gray"
 					opacity={0.25}
-					radius="md"
+					radius="sm"
 				/>
 				<Center
 					pos="absolute"
