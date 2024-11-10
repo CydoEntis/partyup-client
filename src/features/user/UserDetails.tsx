@@ -2,10 +2,12 @@ import { ActionIcon, Flex, Group, Progress, Stack, Text } from "@mantine/core";
 import { Edit } from "lucide-react";
 import { User } from "../../shared/types/auth.types";
 import { getPercentage } from "../../shared/utils/progress-bar.utils";
+import { useState } from "react";
 
 type UserDetailsProps = { user: User };
 
 function UserDetails({ user }: UserDetailsProps) {
+	const [isEditing, setIsEditing] = useState(false);
 	const percentage = user
 		? getPercentage(user.currentExp, user.expToNextLevel)
 		: 0;
@@ -16,9 +18,11 @@ function UserDetails({ user }: UserDetailsProps) {
 		>
 			<Flex
 				justify="space-between"
-				align="center"
 			>
-				<Text size="xl">{user.displayName}</Text>
+				<Stack gap={0}>
+					<Text size="xs">Display Name</Text>
+					<Text size="xl">{user.displayName}</Text>
+				</Stack>
 				<ActionIcon
 					variant="light"
 					color="violet"
