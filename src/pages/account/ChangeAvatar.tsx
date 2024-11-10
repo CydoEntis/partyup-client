@@ -28,6 +28,8 @@ function ChangeAvatar({
 		fetchUnlockedAvatars();
 	}, [changedAvatarOpened]);
 
+	console.log(unlockedAvatars);
+
 	return (
 		<Modal
 			opened={changedAvatarOpened}

@@ -1,7 +1,11 @@
-import { Button, Flex, Modal, Text } from "@mantine/core";
+import { Box, Button, Flex, Modal, Text } from "@mantine/core";
 import { Avatar } from "../../shared/types/avatar.types";
 
 import AvatarUnlockPreview from "../../components/avatar/AvatarUnlockPreview";
+import useAvatarStore from "../../stores/useAvatarStore";
+import { AxiosError } from "axios";
+import { useState } from "react";
+import useAuthStore from "../../stores/useAuthStore";
 
 type UnlockAvatarModal = {
 	isUnlockAvatarOpen: boolean;
@@ -14,8 +18,28 @@ function UnlockAvatarModal({
 	onCloseUnlockAvatar,
 	avatarToUnlock,
 }: UnlockAvatarModal) {
-	const unlockAvatarHandler = () => {
-		onCloseUnlockAvatar();
+	const { unlockAvatar } = useAvatarStore();
+	const [error, setError] = useState<Record<string, string>>();
+	const unlockAvatarHandler = async () => {
+		try {
+			if (avatarToUnlock) {
+				await unlockAvatar(avatarToUnlock.id);
+			}
+			onCloseUnlockAvatar();
+		} catch (error) {
+			if (error instanceof AxiosError && error.response?.data?.errors) {
+				const errors = error.response.data.errors as Record<string, string[]>;
+				const fieldErrors: Record<string, string> = {};
+
+				for (const [key, messages] of Object.entries(errors)) {
+					if (Array.isArray(messages) && messages.length > 0) {
+						fieldErrors[key] = messages[0];
+					}
+				}
+
+				setError(fieldErrors);
+			}
+		}
 	};
 
 	return (
@@ -35,6 +59,20 @@ function UnlockAvatarModal({
 				Action cannot be undone.
 			</Text>
 			<AvatarUnlockPreview avatar={avatarToUnlock!} />
+			<Box>
+				{Object.entries(error || {}).map(([field, message]) => (
+					<Text
+					pt={8}
+						size="xs"
+						c="red"
+						ta="center"
+						key={field}
+					>
+						{message}
+					</Text>
+				))}
+			</Box>
+
 			<Flex
 				justify="space-evenly"
 				gap={8}

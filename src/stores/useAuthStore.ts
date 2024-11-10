@@ -9,6 +9,7 @@ import authService from "../services/authService";
 import localStorageService from "../services/localStorageService";
 import userService from "../services/userService";
 import avatarService from "../services/avatarService";
+import { Avatar } from "../shared/types/avatar.types";
 
 type AuthState = {
 	user: User | null;
@@ -29,6 +30,7 @@ type AuthState = {
 	getUser: (userId: string) => Promise<void>;
 	updateAvatar: (avatarId: number) => Promise<void>;
 	updateUserDisplayName: (displayName: string) => Promise<void>;
+	updateUserAvatarAndCurrency: (avatar: Avatar) => void;
 };
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -275,6 +277,30 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 				error: null,
 			}));
 		}
+	},
+
+	updateUserAvatarAndCurrency: (avatar: Avatar) => {
+		set((state) => {
+			const currentUser = state.user;
+			if (currentUser) {
+				const newCurrency = currentUser.currency - avatar.cost;
+				const updatedUser = {
+					...currentUser,
+					avatar: avatar,
+					currency: Math.max(newCurrency, 0), 
+				};
+				const storedUser = localStorageService.getItem<User>("questLog");
+				if (storedUser) {
+					localStorageService.setItem("questLog", {
+						...storedUser,
+						avatar: avatar,
+						currency: Math.max(newCurrency, 0),
+					});
+				}
+				return { user: updatedUser };
+			}
+			return {}; 
+		});
 	},
 }));
 

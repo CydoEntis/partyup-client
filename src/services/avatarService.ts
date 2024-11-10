@@ -28,15 +28,13 @@ const getNextTierOfAvatars = async (): Promise<Avatar[]> => {
 
 const unlockAvatar = async (avatarId: number): Promise<Avatar> => {
 	const response = (
-		await apiClient.post(`${endpoints.avatars}/unlock`, avatarId)
+		await apiClient.post(`${endpoints.avatars}/unlock`, { id: avatarId })
 	).data;
 	console.log("Response: ", response);
 	if (!response.isSuccess) throw new Error();
 
 	return response.result;
 };
-
-
 
 export default {
 	getAvatars,

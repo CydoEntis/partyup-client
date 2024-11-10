@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Avatar } from "../shared/types/avatar.types";
 import avatarService from "../services/avatarService";
+import useAuthStore from "../stores/useAuthStore";
 
 type AvatarShopState = {
 	avatars: Avatar[] | null;
@@ -20,7 +21,7 @@ type AvatarShopState = {
 	unlockAvatar: (avatarId: number) => Promise<void>;
 };
 
-export const useAvatarStore = create<AvatarShopState>((set) => ({
+export const useAvatarStore = create<AvatarShopState>((set, get) => ({
 	avatars: null,
 	unlockedAvatars: null,
 	nextUnlockableTierOfAvatars: null,
@@ -97,6 +98,9 @@ export const useAvatarStore = create<AvatarShopState>((set) => ({
 		}));
 		try {
 			const unlockedAvatar = await avatarService.unlockAvatar(avatarId);
+
+			const { updateUserAvatarAndCurrency } = useAuthStore.getState();
+			updateUserAvatarAndCurrency(unlockedAvatar);
 
 			set((state) => {
 				const updatedAvatars = state.avatars?.map((avatar) =>

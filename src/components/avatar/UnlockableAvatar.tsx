@@ -36,7 +36,6 @@ const UnlockableAvatar = forwardRef<HTMLDivElement, UnlockabeAvatarProps>(
 
 		return (
 			<Stack
-				justify="center"
 				align="center"
 				gap={4}
 			>
