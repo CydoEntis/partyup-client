@@ -18,10 +18,11 @@ import usePartyStore from "../../stores/usePartyStore";
 import useLogout from "../../hooks/useLogout";
 import { useEffect, useState } from "react";
 import { User } from "../../shared/types/auth.types";
-import SideNavSkeleton from "../../features/loading-skeletons/SideNavSkeleton";
+import SideNavSkeleton from "../loading-skeletons/SideNavSkeleton";
 import { useDisclosure } from "@mantine/hooks";
-import AccountIndicator from "../../features/account/AccountIndicator";
-import AccountManagementModal from "../../features/account/AccountManagementModal";
+import AccountIndicator from "../account/AccountIndicator";
+import AccountManagementModal from "../account/AccountManagementModal";
+import ThemeToggle from "../theme/ThemeToggle";
 
 type AuthenticatedNavProps = { user: User; onOpenNewParty: () => void };
 
@@ -57,7 +58,7 @@ function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
 			{recent ? (
 				<SideNavSkeleton />
 			) : (
-				<>
+				<Stack style={{ flexGrow: 1 }}>
 					<Stack gap={8}>
 						<AccountIndicator
 							user={user!}
@@ -126,6 +127,7 @@ function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
 						</MantineNavLink>
 					</Stack>
 					<Stack mt="auto">
+						<ThemeToggle />
 						<Button
 							justify="start"
 							leftSection={<LogOut size={20} />}
@@ -137,7 +139,7 @@ function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
 							Log out
 						</Button>
 					</Stack>
-				</>
+				</Stack>
 			)}
 		</>
 	);

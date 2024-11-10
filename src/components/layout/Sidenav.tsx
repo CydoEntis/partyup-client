@@ -5,11 +5,13 @@ import useGetColorTheme from "../../hooks/useGetColorTheme";
 import PartyDrawer from "../../features/party/PartyDrawer";
 
 import useAuthStore from "../../stores/useAuthStore";
-import AuthenticatedNav from "./AuthenticatedLinks";
+import AuthenticatedNav from "../../features/navigation/AuthenticatedNav";
 import { NavLink } from "react-router-dom";
 
 import PartyUpLogo from "../../assets/party-up-logo.png";
 import PartyUpLogo2 from "../../assets/partyup-logo.png";
+import ThemeToggle from "../../features/theme/ThemeToggle";
+import UnauthenticatedNav from "../../features/navigation/UnauthenticatedNav";
 
 function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
@@ -33,32 +35,14 @@ function Sidenav() {
 					},
 				}}
 			>
-				<Stack style={{ flexGrow: 1 }}>
-					{user?.isLoggedIn ? (
-						<AuthenticatedNav
-							user={user}
-							onOpenNewParty={openNewParty}
-						/>
-					) : (
-						<>
-							<Button
-								component={NavLink}
-								to="/login"
-								variant="outline"
-								color="violet"
-							>
-								Login
-							</Button>
-							<Button
-								component={NavLink}
-								to="/register"
-								color="violet"
-							>
-								Register
-							</Button>
-						</>
-					)}
-				</Stack>
+				{user?.isLoggedIn ? (
+					<AuthenticatedNav
+						user={user}
+						onOpenNewParty={openNewParty}
+					/>
+				) : (
+					<UnauthenticatedNav />
+				)}
 			</AppShell.Navbar>
 		</>
 	);
