@@ -1,4 +1,4 @@
-import { AppShell, Button, Stack, Image, Flex } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 
 import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
@@ -6,12 +6,13 @@ import PartyDrawer from "../../features/party/PartyDrawer";
 
 import useAuthStore from "../../stores/useAuthStore";
 import AuthenticatedNav from "../../features/navigation/AuthenticatedNav";
-import { NavLink } from "react-router-dom";
 
-import PartyUpLogo from "../../assets/party-up-logo.png";
-import PartyUpLogo2 from "../../assets/partyup-logo.png";
-import ThemeToggle from "../../features/theme/ThemeToggle";
 import UnauthenticatedNav from "../../features/navigation/UnauthenticatedNav";
+
+import AvatarShop from "../../features/shop/AvatarShop";
+import useAvatar from "../../hooks/useGetAvatar";
+import { useEffect } from "react";
+import useAvatarStore from "../../stores/useAvatarStore";
 
 function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
@@ -19,12 +20,36 @@ function Sidenav() {
 	const [openedNewParty, { open: openNewParty, close: closeNewParty }] =
 		useDisclosure(false);
 
+	const [openedAvatarShop, { open: openAvatarShop, close: closeAvatarShop }] =
+		useDisclosure(false);
+
+	const { avatars, getAvatars } = useAvatarStore();
+
+	useEffect(() => {
+		const fetchAvatars = async () => {
+			try {
+				await getAvatars();
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		fetchAvatars()
+	}, [ getAvatars]);
+
+
 	return (
 		<>
 			<PartyDrawer
 				isOpened={openedNewParty}
 				onClose={closeNewParty}
 				drawerMode="create"
+			/>
+			<AvatarShop
+				isAvatarShopOpen={openedAvatarShop}
+				onCloseAvatarShop={closeAvatarShop}
+				user={user!}
+				avatars={avatars!}
 			/>
 			<AppShell.Navbar
 				p="md"
@@ -39,6 +64,7 @@ function Sidenav() {
 					<AuthenticatedNav
 						user={user}
 						onOpenNewParty={openNewParty}
+						onOpenAvatarShop={openAvatarShop}
 					/>
 				) : (
 					<UnauthenticatedNav />

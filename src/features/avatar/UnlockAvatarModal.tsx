@@ -24,6 +24,7 @@ function UnlockAvatarModal({
 		try {
 			if (avatarToUnlock) {
 				await unlockAvatar(avatarToUnlock.id);
+				onCloseUnlockAvatar();
 			}
 		} catch (error) {
 			if (error instanceof AxiosError && error.response?.data?.errors) {

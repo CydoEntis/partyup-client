@@ -12,6 +12,7 @@ import {
 	LayoutGrid,
 	LogOut,
 	PlusCircle,
+	ShoppingBag,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import usePartyStore from "../../stores/usePartyStore";
@@ -24,9 +25,17 @@ import AccountIndicator from "../account/AccountIndicator";
 import AccountManagementModal from "../account/AccountManagementModal";
 import ThemeToggle from "../theme/ThemeToggle";
 
-type AuthenticatedNavProps = { user: User; onOpenNewParty: () => void };
+type AuthenticatedNavProps = {
+	user: User;
+	onOpenNewParty: () => void;
+	onOpenAvatarShop: () => void;
+};
 
-function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
+function AuthenticatedNav({
+	user,
+	onOpenNewParty,
+	onOpenAvatarShop,
+}: AuthenticatedNavProps) {
 	const {
 		getRecentParties,
 		recentParties,
@@ -127,7 +136,16 @@ function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
 						</MantineNavLink>
 					</Stack>
 					<Stack mt="auto">
-						<ThemeToggle />
+						<Button
+							justify="start"
+							leftSection={<ShoppingBag size={20} />}
+							variant="light"
+							color="violet"
+							h={40}
+							onClick={onOpenAvatarShop}
+						>
+							Avatar Shop
+						</Button>
 						<Button
 							justify="start"
 							leftSection={<LogOut size={20} />}
@@ -138,6 +156,7 @@ function AuthenticatedNav({ user, onOpenNewParty }: AuthenticatedNavProps) {
 						>
 							Log out
 						</Button>
+						<ThemeToggle />
 					</Stack>
 				</Stack>
 			)}

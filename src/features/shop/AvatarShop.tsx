@@ -9,6 +9,7 @@ import {
 	Group,
 	Image,
 	Title,
+	Modal,
 } from "@mantine/core";
 import { Lock } from "lucide-react";
 import UnlockableAvatar from "../../components/avatar/UnlockableAvatar";
@@ -20,16 +21,25 @@ import UnlockAvatarModal from "../avatar/UnlockAvatarModal";
 import { User } from "../../shared/types/auth.types";
 import { useState } from "react";
 
-type UnlockableAvatarsProps = {
+type AvatarShopProps = {
 	user: User;
 	avatars: Avatar[];
+	isAvatarShopOpen: boolean;
+	onCloseAvatarShop: () => void;
 };
 
-function UnlockableAvatars({ user, avatars }: UnlockableAvatarsProps) {
+function AvatarShop({
+	user,
+	avatars,
+	isAvatarShopOpen,
+	onCloseAvatarShop,
+}: AvatarShopProps) {
 	const [
 		confirmUnlockOpened,
 		{ open: openUnlockAvatar, close: closeUnlockAvatar },
 	] = useDisclosure(false);
+
+	console.log(avatars);
 
 	const [avatarToUnlock, setAvatarToUnlock] = useState<Avatar | null>(null);
 
@@ -48,7 +58,13 @@ function UnlockableAvatars({ user, avatars }: UnlockableAvatarsProps) {
 	};
 
 	return (
-		<>
+		<Modal
+			opened={isAvatarShopOpen}
+			onClose={onCloseAvatarShop}
+			title="Avatar Shop"
+			centered
+			size="lg"
+		>
 			<UnlockAvatarModal
 				isUnlockAvatarOpen={confirmUnlockOpened}
 				onCloseUnlockAvatar={closeUnlockAvatar}
@@ -85,8 +101,8 @@ function UnlockableAvatars({ user, avatars }: UnlockableAvatarsProps) {
 									/>
 
 									<SimpleGrid
-										cols={10}
-										spacing="md"
+										cols={8}
+										spacing="xl"
 									>
 										{avatarsByTier.map((avatar) => (
 											<UnlockableAvatar
@@ -127,8 +143,8 @@ function UnlockableAvatars({ user, avatars }: UnlockableAvatarsProps) {
 			) : (
 				<p>Loading...</p>
 			)}
-		</>
+		</Modal>
 	);
 }
 
-export default UnlockableAvatars;
+export default AvatarShop;
