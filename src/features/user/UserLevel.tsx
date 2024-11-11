@@ -10,28 +10,34 @@ type UserLevelProps = {
 function UserLevel({ user }: UserLevelProps) {
 	const percentage = getPercentage(user.currentExp, user.expToNextLevel);
 	return (
-		<Flex align="center" gap={12}>
+		<Flex
+			align="center"
+			gap={12}
+		>
 			<Group
 				gap={8}
 				w={200}
 			>
 				<UserAvatar avatar={user.avatar} />
-				<Stack gap={6}>
+				<Stack gap={1}>
 					<Group
 						justify="space-between"
 						align="center"
 						gap={6}
-					>
-						<Text>{user.displayName}</Text>
-						<Text size="xs">Lv. {user.currentLevel}</Text>
-					</Group>
-					<Progress
-						value={percentage}
 						w={150}
-						size="sm"
-						animated
-						color="violet"
-					/>
+					>
+						<Text className="truncate ...">{user.displayName}</Text>
+					</Group>
+					<Group>
+						<Text size="xs">Lv. {user.currentLevel}</Text>
+						<Progress
+							value={percentage}
+							w={110}
+							size="sm"
+							animated
+							color="violet"
+						/>
+					</Group>
 				</Stack>
 			</Group>
 		</Flex>
