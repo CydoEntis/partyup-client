@@ -3,9 +3,10 @@ import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import PartiesPage from "../pages/party/PartiesPage";
 import PartyPage from "../pages/party/PartyPage";
-import AuthGuard from "../guards/AuthGuard";
-import UnAuthGuard from "../guards/UnAuthGuard";
+import AuthGuard from "../guards/PrivateGuard";
+import UnAuthGuard from "../guards/PublicGuard";
 import PrivateLayout from "../components/layout/PrivateLayout";
+import PublicLayout from "../components/layout/PublicLayout";
 
 // Define public routes separately with UnAuthGuard
 const publicRoutes = [
@@ -13,7 +14,7 @@ const publicRoutes = [
 		path: "/",
 		element: (
 			<UnAuthGuard>
-				<PrivateLayout />
+				<PublicLayout />
 			</UnAuthGuard>
 		),
 		children: [

@@ -3,8 +3,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router-dom";
 import PrivateWrapper from "./PrivateWrapper";
+import PublicSideNav from "./PublicSideNav";
 
-function PrivateLayout() {
+function PublicLayout() {
 	const [opened, { toggle }] = useDisclosure();
 
 	return (
@@ -13,6 +14,7 @@ function PrivateLayout() {
 				opened={opened}
 				toggle={toggle}
 			/>
+			<PublicSideNav />
 			<AppShell.Main>
 				<Outlet />
 			</AppShell.Main>
@@ -20,4 +22,4 @@ function PrivateLayout() {
 	);
 }
 
-export default PrivateLayout;
+export default PublicLayout;

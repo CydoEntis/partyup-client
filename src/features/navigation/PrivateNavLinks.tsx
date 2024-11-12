@@ -25,17 +25,17 @@ import AccountIndicator from "../account/AccountIndicator";
 import AccountManagementModal from "../account/AccountManagementModal";
 import ThemeToggle from "../theme/ThemeToggle";
 
-type AuthenticatedNavProps = {
+type PrivateNavLinksProps = {
 	user: User;
 	onOpenNewParty: () => void;
 	onOpenAvatarShop: () => void;
 };
 
-function AuthenticatedNav({
+function PrivateNavLinks({
 	user,
 	onOpenNewParty,
 	onOpenAvatarShop,
-}: AuthenticatedNavProps) {
+}: PrivateNavLinksProps) {
 	const {
 		getRecentParties,
 		recentParties,
@@ -164,4 +164,4 @@ function AuthenticatedNav({
 	);
 }
 
-export default AuthenticatedNav;
+export default PrivateNavLinks;

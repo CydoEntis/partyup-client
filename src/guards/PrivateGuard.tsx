@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useUserStore from "../stores/useUserStore";
 
-interface AuthGuardProps {
+interface PrivateGuardProps {
 	children: JSX.Element;
 }
 
-const AuthGuard = ({ children }: AuthGuardProps) => {
+const PrivateGuard = ({ children }: PrivateGuardProps) => {
 	const { user } = useUserStore();
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -21,4 +21,4 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
 	return isLoggedIn ? children : null;
 };
 
-export default AuthGuard;
+export default PrivateGuard;

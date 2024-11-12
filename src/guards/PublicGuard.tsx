@@ -2,11 +2,11 @@ import { Navigate } from "react-router-dom";
 import useUserStore from "../stores/useUserStore";
 import { ReactNode } from "react";
 
-type UnAuthGuardProps = {
+type PublicGuardProps = {
 	children: ReactNode;
 }
 
-const UnAuthGuard = ({ children }: UnAuthGuardProps) => {
+const PublicGuard = ({ children }: PublicGuardProps) => {
 	const { user } = useUserStore();
 
 	if (user?.isLoggedIn) {
@@ -21,4 +21,4 @@ const UnAuthGuard = ({ children }: UnAuthGuardProps) => {
 	return <>{children}</>;
 };
 
-export default UnAuthGuard;
+export default PublicGuard;

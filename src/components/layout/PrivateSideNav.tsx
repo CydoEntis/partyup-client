@@ -6,13 +6,12 @@ import PartyDrawer from "../../features/party/PartyDrawer";
 
 import useUserStore from "../../stores/useUserStore";
 
-
 import AvatarShop from "../../features/shop/AvatarShop";
 import { useEffect } from "react";
 import useAvatarStore from "../../stores/useAvatarStore";
-import SideNavLinks from "../../features/navigation/SideNavLinks";
+import PrivateNavLinks from "../../features/navigation/PrivateNavLinks";
 
-function Sidenav() {
+function PrivateSideNav() {
 	const { isLightMode } = useGetColorTheme();
 	const { user } = useUserStore();
 	const [openedNewParty, { open: openNewParty, close: closeNewParty }] =
@@ -58,7 +57,7 @@ function Sidenav() {
 				}}
 			>
 				{user?.isLoggedIn && (
-					<SideNavLinks
+					<PrivateNavLinks
 						user={user}
 						onOpenNewParty={openNewParty}
 						onOpenAvatarShop={openAvatarShop}
@@ -69,4 +68,4 @@ function Sidenav() {
 	);
 }
 
-export default Sidenav;
+export default PrivateSideNav;
