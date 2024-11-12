@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import useAuthStore from "../stores/useAuthStore";
+import useUserStore from "../stores/useUserStore";
 import { ReactNode } from "react";
 
 interface UnAuthGuardProps {
@@ -7,7 +7,7 @@ interface UnAuthGuardProps {
 }
 
 const UnAuthGuard = ({ children }: UnAuthGuardProps) => {
-	const { user } = useAuthStore();
+	const { user } = useUserStore();
 
 	if (user?.isLoggedIn) {
 		return <Navigate to="/dashboard" />;

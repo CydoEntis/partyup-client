@@ -9,10 +9,10 @@ import {
 	virtualColor,
 } from "@mantine/core";
 import { useEffect } from "react";
-import useAuthStore from "./stores/useAuthStore";
+import useUserStore from "./stores/useUserStore";
 
 function App() {
-	const { restoreSession } = useAuthStore();
+	const { restoreSession } = useUserStore();
 
 	const theme = createTheme({
 		cursorType: "pointer",

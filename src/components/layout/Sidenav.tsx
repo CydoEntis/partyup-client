@@ -4,7 +4,7 @@ import { useDisclosure } from "@mantine/hooks";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import PartyDrawer from "../../features/party/PartyDrawer";
 
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 import AuthenticatedNav from "../../features/navigation/AuthenticatedNav";
 
 import UnauthenticatedNav from "../../features/navigation/UnauthenticatedNav";
@@ -16,7 +16,7 @@ import useAvatarStore from "../../stores/useAvatarStore";
 
 function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
-	const { user } = useAuthStore();
+	const { user } = useUserStore();
 	const [openedNewParty, { open: openNewParty, close: closeNewParty }] =
 		useDisclosure(false);
 

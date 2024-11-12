@@ -3,7 +3,7 @@ import Sidenav from "./Sidenav";
 import { useDisclosure } from "@mantine/hooks";
 import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router-dom";
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 import AppWrapper from "./AppWrapper";
 
 function AppLayout() {

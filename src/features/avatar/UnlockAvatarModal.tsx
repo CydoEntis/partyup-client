@@ -5,7 +5,7 @@ import AvatarUnlockPreview from "../../components/avatar/AvatarUnlockPreview";
 import useAvatarStore from "../../stores/useAvatarStore";
 import { AxiosError } from "axios";
 import { useState } from "react";
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 
 type UnlockAvatarModal = {
 	isUnlockAvatarOpen: boolean;

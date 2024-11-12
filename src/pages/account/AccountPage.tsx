@@ -1,5 +1,5 @@
 import { Box, Stack, SimpleGrid, Container, Skeleton } from "@mantine/core";
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 import { useEffect } from "react";
 import useAvatarStore from "../../stores/useAvatarStore";
 import AccountLevel from "../../pages/account/AccountLevel";
@@ -15,7 +15,7 @@ function AccountPage() {
 		nextUnlockableTierOfAvatars,
 		loading: { nextTier, list },
 	} = useAvatarStore();
-	const { user } = useAuthStore();
+	const { user } = useUserStore();
 
 	useEffect(() => {
 		const loadAvatarsWithDelay = async () => {

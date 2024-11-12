@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { AxiosError } from "axios";
 import { Stack, TextInput } from "@mantine/core";
 import classes from "../../features/auth/auth.module.css";
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 
 type UpdateDisplayNameFormProps = { user: User, onClose: () => void; };
 
@@ -19,7 +19,7 @@ const updateDisplayNameSchema = z.object({
 type UpdateDisplayName = z.infer<typeof updateDisplayNameSchema>;
 
 function UpdateDisplayNameForm({ user, onClose }: UpdateDisplayNameFormProps) {
-	const { updateUserDisplayName } = useAuthStore();
+	const { updateUserDisplayName } = useUserStore();
 
 	const form = useForm<UpdateDisplayName>({
 		validate: zodResolver(updateDisplayNameSchema),

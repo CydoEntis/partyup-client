@@ -31,6 +31,12 @@ const updateDisplayName = async (displayName: string): Promise<void> => {
 	if (!response.isSuccess) throw new Error();
 };
 
+const getUserStats = async (): Promise<void> => {
+	const response = (await apiClient.get(`${endpoints.user}/stats`)).data;
+	console.log("Response: ", response);
+	if (!response.isSuccess) throw new Error();
+};
+
 export default {
 	getUser,
 	updateDisplayName,

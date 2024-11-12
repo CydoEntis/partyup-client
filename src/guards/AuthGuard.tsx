@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from "react-router-dom";
-import useAuthStore from "../stores/useAuthStore";
+import useUserStore from "../stores/useUserStore";
 
 const AuthGuard = ({ children }: { children: JSX.Element }) => {
-	const { user } = useAuthStore();
+	const { user } = useUserStore();
 
 	const location = useLocation();
 

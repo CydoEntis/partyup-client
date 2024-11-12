@@ -1,7 +1,7 @@
 import { AppShell, Burger, Button, Flex, Group, Title } from "@mantine/core";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 import { NavLink } from "react-router-dom";
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 
 type HeaderProps = {
 	opened: boolean;

@@ -14,7 +14,7 @@ import classes from "./auth.module.css";
 import { z } from "zod";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useForm } from "@mantine/form";
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 import { AxiosError } from "axios";
 
 const loginFormSchema = z.object({
@@ -29,7 +29,7 @@ type LoginFormData = z.infer<typeof loginFormSchema>;
 type Props = {};
 
 function LoginForm({}: Props) {
-	const { login: loginUser } = useAuthStore();
+	const { login: loginUser } = useUserStore();
 	const navigate = useNavigate();
 
 	const form = useForm<LoginFormData>({

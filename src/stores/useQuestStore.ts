@@ -9,7 +9,7 @@ import {
 import { UpdateStep } from "../shared/types/step.types";
 import stepService from "../services/stepService";
 import { QueryParams } from "../shared/types/query-params.types";
-import { useAuthStore } from "./useAuthStore";
+import { useUserStore } from "./useUserStore";
 
 type QuestState = {
 	paginatedQuests: PaginatedQuests;
@@ -257,7 +257,7 @@ export const useQuestStore = create<QuestState>((set) => ({
 		try {
 			const completedQuest = await questService.completeQuest(partyId, questId);
 
-			const { getUser, user } = useAuthStore.getState();
+			const { getUser, user } = useUserStore.getState();
 			await getUser(user!.id);
 
 			set((state) => {
@@ -291,7 +291,7 @@ export const useQuestStore = create<QuestState>((set) => ({
 				questId,
 			);
 
-			const { getUser, user } = useAuthStore.getState();
+			const { getUser, user } = useUserStore.getState();
 			await getUser(user!.id);
 
 			set((state) => {

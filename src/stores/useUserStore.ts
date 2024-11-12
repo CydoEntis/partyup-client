@@ -8,10 +8,9 @@ import {
 import authService from "../services/authService";
 import localStorageService from "../services/localStorageService";
 import userService from "../services/userService";
-import avatarService from "../services/avatarService";
 import { Avatar } from "../shared/types/avatar.types";
 
-type AuthState = {
+type UserState = {
 	user: User | null;
 	loading: {
 		session: boolean;
@@ -33,7 +32,7 @@ type AuthState = {
 	updateUserAvatarAndCurrency: (avatar: Avatar) => void;
 };
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useUserStore = create<UserState>((set, get) => ({
 	user: null,
 	loading: {
 		session: false,
@@ -304,4 +303,4 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 	},
 }));
 
-export default useAuthStore;
+export default useUserStore;

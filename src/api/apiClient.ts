@@ -1,5 +1,5 @@
 import axios from "axios";
-import useAuthStore from "../stores/useAuthStore";
+import useUserStore from "../stores/useUserStore";
 import { baseUrl } from "./endpoints";
 
 const apiClient = axios.create({
@@ -8,7 +8,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
 	(request) => {
-		const { user } = useAuthStore.getState();
+		const { user } = useUserStore.getState();
 		if (user && user.tokens) {
 			request.headers["Authorization"] = `Bearer ${user.tokens.accessToken}`;
 		}
@@ -27,7 +27,7 @@ apiClient.interceptors.response.use(
 		// Handle token refresh when 401 error occurs
 		if (error.response?.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
-			const { user, refreshTokens, logout } = useAuthStore.getState();
+			const { user, refreshTokens, logout } = useUserStore.getState();
 			try {
 				if (user && user.tokens) {
 					const { tokens } = user;

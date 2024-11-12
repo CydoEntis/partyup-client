@@ -1,11 +1,11 @@
 import { Modal } from "@mantine/core";
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 import AccountManagement from "./AccountManagement";
 
 type AccountManagementModalProps = { isOpened: boolean; onClose: () => void };
 
 function AccountManagementModal({ isOpened, onClose }: AccountManagementModalProps) {
-	const { user } = useAuthStore();
+	const { user } = useUserStore();
 	return (
 		<Modal
 			opened={isOpened}

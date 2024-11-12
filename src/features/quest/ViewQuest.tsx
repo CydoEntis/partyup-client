@@ -3,12 +3,12 @@ import { Clock, Check } from "lucide-react";
 import CommentList from "../../components/comments/CommentList";
 import { formatDate } from "../../shared/utils/date.utils";
 import StepList from "../../components/steps/StepList";
-import useAuthStore from "../../stores/useAuthStore";
+import useUserStore from "../../stores/useUserStore";
 import useQuestStore from "../../stores/useQuestStore";
 
 function ViewQuest() {
 	const { completeQuest, uncompleteQuest, quest } = useQuestStore();
-	const { user } = useAuthStore();
+	const { user } = useUserStore();
 
 	const memberRole = quest
 		? quest.members.find((member) => member.userId === user?.id)?.role
