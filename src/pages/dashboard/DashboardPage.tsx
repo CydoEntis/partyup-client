@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 
-type Props = {}
+// type Props = {}
 
-function DashboardPage({}: Props) {
-	// const [userState, setUserStats] = useState();
-	// useEffect(() => {
+// function DashboardPage({}: Props) {
+// 	// const [userState, setUserStats] = useState();
+// 	// useEffect(() => {
 
-	// }, [])
+// 	// }, [])
 
-	return (
-		<div></div>
-	)
-}
+// 	return (
+// 		<div></div>
+// 	)
+// }
 
-export default DashboardPage
+// export default DashboardPage

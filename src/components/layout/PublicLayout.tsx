@@ -1,26 +1,23 @@
 import Header from "./Header";
-import Sidenav from "./Sidenav";
 import { useDisclosure } from "@mantine/hooks";
 import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router-dom";
-import useUserStore from "../../stores/useUserStore";
-import AppWrapper from "./AppWrapper";
+import PrivateWrapper from "./PrivateWrapper";
 
-function AppLayout() {
+function PrivateLayout() {
 	const [opened, { toggle }] = useDisclosure();
 
 	return (
-		<AppWrapper opened={opened}>
+		<PrivateWrapper opened={opened}>
 			<Header
 				opened={opened}
 				toggle={toggle}
 			/>
-			<Sidenav />
 			<AppShell.Main>
 				<Outlet />
 			</AppShell.Main>
-		</AppWrapper>
+		</PrivateWrapper>
 	);
 }
 
-export default AppLayout;
+export default PrivateLayout;

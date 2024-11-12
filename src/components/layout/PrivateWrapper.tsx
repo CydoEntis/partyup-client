@@ -1,25 +1,25 @@
 import { AppShell } from "@mantine/core";
 import  { ReactNode } from "react";
 
-type AppWrapperProps = {
+type PrivateWrapperProps = {
 	opened: boolean;
 	children: ReactNode;
 };
 
-function AppWrapper({ opened, children }: AppWrapperProps) {
+function PrivateWrapper({ opened, children }: PrivateWrapperProps) {
 	return (
 		<AppShell
-			header={{ height: { base: 60} }}
+			header={{ height: { base: 60 } }}
+			bg={"primary"}
 			navbar={{
 				width: { base: 200, md: 300 },
 				breakpoint: "sm",
 				collapsed: { mobile: !opened },
 			}}
-			bg={"primary"}
 		>
 			{children}
 		</AppShell>
 	);
 }
 
-export default AppWrapper;
+export default PrivateWrapper;

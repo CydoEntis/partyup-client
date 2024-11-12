@@ -5,14 +5,12 @@ import useGetColorTheme from "../../hooks/useGetColorTheme";
 import PartyDrawer from "../../features/party/PartyDrawer";
 
 import useUserStore from "../../stores/useUserStore";
-import AuthenticatedNav from "../../features/navigation/AuthenticatedNav";
 
-import UnauthenticatedNav from "../../features/navigation/UnauthenticatedNav";
 
 import AvatarShop from "../../features/shop/AvatarShop";
-import useAvatar from "../../hooks/useGetAvatar";
 import { useEffect } from "react";
 import useAvatarStore from "../../stores/useAvatarStore";
+import SideNavLinks from "../../features/navigation/SideNavLinks";
 
 function Sidenav() {
 	const { isLightMode } = useGetColorTheme();
@@ -34,9 +32,8 @@ function Sidenav() {
 			}
 		};
 
-		fetchAvatars()
-	}, [ getAvatars]);
-
+		fetchAvatars();
+	}, [getAvatars]);
 
 	return (
 		<>
@@ -60,14 +57,12 @@ function Sidenav() {
 					},
 				}}
 			>
-				{user?.isLoggedIn ? (
-					<AuthenticatedNav
+				{user?.isLoggedIn && (
+					<SideNavLinks
 						user={user}
 						onOpenNewParty={openNewParty}
 						onOpenAvatarShop={openAvatarShop}
 					/>
-				) : (
-					<UnauthenticatedNav />
 				)}
 			</AppShell.Navbar>
 		</>
