@@ -3,25 +3,34 @@ import AppLayout from "../components/layout/AppLayout";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import PartiesPage from "../pages/party/PartiesPage";
-import AccountPage from "../pages/account/AccountPage";
 import PartyPage from "../pages/party/PartyPage";
+import AuthGuard from "../guards/AuthGuard";
+import UnAuthGuard from "../guards/UnAuthGuard";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
 		element: (
-			// <AuthenticatedRoute>
-			<AppLayout />
-			// </AuthenticatedRoute>
+			<AuthGuard>
+				<AppLayout />
+			</AuthGuard>
 		),
 		children: [
 			{
 				path: "login",
-				element: <LoginPage />,
+				element: (
+					<UnAuthGuard>
+						<LoginPage />
+					</UnAuthGuard>
+				),
 			},
 			{
 				path: "register",
-				element: <RegisterPage />,
+				element: (
+					<UnAuthGuard>
+						<RegisterPage />
+					</UnAuthGuard>
+				),
 			},
 			{
 				path: "dashboard",

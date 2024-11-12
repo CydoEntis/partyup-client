@@ -18,10 +18,10 @@ function App() {
 		cursorType: "pointer",
 		colors: {
 			darkPrimary: colorsTuple("#111111"),
-			lightPrimary: colorsTuple("#F5F4F4"),
 			darkSecondary: colorsTuple("#1C1C1C"),
-			lightSecondary: colorsTuple("#FFFFFF"),
 			darkCard: colorsTuple("#232323"),
+			lightPrimary: colorsTuple("#F5F4F4"),
+			lightSecondary: colorsTuple("#FFFFFF"),
 			lightCard: colorsTuple("#FFFFFF"),
 			primary: virtualColor({
 				name: "primary",
