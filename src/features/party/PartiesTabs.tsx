@@ -1,7 +1,20 @@
-import { ActionIcon, Box, Group, Pagination, Paper, Skeleton, Table, TableData, Tabs } from "@mantine/core";
+import {
+	ActionIcon,
+	Box,
+	Flex,
+	Group,
+	Pagination,
+	Paper,
+	ScrollArea,
+	Skeleton,
+	Stack,
+	Table,
+	TableData,
+	Tabs,
+} from "@mantine/core";
 import { Eye, LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import usePartiestore from "../../stores/usePartyStore";
 import PartyCard from "./PartyCard";
 import Members from "../../components/avatar/Members";
@@ -14,20 +27,32 @@ function PartiesTabs() {
 		parties,
 		loading: { list },
 	} = usePartiestore();
+	const [page, setPage] = useState(1);
 
 	useEffect(() => {
-		const fetchQuests = async () => {
+		const fetchParties = async () => {
 			try {
-				await getParties();
+				const params = {
+					pageNumber: page,
+				};
+				await getParties(params);
 			} catch (error) {
 				console.error("Error fetching party or quests:", error);
 			}
 		};
 
-		fetchQuests();
-	}, [getParties]);
+		fetchParties();
+	}, [getParties, page]);
 
-	const rows = parties!.items.map((party) => (
+	const handlePageChange = (newPage: number) => {
+		setPage(newPage);
+	};
+
+	console.log(parties);
+
+	if (!parties) return <p>Loading...</p>;
+
+	const rows = parties.items.map((party) => (
 		<Table.Tr key={party.id}>
 			<Table.Td>{party.title}</Table.Td>
 			<Table.Td>{party.description}</Table.Td>
@@ -39,8 +64,13 @@ function PartiesTabs() {
 			</Table.Td>
 			<Table.Td>{formatDate(party.dueDate)}</Table.Td>
 			<Table.Td>
-				<ActionIcon variant="light" color="violet" component={NavLink} to={`/parties/${party.id}/quests`}>
-					<Eye size={20}/>
+				<ActionIcon
+					variant="light"
+					color="violet"
+					component={NavLink}
+					to={`/parties/${party.id}/quests`}
+				>
+					<Eye size={20} />
 				</ActionIcon>
 			</Table.Td>
 		</Table.Tr>
@@ -77,23 +107,38 @@ function PartiesTabs() {
 				value="grid"
 				p={16}
 			>
-				<SimpleGridLayout cols={6}>
-					{list
-						? Array.from({ length: 12 }).map((_, index) => (
-								<Skeleton
-									key={index}
-									height={350}
-									mb="md"
-								/>
-						  ))
-						: parties &&
-						  parties.items.map((party) => (
-								<PartyCard
-									key={party.id}
-									party={party}
-								/>
-						  ))}
-				</SimpleGridLayout>
+				<Stack
+					justify="space-between"
+					h="75vh"
+				>
+					<ScrollArea>
+						<SimpleGridLayout cols={6}>
+							{list
+								? Array.from({ length: 12 }).map((_, index) => (
+										<Skeleton
+											key={index}
+											height={350}
+											mb="md"
+										/>
+								  ))
+								: parties &&
+								  parties.items.map((party) => (
+										<PartyCard
+											key={party.id}
+											party={party}
+										/>
+								  ))}
+						</SimpleGridLayout>
+					</ScrollArea>
+					<Flex justify="center">
+						<Pagination
+							total={parties?.totalPages || 1}
+							value={page}
+							onChange={handlePageChange}
+							color="violet"
+						/>
+					</Flex>
+				</Stack>
 			</Tabs.Panel>
 			<Tabs.Panel value="list">
 				<Box p={32}>
@@ -115,7 +160,6 @@ function PartiesTabs() {
 						</Table>
 					</Paper>
 				</Box>
-				<Pagination total={parties!.totalCount} />
 			</Tabs.Panel>
 		</Tabs>
 	);

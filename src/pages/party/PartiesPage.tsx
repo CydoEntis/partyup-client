@@ -1,22 +1,11 @@
 import { useEffect } from "react";
 import usePartytore from "../../stores/usePartyStore";
-import { Link } from "react-router-dom";
-import { Box, Button, Flex, Group, SimpleGrid, Stack, Title } from "@mantine/core";
-import PartyCard from "../../features/party/PartyCard";
+import { Box, Flex, Group, Title } from "@mantine/core";
 import PartiesTabs from "../../features/party/PartiesTabs";
 
 type Props = {};
 
 function PartiesPage({}: Props) {
-	const { getParties, parties } = usePartytore();
-
-	useEffect(() => {
-		const fetchParty = async () => {
-			await getParties();
-		};
-		fetchParty();
-	}, []);
-
 	return (
 		<Box>
 			<Box

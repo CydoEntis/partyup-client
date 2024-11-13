@@ -69,6 +69,7 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 			error: null,
 		}));
 		try {
+			console.log("PArams: ", params)
 			const parties = await partieservice.getAllParties(params);
 			set({ parties });
 			return parties;
