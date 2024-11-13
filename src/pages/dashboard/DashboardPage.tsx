@@ -15,6 +15,7 @@ import {
 } from "@mantine/core";
 import NextUnlock from "../../components/avatar/NextAvatarUnlock";
 import useUserStore from "../../stores/useUserStore";
+import DashboardStats from "../../features/dashboard/DashboardStats";
 
 type Props = {};
 
@@ -31,7 +32,7 @@ function DashboardPage({}: Props) {
 		fetchUserStats();
 	}, []);
 
-	console.log(userStats);
+	if(!userStats) return;
 
 	return (
 		<>
@@ -56,56 +57,9 @@ function DashboardPage({}: Props) {
 					</Group>
 				</Flex>
 			</Box>
-			<Box p={32}>
-				<SimpleGrid
-					cols={5}
-					spacing="sm"
-				>
-					<Paper
-						withBorder
-						p={12}
-						h={200}
-					>
-						<Text>Joined Parties</Text>
-						<Title>{userStats?.totalParties}</Title>
-					</Paper>
-
-					<Paper
-						withBorder
-						p={12}
-						h={200}
-					>
-						<Text>Total Quests</Text>
-						<Title>{userStats?.totalParties}</Title>
-					</Paper>
-
-					<Paper
-						withBorder
-						p={12}
-						h={200}
-					>
-						<Text>In Progress Quests</Text>
-						<Title>{userStats?.totalQuests}</Title>
-					</Paper>
-					<Paper
-						withBorder
-						p={12}
-						h={200}
-					>
-						<Text>Completed Quests</Text>
-						<Title>{userStats?.completedQuests}</Title>
-					</Paper>
-
-					<Paper
-						withBorder
-						p={12}
-						h={200}
-					>
-						<Text>Past Due Quests</Text>
-						<Title>{userStats?.pastDueQuests}</Title>
-					</Paper>
-				</SimpleGrid>
-				<Grid pt={16}>
+			<DashboardStats stats={userStats!} />
+			<Box>
+				<Grid>
 					<Grid.Col span={8}>
 						<Paper
 							style={{ height: "100%" }}
@@ -133,7 +87,12 @@ function DashboardPage({}: Props) {
 							style={{ height: "100%" }}
 							p={16}
 						>
-							<Title pb={8} size="xl">Your Next Unlock</Title>
+							<Title
+								pb={8}
+								size="xl"
+							>
+								Your Next Unlock
+							</Title>
 							<Divider pb={8} />
 							<NextUnlock user={user!} />
 						</Paper>
