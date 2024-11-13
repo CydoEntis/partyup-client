@@ -24,7 +24,7 @@ function PartyCard({ party }: PartyCardProps) {
 	return (
 		<Card
 			component={NavLink}
-			to={`/party/${party.id}/quests`}
+			to={`/parties/${party.id}/quests`}
 			key={party.id}
 			className="transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
 			bg={"card"}

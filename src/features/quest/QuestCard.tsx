@@ -25,14 +25,14 @@ type QuestCardProps = {
 const getBadgeColor = (priority: PriorityLevel) => {
 	switch (priority) {
 		case PriorityLevel.CRITICAL:
-			return "red"; 
+			return "red";
 		case PriorityLevel.HIGH:
-			return "orange"; 
+			return "orange";
 		case PriorityLevel.MEDIUM:
-			return "yellow"; 
+			return "yellow";
 		case PriorityLevel.LOW:
 		default:
-			return "cyan"; 
+			return "cyan";
 	}
 };
 
@@ -62,16 +62,6 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 				pb={12}
 				justify="space-between"
 			>
-				<Group>
-					<Indicator
-						inline
-						processing
-						color="yellow"
-						size={8}
-					/>
-					<Text size="xs">In Progress</Text>
-				</Group>
-
 				<Badge
 					variant="light"
 					color={badgeColor}
