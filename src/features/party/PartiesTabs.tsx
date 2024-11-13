@@ -9,17 +9,16 @@ import {
 	Skeleton,
 	Stack,
 	Table,
-	TableData,
 	Tabs,
 } from "@mantine/core";
 import { Eye, LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import { useEffect, useState } from "react";
+import { useSearchParams, NavLink } from "react-router-dom";
 import usePartiestore from "../../stores/usePartyStore";
 import PartyCard from "./PartyCard";
 import Members from "../../components/avatar/Members";
 import { formatDate } from "../../shared/utils/date.utils";
-import { NavLink } from "react-router-dom";
 
 function PartiesTabs() {
 	const {
@@ -27,7 +26,8 @@ function PartiesTabs() {
 		parties,
 		loading: { list },
 	} = usePartiestore();
-	const [page, setPage] = useState(1);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 
 	useEffect(() => {
 		const fetchParties = async () => {
@@ -44,11 +44,13 @@ function PartiesTabs() {
 		fetchParties();
 	}, [getParties, page]);
 
+	useEffect(() => {
+		setSearchParams({ page: page.toString() });
+	}, [page, setSearchParams]);
+
 	const handlePageChange = (newPage: number) => {
 		setPage(newPage);
 	};
-
-	console.log(parties);
 
 	if (!parties) return <p>Loading...</p>;
 
