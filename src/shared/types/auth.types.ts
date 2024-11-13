@@ -28,3 +28,24 @@ export type User = {
 	expToNextLevel: number;
 	isLoggedIn: boolean;
 };
+
+export type UserStats = {
+	totalParties: number;
+	totalQuests: number;
+	completedQuests: number;
+	inProgressQuests: number;
+	pastDueQuest: number;
+	questsCompletedCurrentMonth: QuestCompletionOverTime;
+	questsCompletedByDay: QuestCompletionByDay;
+};
+
+export type QuestCompletionOverTime = {
+	year: number;
+	monthL: number;
+	questCount: number;
+};
+
+export type QuestCompletionByDay = {
+	date: string;
+	questCount: number;
+};

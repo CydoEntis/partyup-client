@@ -41,4 +41,5 @@ export default {
 	getUser,
 	updateDisplayName,
 	updateAvatar,
+	getUserStats,
 };

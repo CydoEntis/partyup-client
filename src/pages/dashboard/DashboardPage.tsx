@@ -1,16 +1,19 @@
-// import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
+import userService from "../../services/userService";
+import { UserStats } from "../../shared/types/auth.types";
 
-// type Props = {}
+type Props = {};
 
-// function DashboardPage({}: Props) {
-// 	// const [userState, setUserStats] = useState();
-// 	// useEffect(() => {
+function DashboardPage({}: Props) {
+	const [userStats, setUserStats] = useState<UserStats>();
+	useEffect(() => {
+		const fetchUserStats = async () => {
+			const stats = await userService.getUserStats();
+			setUserStats(stats);
+		};
+	}, []);
 
-// 	// }, [])
+	return <div>Dashboard</div>;
+}
 
-// 	return (
-// 		<div></div>
-// 	)
-// }
-
-// export default DashboardPage
+export default DashboardPage;

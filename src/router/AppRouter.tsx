@@ -7,6 +7,7 @@ import AuthGuard from "../guards/PrivateGuard";
 import UnAuthGuard from "../guards/PublicGuard";
 import PrivateLayout from "../components/layout/PrivateLayout";
 import PublicLayout from "../components/layout/PublicLayout";
+import DashboardPage from "../pages/dashboard/DashboardPage";
 
 // Define public routes separately with UnAuthGuard
 const publicRoutes = [
@@ -34,7 +35,7 @@ const publicRoutes = [
 const protectedRoutes = [
 	{
 		path: "dashboard",
-		element: <div>Will be a dashboard</div>,
+		element: <DashboardPage />,
 	},
 	{
 		path: "parties",
