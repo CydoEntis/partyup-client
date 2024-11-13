@@ -12,10 +12,12 @@ import {
 	Flex,
 	Group,
 	Divider,
+	Stack,
 } from "@mantine/core";
 import NextUnlock from "../../components/avatar/NextAvatarUnlock";
 import useUserStore from "../../stores/useUserStore";
 import DashboardStats from "../../features/dashboard/DashboardStats";
+import UserProgression from "../../features/dashboard/UserProgression";
 
 type Props = {};
 
@@ -32,13 +34,13 @@ function DashboardPage({}: Props) {
 		fetchUserStats();
 	}, []);
 
-	if(!userStats) return;
+	if (!userStats && user) return;
 
 	return (
 		<>
 			<Box
 				bg="secondary"
-				p={16}
+				p={32}
 			>
 				<Flex
 					justify="space-between"
@@ -51,54 +53,44 @@ function DashboardPage({}: Props) {
 						w="100%"
 						justify="space-between"
 					>
-						<Group>
-							<Title size="2.5rem">Dashboard</Title>
-						</Group>
+						<Stack gap={4}>
+							<Title size="lg">Your Dashboard</Title>
+							<Title size="2.5rem">Welcome, {user?.displayName}</Title>
+						</Stack>
 					</Group>
 				</Flex>
 			</Box>
-			<DashboardStats stats={userStats!} />
-			<Box>
-				<Grid>
-					<Grid.Col span={8}>
-						<Paper
-							style={{ height: "100%" }}
-							p={16}
-						>
-							<AreaChart
-								data={userStats?.questsCompletedByDay || []}
-								dataKey="date"
-								h={400}
-								series={[
-									{
-										name: "questCount",
-										label: "Completed Quests",
-										color: "violet.6",
-									},
-								]}
-								curveType="linear"
-								gridAxis="xy"
-							/>
-						</Paper>
-					</Grid.Col>
-					<Grid.Col span={4}>
-						<Paper
-							withBorder
-							style={{ height: "100%" }}
-							p={16}
-						>
-							<Title
-								pb={8}
-								size="xl"
+			<Stack gap={32} p={32}>
+				<DashboardStats stats={userStats!} />
+				<Box>
+					<Grid>
+						<Grid.Col span={8}>
+							<Paper
+								style={{ height: "100%" }}
+								p={16}
 							>
-								Your Next Unlock
-							</Title>
-							<Divider pb={8} />
-							<NextUnlock user={user!} />
-						</Paper>
-					</Grid.Col>
-				</Grid>
-			</Box>
+								<AreaChart
+									data={userStats?.questsCompletedByDay || []}
+									dataKey="date"
+									h={300}
+									series={[
+										{
+											name: "questCount",
+											label: "Completed Quests",
+											color: "violet.6",
+										},
+									]}
+									curveType="linear"
+									gridAxis="xy"
+								/>
+							</Paper>
+						</Grid.Col>
+						<Grid.Col span={4}>
+							{user ? <UserProgression user={user} /> : <p>Loading...</p>}
+						</Grid.Col>
+					</Grid>
+				</Box>
+			</Stack>
 		</>
 	);
 }
