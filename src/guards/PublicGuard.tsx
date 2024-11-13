@@ -1,18 +1,21 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import useUserStore from "../stores/useUserStore";
 import { ReactNode } from "react";
 
 type PublicGuardProps = {
 	children: ReactNode;
-}
+};
 
 const PublicGuard = ({ children }: PublicGuardProps) => {
 	const { user } = useUserStore();
+	const location = useLocation();
 
-	if (user?.isLoggedIn) {
+	console.log(user);
+
+	if (user && user.isLoggedIn) {
 		return (
 			<Navigate
-				to="/dashboard"
+				to={location.state.from || "/dashboard"}
 				replace
 			/>
 		);

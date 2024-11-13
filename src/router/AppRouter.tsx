@@ -3,20 +3,19 @@ import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import PartiesPage from "../pages/party/PartiesPage";
 import PartyPage from "../pages/party/PartyPage";
-import AuthGuard from "../guards/PrivateGuard";
-import UnAuthGuard from "../guards/PublicGuard";
+import PrivateGuard from "../guards/PrivateGuard";
+import PublicGuard from "../guards/PublicGuard";
 import PrivateLayout from "../components/layout/PrivateLayout";
 import PublicLayout from "../components/layout/PublicLayout";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 
-// Define public routes separately with UnAuthGuard
 const publicRoutes = [
 	{
 		path: "/",
 		element: (
-			<UnAuthGuard>
+			<PublicGuard>
 				<PublicLayout />
-			</UnAuthGuard>
+			</PublicGuard>
 		),
 		children: [
 			{
@@ -31,7 +30,6 @@ const publicRoutes = [
 	},
 ];
 
-// Define protected routes with AuthGuard
 const protectedRoutes = [
 	{
 		path: "dashboard",
@@ -57,9 +55,9 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: (
-			<AuthGuard>
+			<PrivateGuard>
 				<PrivateLayout />
-			</AuthGuard>
+			</PrivateGuard>
 		),
 		children: protectedRoutes,
 	},
