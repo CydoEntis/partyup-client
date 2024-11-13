@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Group, Paper, Skeleton, Table, TableData, Tabs } from "@mantine/core";
+import { ActionIcon, Box, Group, Pagination, Paper, Skeleton, Table, TableData, Tabs } from "@mantine/core";
 import { Eye, LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import { useEffect } from "react";
@@ -115,6 +115,7 @@ function PartiesTabs() {
 						</Table>
 					</Paper>
 				</Box>
+				<Pagination total={parties!.totalCount} />
 			</Tabs.Panel>
 		</Tabs>
 	);

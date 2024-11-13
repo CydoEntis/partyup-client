@@ -25,6 +25,7 @@ const getAllQuests = async (
 			queryParams.append("pageSize", params.pageSize.toString());
 	}
 
+
 	const response = (
 		await apiClient.get(
 			`${endpoints.parties}/${partyId}/quests?${queryParams.toString()}`,

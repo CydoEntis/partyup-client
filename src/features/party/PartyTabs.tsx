@@ -1,11 +1,11 @@
-import { Group, Skeleton, Tabs } from "@mantine/core";
+import { Flex, Group, Pagination, ScrollArea, Skeleton, Stack, Tabs } from "@mantine/core";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function PartyTabs() {
 	const { partyId } = useParams();
@@ -14,13 +14,16 @@ function PartyTabs() {
 		paginatedQuests,
 		loading: { list },
 	} = useQuestStore();
-
+	const [page, setPage] = useState(1);
 
 	useEffect(() => {
 		const fetchQuests = async () => {
 			if (partyId) {
 				try {
-					await getQuests(partyId);
+					const params = {
+						pageNumber: page, 
+					};
+					await getQuests(partyId, params);
 				} catch (error) {
 					console.error("Error fetching party or quests:", error);
 				}
@@ -28,7 +31,11 @@ function PartyTabs() {
 		};
 
 		fetchQuests();
-	}, [partyId, getQuests]);
+	}, [partyId, getQuests, page]); 
+
+	const handlePageChange = (newPage: number) => {
+		setPage(newPage); 
+	};
 
 	const { handleViewQuest } = useQuestDrawer();
 
@@ -63,23 +70,38 @@ function PartyTabs() {
 				value="grid"
 				p={16}
 			>
-				<SimpleGridLayout cols={6}>
-					{list
-						? Array.from({ length: 12 }).map((_, index) => (
-								<Skeleton
-									key={index}
-									height={350}
-									mb="md"
-								/>
-						  ))
-						: paginatedQuests?.items.map((quest) => (
-								<QuestCard
-									key={quest.id}
-									quest={quest}
-									onClick={handleViewQuest}
-								/>
-						  ))}
-				</SimpleGridLayout>
+				<Stack
+					justify="space-between"
+					h="75vh"
+				>
+					<ScrollArea>
+						<SimpleGridLayout cols={6}>
+							{list
+								? Array.from({ length: 12 }).map((_, index) => (
+										<Skeleton
+											key={index}
+											height={350}
+											mb="md"
+										/>
+								  ))
+								: paginatedQuests?.items.map((quest) => (
+										<QuestCard
+											key={quest.id}
+											quest={quest}
+											onClick={handleViewQuest}
+										/>
+								  ))}
+						</SimpleGridLayout>
+					</ScrollArea>
+					<Flex justify="center">
+						<Pagination
+							total={paginatedQuests?.totalPages || 1}
+							value={page}
+							onChange={handlePageChange}
+							color="violet"
+						/>
+					</Flex>
+				</Stack>
 			</Tabs.Panel>
 			<Tabs.Panel value="list">List Tab View</Tabs.Panel>
 		</Tabs>
