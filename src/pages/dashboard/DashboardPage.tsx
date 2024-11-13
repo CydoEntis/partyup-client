@@ -64,6 +64,7 @@ function DashboardPage({}: Props) {
 					<Paper
 						withBorder
 						p={12}
+						h={200}
 					>
 						<Text>Joined Parties</Text>
 						<Title>{userStats?.totalParties}</Title>
@@ -72,6 +73,7 @@ function DashboardPage({}: Props) {
 					<Paper
 						withBorder
 						p={12}
+						h={200}
 					>
 						<Text>Total Quests</Text>
 						<Title>{userStats?.totalParties}</Title>
@@ -80,6 +82,7 @@ function DashboardPage({}: Props) {
 					<Paper
 						withBorder
 						p={12}
+						h={200}
 					>
 						<Text>In Progress Quests</Text>
 						<Title>{userStats?.totalQuests}</Title>
@@ -87,6 +90,7 @@ function DashboardPage({}: Props) {
 					<Paper
 						withBorder
 						p={12}
+						h={200}
 					>
 						<Text>Completed Quests</Text>
 						<Title>{userStats?.completedQuests}</Title>
@@ -95,6 +99,7 @@ function DashboardPage({}: Props) {
 					<Paper
 						withBorder
 						p={12}
+						h={200}
 					>
 						<Text>Past Due Quests</Text>
 						<Title>{userStats?.pastDueQuests}</Title>
