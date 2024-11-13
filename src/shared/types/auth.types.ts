@@ -34,7 +34,7 @@ export type UserStats = {
 	totalQuests: number;
 	completedQuests: number;
 	inProgressQuests: number;
-	pastDueQuest: number;
+	pastDueQuests: number;
 	questsCompletedCurrentMonth: QuestCompletionOverTime[];
 	questsCompletedByDay: QuestCompletionByDay[];
 };
