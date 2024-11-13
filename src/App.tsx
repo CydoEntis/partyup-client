@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
 import router from "./router/AppRouter";
 import "@mantine/core/styles.css";
-
+import "@mantine/charts/styles.css";
 import {
 	colorsTuple,
 	createTheme,

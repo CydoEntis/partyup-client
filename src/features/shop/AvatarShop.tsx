@@ -39,7 +39,6 @@ function AvatarShop({
 		{ open: openUnlockAvatar, close: closeUnlockAvatar },
 	] = useDisclosure(false);
 
-	console.log(avatars);
 
 	const [avatarToUnlock, setAvatarToUnlock] = useState<Avatar | null>(null);
 

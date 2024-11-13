@@ -1,6 +1,6 @@
 import apiClient from "../api/apiClient";
 import endpoints from "../api/endpoints";
-import { User } from "../shared/types/auth.types";
+import { User, UserStats } from "../shared/types/auth.types";
 import { Avatar } from "../shared/types/avatar.types";
 
 const getUser = async (userId: string): Promise<User> => {
@@ -17,7 +17,6 @@ const updateAvatar = async (avatarId: number): Promise<Avatar> => {
 	const response = (
 		await apiClient.put(`${endpoints.user}/avatar`, { id: avatarId })
 	).data;
-	console.log("Response: ", response);
 	if (!response.isSuccess) throw new Error();
 
 	return response.result;
@@ -27,14 +26,14 @@ const updateDisplayName = async (displayName: string): Promise<void> => {
 	const response = (
 		await apiClient.put(`${endpoints.user}/display-name`, { displayName })
 	).data;
-	console.log("Response: ", response);
 	if (!response.isSuccess) throw new Error();
 };
 
-const getUserStats = async (): Promise<void> => {
+const getUserStats = async (): Promise<UserStats> => {
 	const response = (await apiClient.get(`${endpoints.user}/stats`)).data;
-	console.log("Response: ", response);
 	if (!response.isSuccess) throw new Error();
+
+	return response.result;
 };
 
 export default {
