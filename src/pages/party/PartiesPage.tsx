@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import usePartytore from "../../stores/usePartyStore";
 import { Link } from "react-router-dom";
-import { Box, Button, Flex, Group, Stack, Title } from "@mantine/core";
+import { Box, Button, Flex, Group, SimpleGrid, Stack, Title } from "@mantine/core";
 import PartyCard from "../../features/party/PartyCard";
+import PartiesTabs from "../../features/party/PartiesTabs";
 
 type Props = {};
 
@@ -17,7 +18,7 @@ function PartiesPage({}: Props) {
 	}, []);
 
 	return (
-		<>
+		<Box>
 			<Box
 				bg="secondary"
 				p={16}
@@ -39,11 +40,8 @@ function PartiesPage({}: Props) {
 					</Group>
 				</Flex>
 			</Box>
-
-			<Stack gap={8}>
-				{parties && parties.items.map((party) => <PartyCard party={party} />)}
-			</Stack>
-		</>
+			<PartiesTabs />
+		</Box>
 	);
 }
 

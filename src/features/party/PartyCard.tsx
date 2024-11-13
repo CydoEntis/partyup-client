@@ -8,6 +8,7 @@ import {
 	Group,
 	Text,
 	Badge,
+	Box,
 } from "@mantine/core";
 import { Calendar, ListChecks, MessageCircle } from "lucide-react";
 import Members from "../../components/avatar/Members";
@@ -32,6 +33,7 @@ function PartyCard({ party }: PartyCardProps) {
 			radius="md"
 			withBorder
 		>
+			<Box bg={party.color} w="100%" h="1px"></Box>
 			<Stack
 				mt="md"
 				mb="xs"
@@ -40,13 +42,7 @@ function PartyCard({ party }: PartyCardProps) {
 				<Group
 					justify="space-between"
 				>
-					<Group>
-						<Indicator
-							inline
-							processing
-							color={party.color}
-							size={8}
-						/>
+					<Group >
 						<Title
 							size="1.5rem"
 							fw={600}
