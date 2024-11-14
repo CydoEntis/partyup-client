@@ -10,6 +10,7 @@ import PartyHeader from "../../features/party/PartyHeader";
 import usePartyStore from "../../stores/usePartyStore";
 import PartyHeaderSkeleton from "../../features/loading-skeletons/PartyHeaderSkeleton";
 import usePartyDrawer from "../../hooks/usePartyDrawer";
+import { Box } from "@mantine/core";
 
 type Props = {};
 
@@ -48,7 +49,7 @@ function PartyPage({}: Props) {
 	} = usePartyDrawer();
 
 	return (
-		<>
+		<Box>
 			<InviteMemberModal
 				isOpened={openedInviteMember}
 				onClose={closeMemberInvite}
@@ -81,7 +82,7 @@ function PartyPage({}: Props) {
 			)}
 
 			<PartyTabs />
-		</>
+		</Box>
 	);
 }
 

@@ -1,4 +1,4 @@
-import { Flex, Group, Pagination, ScrollArea, Skeleton, Stack, Tabs } from "@mantine/core";
+import { Box, Flex, Group, Pagination, ScrollArea, Skeleton, Stack, Tabs, TextInput } from "@mantine/core";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
@@ -47,23 +47,32 @@ function PartyTabs() {
 			<Tabs.List
 				bg="secondary"
 				justify="space-between"
+				w="100%"
 			>
-				<Group>
-					<Tabs.Tab
-						value="grid"
-						px={40}
-						leftSection={<LayoutGrid size={20} />}
-					>
-						Grid
-					</Tabs.Tab>
-					<Tabs.Tab
-						value="list"
-						px={40}
-						leftSection={<LayoutList size={20} />}
-					>
-						List
-					</Tabs.Tab>
-				</Group>
+				<Flex
+					justify="space-between"
+					w="100%"
+				>
+					<Group>
+						<Tabs.Tab
+							value="grid"
+							px={40}
+							leftSection={<LayoutGrid size={20} />}
+						>
+							Grid
+						</Tabs.Tab>
+						<Tabs.Tab
+							value="list"
+							px={40}
+							leftSection={<LayoutList size={20} />}
+						>
+							List
+						</Tabs.Tab>
+					</Group>
+					<Group >
+							<TextInput />
+					</Group>
+				</Flex>
 			</Tabs.List>
 
 			<Tabs.Panel
@@ -72,9 +81,7 @@ function PartyTabs() {
 			>
 				<Stack
 					justify="space-between"
-					h="75vh"
 				>
-					<ScrollArea>
 						<SimpleGridLayout cols={6}>
 							{list
 								? Array.from({ length: 12 }).map((_, index) => (
@@ -92,7 +99,6 @@ function PartyTabs() {
 										/>
 								  ))}
 						</SimpleGridLayout>
-					</ScrollArea>
 					<Flex justify="center">
 						<Pagination
 							total={paginatedQuests?.totalPages || 1}

@@ -4,8 +4,3 @@
 @tailwind components;
 @tailwind utilities;
 
-.title {
-  font-family: "Happy Monkey", system-ui;
-  font-weight: 700;
-  font-style: normal;
-}
