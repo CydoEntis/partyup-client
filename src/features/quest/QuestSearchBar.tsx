@@ -16,13 +16,24 @@ function QuestSearchBar() {
 	const { getQuests } = useQuestStore();
 	const { partyId } = useParams();
 
-	const [selectedFilter, setSelectedFilter] = useState<string | null>("created");
+	const [selectedFilter, setSelectedFilter] = useState<string | null>(
+		"created",
+	);
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const [startDate, setStartDate] = useState<Date | null>(null);
 	const [endDate, setEndDate] = useState<Date | null>(null);
 	const [order, setOrder] = useState<"asc" | "desc">("desc");
 
 	const [searchParams, setSearchParams] = useSearchParams();
+
+	// Reset filters when the partyId changes
+	useEffect(() => {
+		setSelectedFilter("created");
+		setSearchTerm("");
+		setStartDate(null);
+		setEndDate(null);
+		setOrder("desc");
+	}, [partyId]);
 
 	useEffect(() => {
 		const params: Record<string, string> = {};
@@ -48,7 +59,7 @@ function QuestSearchBar() {
 		if (partyId) {
 			console.log(params);
 
-			getQuests(partyId, params); 
+			getQuests(partyId, params);
 		}
 	}, [searchParams, partyId, getQuests]);
 
@@ -60,22 +71,21 @@ function QuestSearchBar() {
 		setSelectedFilter(isChecked ? value : null);
 	};
 
-const handleDateChange = (date: Date | null, type: "start" | "end") => {
-	if (date) {
-		const updatedDate = new Date(date);
-		if (type === "start") {
-			updatedDate.setHours(0, 0, 0, 0);
-			setStartDate(updatedDate);
+	const handleDateChange = (date: Date | null, type: "start" | "end") => {
+		if (date) {
+			const updatedDate = new Date(date);
+			if (type === "start") {
+				updatedDate.setHours(0, 0, 0, 0);
+				setStartDate(updatedDate);
+			} else {
+				updatedDate.setHours(23, 59, 59, 999);
+				setEndDate(updatedDate);
+			}
 		} else {
-			updatedDate.setHours(23, 59, 59, 999);
-			setEndDate(updatedDate);
+			if (type === "start") setStartDate(null);
+			else setEndDate(null);
 		}
-	} else {
-		if (type === "start") setStartDate(null);
-		else setEndDate(null);
-	}
-};
-
+	};
 
 	const toggleOrder = () => {
 		setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
