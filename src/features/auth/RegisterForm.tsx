@@ -1,15 +1,11 @@
 import {
-	Anchor,
 	Button,
-	Checkbox,
-	Group,
-	Paper,
+
 	PasswordInput,
 	Stack,
 	TextInput,
 } from "@mantine/core";
 import { AtSign, Lock, User, User2 } from "lucide-react";
-import { NavLink } from "react-router-dom";
 
 import classes from "./auth.module.css";
 
@@ -17,6 +13,8 @@ import { z } from "zod";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useForm } from "@mantine/form";
 import ValidatedPasswordInput from "../../components/input/ValidatedPasswordInput";
+import useUserStore from "../../stores/useUserStore";
+import { AxiosError } from "axios";
 
 const registerFormSchema = z
 	.object({
@@ -40,9 +38,8 @@ const registerFormSchema = z
 
 type RegisterFormData = z.infer<typeof registerFormSchema>;
 
-type Props = {};
-
-function RegisterForm({}: Props) {
+function RegisterForm() {
+	const { register } = useUserStore();
 	const form = useForm<RegisterFormData>({
 		validate: zodResolver(registerFormSchema),
 		initialValues: {
@@ -55,9 +52,21 @@ function RegisterForm({}: Props) {
 
 	async function onSubmit(data: RegisterFormData) {
 		try {
-			console.log(data);
+			// await register(data);
 		} catch (error) {
 			console.error(error);
+			if (error instanceof AxiosError && error.response?.data?.errors) {
+				const errors = error.response.data.errors as Record<string, string[]>;
+				const fieldErrors: Record<string, string> = {};
+
+				for (const [key, messages] of Object.entries(errors)) {
+					if (Array.isArray(messages) && messages.length > 0) {
+						fieldErrors[key] = messages[0];
+					}
+				}
+
+				form.setErrors(fieldErrors);
+			}
 		}
 	}
 

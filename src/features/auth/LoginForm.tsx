@@ -47,18 +47,11 @@ function LoginForm({}: Props) {
 			form.reset();
 			navigate("/dashboard");
 		} catch (error) {
-			console.error(error);
 			if (error instanceof AxiosError && error.response?.data?.errors) {
-				const errors = error.response.data.errors as Record<string, string[]>;
-				const fieldErrors: Record<string, string> = {};
-
-				for (const [key, messages] of Object.entries(errors)) {
-					if (Array.isArray(messages) && messages.length > 0) {
-						fieldErrors[key] = messages[0];
-					}
+				if (error.response.data.errors.badRequest) {
+					const errorMessage = error.response.data.errors.badRequest[0];
+					form.setErrors({ email: errorMessage });
 				}
-
-				form.setErrors(fieldErrors);
 			}
 		}
 	}
