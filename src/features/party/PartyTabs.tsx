@@ -1,11 +1,12 @@
-import { Box, Flex, Group, Pagination, ScrollArea, Skeleton, Stack, Tabs, TextInput } from "@mantine/core";
-import { LayoutGrid, LayoutList } from "lucide-react";
+import { ActionIcon, Box, Button, Flex, Group, Pagination, ScrollArea, Skeleton, Stack, Tabs, TextInput } from "@mantine/core";
+import { LayoutGrid, LayoutList, Search, Settings2 } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
+import SearchBar from "../../components/input/SearchBar";
 
 function PartyTabs() {
 	const { partyId } = useParams();
@@ -69,9 +70,6 @@ function PartyTabs() {
 							List
 						</Tabs.Tab>
 					</Group>
-					<Group >
-							<TextInput />
-					</Group>
 				</Flex>
 			</Tabs.List>
 
@@ -79,26 +77,25 @@ function PartyTabs() {
 				value="grid"
 				p={16}
 			>
-				<Stack
-					justify="space-between"
-				>
-						<SimpleGridLayout cols={6}>
-							{list
-								? Array.from({ length: 12 }).map((_, index) => (
-										<Skeleton
-											key={index}
-											height={350}
-											mb="md"
-										/>
-								  ))
-								: paginatedQuests?.items.map((quest) => (
-										<QuestCard
-											key={quest.id}
-											quest={quest}
-											onClick={handleViewQuest}
-										/>
-								  ))}
-						</SimpleGridLayout>
+				<SearchBar />
+				<Stack justify="space-between">
+					<SimpleGridLayout cols={6}>
+						{list
+							? Array.from({ length: 12 }).map((_, index) => (
+									<Skeleton
+										key={index}
+										height={350}
+										mb="md"
+									/>
+							  ))
+							: paginatedQuests?.items.map((quest) => (
+									<QuestCard
+										key={quest.id}
+										quest={quest}
+										onClick={handleViewQuest}
+									/>
+							  ))}
+					</SimpleGridLayout>
 					<Flex justify="center">
 						<Pagination
 							total={paginatedQuests?.totalPages || 1}

@@ -12,11 +12,7 @@ import DashboardPage from "../pages/dashboard/DashboardPage";
 const publicRoutes = [
 	{
 		path: "/",
-		element: (
-			<PublicGuard>
-				<PublicLayout />
-			</PublicGuard>
-		),
+		element: <PublicLayout />,
 		children: [
 			{
 				path: "login",

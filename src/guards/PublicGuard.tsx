@@ -13,14 +13,17 @@ const PublicGuard = ({ children }: PublicGuardProps) => {
 	console.log(user);
 
 	if (user && user.isLoggedIn) {
+		const redirectTo =
+			location.state?.from || location.pathname + location.search;
 		return (
 			<Navigate
-				to={location.state.from || "/dashboard"}
+				to={redirectTo}
 				replace
 			/>
 		);
 	}
 
+	// Return children if the user is not logged in
 	return <>{children}</>;
 };
 

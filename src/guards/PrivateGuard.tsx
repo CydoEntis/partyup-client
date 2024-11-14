@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useUserStore from "../stores/useUserStore";
 
@@ -7,18 +7,28 @@ interface PrivateGuardProps {
 }
 
 const PrivateGuard = ({ children }: PrivateGuardProps) => {
-	const { user } = useUserStore();
+	const { user, restoreSession } = useUserStore();
 	const location = useLocation();
 	const navigate = useNavigate();
-	const isLoggedIn = user?.isLoggedIn;
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		if (!isLoggedIn) {
+		restoreSession();
+		setLoading(false);
+	}, [restoreSession]);
+
+	useEffect(() => {
+		if (!loading && !user?.isLoggedIn) {
 			navigate("/login", { state: { from: location }, replace: true });
 		}
-	}, [isLoggedIn, location, navigate]);
+	}, [loading, user, location, navigate]);
 
-	return isLoggedIn ? children : null;
+	if (loading) {
+		return <div>Loading...</div>;
+	}
+
+	// Return children if logged in
+	return user?.isLoggedIn ? children : null;
 };
 
 export default PrivateGuard;
