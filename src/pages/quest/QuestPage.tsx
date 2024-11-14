@@ -12,6 +12,8 @@ import {
 	Group,
 } from "@mantine/core";
 import UserAvatar from "../../components/avatar/UserAvatar";
+import PriortyBadge from "../../components/badge/PriortyBadge";
+import StepList from "../../components/steps/StepList";
 
 type Props = {};
 
@@ -32,8 +34,6 @@ function QuestPage({}: Props) {
 		fetchQuest();
 	}, [partyId, questId]);
 
-
-
 	if (!quest || loadingDetails) return <p>Loading...</p>;
 
 	return (
@@ -43,8 +43,13 @@ function QuestPage({}: Props) {
 					withBorder
 					p={16}
 				>
+					<PriortyBadge priority={quest.priority} />
 					<Title>{quest.title}</Title>
 					<Text size="xl">{quest.description}</Text>
+					<StepList
+						title="Steps to Complete"
+						quest={quest}
+					/>
 				</Paper>
 				<Paper
 					withBorder

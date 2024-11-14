@@ -1,4 +1,4 @@
-import { Checkbox, ScrollArea, Stack, Title } from "@mantine/core";
+import { Box, Checkbox, ScrollArea, Stack, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Step } from "../../shared/types/step.types";
 import useQuestStore from "../../stores/useQuestStore";
@@ -35,10 +35,9 @@ function StepList({ title, quest }: StepListProps) {
 	};
 
 	return (
-		<>
-			<Title size="xl">{title}</Title>
+		<Box py={8}>
+			<Title size="lg" pb={20}>{title}</Title>
 			<ScrollArea
-				h={250}
 				type="scroll"
 			>
 				<Stack>
@@ -58,7 +57,7 @@ function StepList({ title, quest }: StepListProps) {
 					))}
 				</Stack>
 			</ScrollArea>
-		</>
+		</Box>
 	);
 }
 

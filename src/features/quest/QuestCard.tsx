@@ -21,31 +21,16 @@ import {
 	useSearchParams,
 } from "react-router-dom";
 import { PriorityLevel } from "../../shared/types/prioty.types";
+import PriortyBadge from "../../components/badge/PriortyBadge";
 
 type QuestCardProps = {
 	quest: Quest;
 	onClick: () => void;
 };
 
-const getBadgeColor = (priority: PriorityLevel) => {
-	switch (priority) {
-		case PriorityLevel.CRITICAL:
-			return "red";
-		case PriorityLevel.HIGH:
-			return "orange";
-		case PriorityLevel.MEDIUM:
-			return "yellow";
-		case PriorityLevel.LOW:
-		default:
-			return "cyan";
-	}
-};
-
 function QuestCard({ quest, onClick }: QuestCardProps) {
 	const { partyId } = useParams();
 	const percent = getPercentage(quest.completedSteps, quest.steps.length);
-
-	const badgeColor = getBadgeColor(quest.priority);
 
 	return (
 		<Card
@@ -63,12 +48,7 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 				pb={12}
 				justify="space-between"
 			>
-				<Badge
-					variant="light"
-					color={badgeColor}
-				>
-					{quest.priority}
-				</Badge>
+				<PriortyBadge priority={quest.priority} />
 				<p>{formatDate(quest.createdAt)}</p>
 			</Group>
 
