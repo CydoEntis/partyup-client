@@ -1,11 +1,15 @@
 import {
+	Avatar,
+	Box,
 	Button,
-
 	PasswordInput,
+	SimpleGrid,
 	Stack,
 	TextInput,
+	Text,
+	Paper,
 } from "@mantine/core";
-import { AtSign, Lock, User, User2 } from "lucide-react";
+import { AtSign, Lock, User2, Check } from "lucide-react";
 
 import classes from "./auth.module.css";
 
@@ -15,13 +19,18 @@ import { useForm } from "@mantine/form";
 import ValidatedPasswordInput from "../../components/input/ValidatedPasswordInput";
 import useUserStore from "../../stores/useUserStore";
 import { AxiosError } from "axios";
+import { useState } from "react";
+import MaleA from "../../assets/male_a.png";
+import MaleB from "../../assets/male_b.png";
+import FemaleA from "../../assets/female_a.png";
+import FemaleB from "../../assets/female_b.png";
 
 const registerFormSchema = z
 	.object({
 		email: z.string().email("Please enter a valid email"),
 		displayName: z
 			.string()
-			.min(3, "Display name must be atleast 3 characters long."),
+			.min(3, "Display name must be at least 3 characters long."),
 		password: z
 			.string()
 			.min(8, "Password must be at least 8 characters long")
@@ -39,6 +48,14 @@ const registerFormSchema = z
 type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 function RegisterForm() {
+	const [selectedAvatar, setSelectedAvatar] = useState(1); // Default avatar selection
+	const startAvatars = [
+		{ id: 1, src: MaleA, name: "Male A" },
+		{ id: 2, src: MaleB, name: "Male B" },
+		{ id: 3, src: FemaleA, name: "Female A" },
+		{ id: 4, src: FemaleB, name: "Female B" },
+	];
+
 	const { register } = useUserStore();
 	const form = useForm<RegisterFormData>({
 		validate: zodResolver(registerFormSchema),
@@ -91,6 +108,49 @@ function RegisterForm() {
 					leftSection={<User2 size={20} />}
 					{...form.getInputProps("displayName")}
 				/>
+				<SimpleGrid cols={4}>
+					{startAvatars.map((avatar) => (
+						<Stack
+							justify="center"
+							align="center"
+							gap={2}
+							key={avatar.id}
+							style={{ position: "relative" }}
+							onClick={() => setSelectedAvatar(avatar.id)}
+						>
+							<Avatar
+								bg="violet"
+								src={avatar.src}
+								style={{
+									cursor: "pointer",
+									position: "relative",
+								}}
+							/>
+							{selectedAvatar === avatar.id && (
+								<Paper
+									withBorder
+									pos="absolute"
+									bg="violet"
+									c="lime"
+									radius="100%"
+									style={{
+										bottom: 15,
+										right: 20
+										// transformX: "translate(5p, -50%)",
+									}}
+								>
+									<Check size={16} />
+								</Paper>
+							)}
+							<Text
+								size="xs"
+								ta="center"
+							>
+								{avatar.name}
+							</Text>
+						</Stack>
+					))}
+				</SimpleGrid>
 			</Stack>
 			<ValidatedPasswordInput form={form} />
 			<PasswordInput
@@ -114,7 +174,7 @@ function RegisterForm() {
 				variant="light"
 				type="submit"
 			>
-				Sign in
+				Sign up
 			</Button>
 		</form>
 	);
