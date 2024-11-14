@@ -8,6 +8,7 @@ import PublicGuard from "../guards/PublicGuard";
 import PrivateLayout from "../components/layout/PrivateLayout";
 import PublicLayout from "../components/layout/PublicLayout";
 import DashboardPage from "../pages/dashboard/DashboardPage";
+import QuestPage from "../pages/quest/QuestPage";
 
 const publicRoutes = [
 	{
@@ -38,12 +39,10 @@ const protectedRoutes = [
 	{
 		path: "parties/:partyId/quests",
 		element: <PartyPage />,
-		children: [
-			{
-				path: ":questId",
-				element: <PartyPage />,
-			},
-		],
+	},
+	{
+		path: "parties/:partyId/quests/:questId",
+		element: <QuestPage />,
 	},
 ];
 

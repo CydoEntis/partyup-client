@@ -14,7 +14,12 @@ import Members from "../../components/avatar/Members";
 import { Quest } from "../../shared/types/quest.types";
 import { formatDate } from "../../shared/utils/date.utils";
 import { getPercentage } from "../../shared/utils/progress-bar.utils";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+	NavLink,
+	useNavigate,
+	useParams,
+	useSearchParams,
+} from "react-router-dom";
 import { PriorityLevel } from "../../shared/types/prioty.types";
 
 type QuestCardProps = {
@@ -37,13 +42,8 @@ const getBadgeColor = (priority: PriorityLevel) => {
 };
 
 function QuestCard({ quest, onClick }: QuestCardProps) {
-	const percent = getPercentage(quest.completedSteps, quest.steps.length);
 	const { partyId } = useParams();
-	const navigate = useNavigate();
-	const test = () => {
-		navigate(`/parties/${partyId}/quests/${quest.id}`);
-		onClick();
-	};
+	const percent = getPercentage(quest.completedSteps, quest.steps.length);
 
 	const badgeColor = getBadgeColor(quest.priority);
 
@@ -56,7 +56,8 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 			padding="lg"
 			radius="md"
 			withBorder
-			onClick={test}
+			component={NavLink}
+			to={`/parties/${partyId}/quests/${quest.id}`}
 		>
 			<Group
 				pb={12}
