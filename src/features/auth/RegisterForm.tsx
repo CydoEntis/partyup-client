@@ -108,6 +108,7 @@ function RegisterForm() {
 					leftSection={<User2 size={20} />}
 					{...form.getInputProps("displayName")}
 				/>
+				<Text size="sm">Select Your Avatar</Text>
 				<SimpleGrid cols={4}>
 					{startAvatars.map((avatar) => (
 						<Stack
