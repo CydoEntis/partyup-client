@@ -24,6 +24,7 @@ import MaleA from "../../assets/male_a.png";
 import MaleB from "../../assets/male_b.png";
 import FemaleA from "../../assets/female_a.png";
 import FemaleB from "../../assets/female_b.png";
+import { useNavigate } from "react-router-dom";
 
 const registerFormSchema = z
 	.object({
@@ -48,7 +49,8 @@ const registerFormSchema = z
 type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 function RegisterForm() {
-	const [selectedAvatar, setSelectedAvatar] = useState(1); // Default avatar selection
+	const [selectedAvatar, setSelectedAvatar] = useState(1);
+	const navigate = useNavigate();
 	const startAvatars = [
 		{ id: 1, src: MaleA, name: "Male A" },
 		{ id: 2, src: MaleB, name: "Male B" },
@@ -69,19 +71,23 @@ function RegisterForm() {
 
 	async function onSubmit(data: RegisterFormData) {
 		try {
-			// await register(data);
+			const newUser = {
+				...data,
+				avatarId: selectedAvatar,
+			};
+
+			await register(newUser);
+			form.reset();
+			navigate("/dashboard");
 		} catch (error) {
-			console.error(error);
-			if (error instanceof AxiosError && error.response?.data?.errors) {
-				const errors = error.response.data.errors as Record<string, string[]>;
+			if (error instanceof AxiosError && error.response?.data) {
+				console.log(error.response.data);
+				const errors = error.response.data as Record<string, string>;
 				const fieldErrors: Record<string, string> = {};
-
-				for (const [key, messages] of Object.entries(errors)) {
-					if (Array.isArray(messages) && messages.length > 0) {
-						fieldErrors[key] = messages[0];
-					}
+				for (const [key, message] of Object.entries(errors)) {
+					fieldErrors[key] = message;
 				}
-
+				console.log(fieldErrors);
 				form.setErrors(fieldErrors);
 			}
 		}
@@ -136,8 +142,7 @@ function RegisterForm() {
 									radius="100%"
 									style={{
 										bottom: 15,
-										right: 20
-										// transformX: "translate(5p, -50%)",
+										right: 20,
 									}}
 								>
 									<Check size={16} />

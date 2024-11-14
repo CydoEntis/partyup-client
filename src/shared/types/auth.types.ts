@@ -8,7 +8,7 @@ export type LoginCredentials = {
 export type RegisterCredentials = {
 	displayName: string;
 	confirmPassword: string;
-	avatar: Avatar;
+	avatarId: number;
 } & LoginCredentials;
 
 export type Tokens = {
