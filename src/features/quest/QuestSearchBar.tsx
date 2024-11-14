@@ -2,9 +2,8 @@ import { Button, Checkbox, Group, Menu, Stack, TextInput } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { Settings2, Search, ChevronDown, ChevronUp } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-
-type Props = {};
+import { useParams, useSearchParams } from "react-router-dom";
+import useQuestStore from "../../stores/useQuestStore";
 
 const filterOptions = [
 	{ label: "Title", value: "title" },
@@ -13,34 +12,46 @@ const filterOptions = [
 	{ label: "Due Date", value: "dueDate" },
 ];
 
-function SearchBar({}: Props) {
-	const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+function QuestSearchBar() {
+	const { getQuests } = useQuestStore();
+	const { partyId } = useParams();
+
+	const [selectedFilter, setSelectedFilter] = useState<string | null>("created");
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const [startDate, setStartDate] = useState<Date | null>(null);
 	const [endDate, setEndDate] = useState<Date | null>(null);
-	const [order, setOrder] = useState<"asc" | "desc">("asc");
+	const [order, setOrder] = useState<"asc" | "desc">("desc");
 
 	const [searchParams, setSearchParams] = useSearchParams();
 
-	// Update query parameters in the URL based on the current state
-	const updateQueryParams = () => {
+	useEffect(() => {
 		const params: Record<string, string> = {};
-
 		if (searchTerm) params.search = searchTerm;
 		if (selectedFilter) params.filter = selectedFilter;
 		if (startDate) params.startDate = startDate.toISOString();
 		if (endDate) params.endDate = endDate.toISOString();
 		if (order) params.order = order;
-
 		setSearchParams(params);
-	};
+	}, [searchTerm, selectedFilter, startDate, endDate, order, setSearchParams]);
 
-	// Call updateQueryParams whenever any of the controlled states change
 	useEffect(() => {
-		updateQueryParams();
-	}, [searchTerm, selectedFilter, startDate, endDate, order]);
+		const params: Record<string, string> = {};
 
-	// Event handlers
+		if (searchParams.has("search")) params.search = searchParams.get("search")!;
+		if (searchParams.has("filter")) params.filter = searchParams.get("filter")!;
+		if (searchParams.has("startDate"))
+			params.startDate = searchParams.get("startDate")!;
+		if (searchParams.has("endDate"))
+			params.endDate = searchParams.get("endDate")!;
+		if (searchParams.has("order")) params.order = searchParams.get("order")!;
+
+		if (partyId) {
+			console.log(params);
+
+			getQuests(partyId, params); 
+		}
+	}, [searchParams, partyId, getQuests]);
+
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(e.target.value);
 	};
@@ -49,13 +60,22 @@ function SearchBar({}: Props) {
 		setSelectedFilter(isChecked ? value : null);
 	};
 
-	const handleDateChange = (date: Date | null, type: "start" | "end") => {
+const handleDateChange = (date: Date | null, type: "start" | "end") => {
+	if (date) {
+		const updatedDate = new Date(date);
 		if (type === "start") {
-			setStartDate(date);
+			updatedDate.setHours(0, 0, 0, 0);
+			setStartDate(updatedDate);
 		} else {
-			setEndDate(date);
+			updatedDate.setHours(23, 59, 59, 999);
+			setEndDate(updatedDate);
 		}
-	};
+	} else {
+		if (type === "start") setStartDate(null);
+		else setEndDate(null);
+	}
+};
+
 
 	const toggleOrder = () => {
 		setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -131,4 +151,4 @@ function SearchBar({}: Props) {
 	);
 }
 
-export default SearchBar;
+export default QuestSearchBar;

@@ -1,12 +1,12 @@
-import { ActionIcon, Box, Button, Flex, Group, Pagination, ScrollArea, Skeleton, Stack, Tabs, TextInput } from "@mantine/core";
-import { LayoutGrid, LayoutList, Search, Settings2 } from "lucide-react";
+import { Flex, Group, Pagination, Skeleton, Stack, Tabs } from "@mantine/core";
+import { LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import QuestCard from "../quest/QuestCard";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
 import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
-import SearchBar from "../../components/input/SearchBar";
+import QuestSearchBar from "../quest/QuestSearchBar";
 
 function PartyTabs() {
 	const { partyId } = useParams();
@@ -22,7 +22,7 @@ function PartyTabs() {
 			if (partyId) {
 				try {
 					const params = {
-						pageNumber: page, 
+						pageNumber: page,
 					};
 					await getQuests(partyId, params);
 				} catch (error) {
@@ -32,10 +32,10 @@ function PartyTabs() {
 		};
 
 		fetchQuests();
-	}, [partyId, getQuests, page]); 
+	}, [partyId, getQuests, page]);
 
 	const handlePageChange = (newPage: number) => {
-		setPage(newPage); 
+		setPage(newPage);
 	};
 
 	const { handleViewQuest } = useQuestDrawer();
@@ -77,7 +77,7 @@ function PartyTabs() {
 				value="grid"
 				p={16}
 			>
-				<SearchBar />
+				<QuestSearchBar />
 				<Stack justify="space-between">
 					<SimpleGridLayout cols={6}>
 						{list

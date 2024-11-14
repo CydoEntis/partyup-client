@@ -15,16 +15,18 @@ const getAllQuests = async (
 	const queryParams = new URLSearchParams();
 
 	if (params) {
-		if (params.searchValue)
-			queryParams.append("searchValue", params.searchValue);
+		if (params.search) queryParams.append("search", params.search);
 		if (params.orderOn) queryParams.append("orderOn", params.orderOn);
-		if (params.orderBy) queryParams.append("orderBy", params.orderBy);
+		if (params.filter) queryParams.append("filter", params.filter);
 		if (params.pageNumber)
 			queryParams.append("pageNumber", params.pageNumber.toString());
 		if (params.pageSize)
 			queryParams.append("pageSize", params.pageSize.toString());
+		if (params.startDate) queryParams.append("startDate", params.startDate);
+		if (params.endDate) queryParams.append("endDate", params.endDate);
 	}
 
+	console.log(`endpoints.parties}/${partyId}/quests?${queryParams.toString()}`);
 
 	const response = (
 		await apiClient.get(
@@ -41,9 +43,7 @@ const getQuestById = async (
 	questId: number,
 ): Promise<Quest> => {
 	const response = (
-		await apiClient.get(
-			`${endpoints.parties}/${partyId}/quests/${questId}`,
-		)
+		await apiClient.get(`${endpoints.parties}/${partyId}/quests/${questId}`)
 	).data;
 	if (!response.isSuccess) throw new Error();
 	return response.result;
@@ -79,14 +79,9 @@ const updateQuest = async (
 	return response.result;
 };
 
-const deleteQuest = async (
-	partyId: number,
-	questId: number,
-): Promise<void> => {
+const deleteQuest = async (partyId: number, questId: number): Promise<void> => {
 	const response = (
-		await apiClient.delete(
-			`${endpoints.parties}/${partyId}/quests/${questId}`,
-		)
+		await apiClient.delete(`${endpoints.parties}/${partyId}/quests/${questId}`)
 	).data;
 	if (!response.isSuccess) throw new Error();
 };
@@ -115,7 +110,6 @@ const uncompleteQuest = async (
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
-
 
 	return response.result;
 };
