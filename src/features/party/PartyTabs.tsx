@@ -97,12 +97,14 @@ function PartyTabs() {
 							  ))}
 					</SimpleGridLayout>
 					<Flex justify="center">
-						<Pagination
-							total={paginatedQuests?.totalPages || 1}
-							value={page}
-							onChange={handlePageChange}
-							color="violet"
-						/>
+						{paginatedQuests.totalPages > 1 ? (
+							<Pagination
+								total={paginatedQuests?.totalPages || 1}
+								value={page}
+								onChange={handlePageChange}
+								color="violet"
+							/>
+						) : null}
 					</Flex>
 				</Stack>
 			</Tabs.Panel>
