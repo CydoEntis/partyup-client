@@ -103,7 +103,7 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 			>
 				<Progress
 					w="90%"
-					color="yellow"
+					color="violet"
 					radius="xl"
 					size="md"
 					value={percent}
