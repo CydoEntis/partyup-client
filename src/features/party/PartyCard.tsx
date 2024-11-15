@@ -14,7 +14,7 @@ import {
 import Members from "../../components/avatar/Members";
 import { NavLink } from "react-router-dom";
 import { Party } from "../../shared/types/party.types";
-import { CalendarX, CheckCircle2, CircleCheck, Loader } from "lucide-react";
+import { CalendarFoldIcon, CalendarX, CheckCircle2, CircleCheck, Loader } from "lucide-react";
 import { formatDate } from "../../shared/utils/date.utils";
 
 type PartyCardProps = {
@@ -64,10 +64,13 @@ function PartyCard({ party }: PartyCardProps) {
 				</Text>
 			</Stack>
 
-			<Members
-				members={party.members}
-				numOfMembersToShow={3}
-			/>
+			<Stack gap={4}>
+				<Text size="xs">Members</Text>
+				<Members
+					members={party.members}
+					numOfMembersToShow={3}
+				/>
+			</Stack>
 
 			<Stack>
 				<Paper
@@ -80,7 +83,7 @@ function PartyCard({ party }: PartyCardProps) {
 						gap={8}
 						align="center"
 					>
-						<Text>Quest Progress</Text>
+						<Text size="sm">Quest Progress</Text>
 						<Group>
 							<Tooltip label={"Completed"}>
 								<Badge
@@ -122,15 +125,28 @@ function PartyCard({ party }: PartyCardProps) {
 					</Stack>
 				</Paper>
 				<Flex
-					justify="flex-end"
+					justify="space-between"
 					pt={16}
+					align={"center"}
 				>
 					<Text
 						size="xs"
 						c="gray"
 					>
-						Last Accessed: {formatDate(party.updatedAt)}
+						Last Accessed
 					</Text>
+					<Group
+						gap={8}
+						align="center"
+					>
+						<CalendarFoldIcon size={14} />
+						<Text
+							size="xs"
+							c="gray"
+						>
+							{formatDate(party.updatedAt)}
+						</Text>
+					</Group>
 				</Flex>
 			</Stack>
 		</Card>
