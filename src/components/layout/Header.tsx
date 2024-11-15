@@ -1,7 +1,6 @@
-import { AppShell, Burger, Button, Flex, Group, Title } from "@mantine/core";
+import { AppShell, Burger, Flex, Group, Image } from "@mantine/core";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
-import { NavLink } from "react-router-dom";
-import useUserStore from "../../stores/useUserStore";
+import Logo from "../../assets/logo.png";
 
 type HeaderProps = {
 	opened: boolean;
@@ -25,7 +24,8 @@ function Header({ opened, toggle }: HeaderProps) {
 				h="100%"
 				px={16}
 			>
-				<h1 className="title text-4xl">Party Up</h1>
+				<Image src={Logo} w={200} h={50}/>
+				{/* <h1 className="title text-4xl">Party Up</h1> */}
 
 				<Group>
 					<Burger
