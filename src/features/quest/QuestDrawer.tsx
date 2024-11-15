@@ -1,9 +1,8 @@
 import { Box, Drawer, Group, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
-import { Quest } from "../../shared/types/quest.types";
 import ViewQuest from "./ViewQuest";
 import useDrawerTypeHandler from "../../hooks/useDrawerData";
 import UpsertQuestForm from "./UpsertQuestForm";
@@ -13,54 +12,66 @@ import { Edit, Trash2 } from "lucide-react";
 export type QuestDrawerType = "create" | "edit" | "view";
 
 function QuestDrawer({ isOpened, onClose }: DrawerProps) {
-	const { partyId, questId } = useParams();
-	const { getQuest, deleteQuest } = useQuestStore();
-	const [quest, setQuest] = useState<Quest | null>();
+	const { partyId } = useParams();
+	const [searchParams, setSearchParams] = useSearchParams();
+	const questId = searchParams.get("questId");
+	const { quest, deleteQuest, getQuest, setQuest } = useQuestStore();
 	const { setDrawer, drawerTitle, drawerViewType } = useDrawerTypeHandler({
 		defaultTitle: "Create Quest",
 		defaultView: "create",
 	});
-	const navigate = useNavigate();
+
+	const [isDrawerOpen, setIsDrawerOpen] = useState(isOpened);
+
+	console.log(quest);
 
 	const fetchQuest = async () => {
 		if (partyId && questId) {
 			const fetchedQuest = await getQuest(partyId, questId);
-
 			if (fetchedQuest) {
-				setQuest(fetchedQuest);
 				setDrawer("view", fetchedQuest.title);
+				setQuest(fetchedQuest);
 			} else {
 				setDrawer("create", "Create Quest");
 			}
+			setIsDrawerOpen(true);
 		}
 	};
 
 	useEffect(() => {
-		if (questId) {
+		if (quest) {
+			setDrawer("view", quest.title);
+			setIsDrawerOpen(true);
+		} else if (questId) {
 			fetchQuest();
+		} else {
+			setIsDrawerOpen(isOpened);
 		}
-	}, [partyId, questId]);
+	}, [quest, questId, partyId, isOpened]);
 
-	const handleClose = () => {
+  const handleClose = () => {
 		setDrawer("create", "Create Quest");
 		setQuest(null);
-		navigate(`/parties/${partyId}/quests`);
+		setIsDrawerOpen(false);
+
+		const newParams = new URLSearchParams(searchParams);
+		newParams.delete("questId");
+		setSearchParams(newParams);
+
 		onClose();
 	};
 
 	const handleEdit = () => {
 		if (quest) {
-			if (drawerViewType === "edit") {
-				setDrawer("view", quest.title);
-			} else {
-				setDrawer("edit", `Editing: ${quest.title}`);
-			}
+			setDrawer(
+				drawerViewType === "edit" ? "view" : "edit",
+				`Editing: ${quest.title}`,
+			);
 		}
 	};
 
 	const handleDelete = async () => {
 		if (partyId && questId) {
-			console.log("DELETING");
 			deleteQuest(partyId, questId);
 			handleClose();
 		}
@@ -82,7 +93,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	return (
 		<Drawer
 			size="xl"
-			opened={isOpened}
+			opened={isDrawerOpen}
 			onClose={handleClose}
 			position="right"
 		>
@@ -92,26 +103,17 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 			>
 				<Group justify="space-between">
 					<Title size="2rem">{drawerTitle}</Title>
-					{((drawerViewType === "edit" && quest) ||
-						drawerViewType === "view") &&
-					quest ? (
-						// <ToggleEdit
-						// 	toggle={handleEdit}
-						// 	isEditing={drawerViewType === "edit"}
-						// />
-						<QuestOptions options={questOptions} />
-					) : null}
+					{(drawerViewType === "edit" || drawerViewType === "view") &&
+						quest && <QuestOptions options={questOptions} />}
 				</Group>
-				{drawerViewType === "view" ? <ViewQuest /> : null}
-				{drawerViewType === "edit" && quest ? (
+				{drawerViewType === "view" && <ViewQuest />}
+				{drawerViewType === "edit" && quest && (
 					<UpsertQuestForm
 						onClose={onClose}
 						quest={quest}
 					/>
-				) : null}{" "}
-				{drawerViewType === "create" ? (
-					<UpsertQuestForm onClose={onClose} />
-				) : null}
+				)}
+				{drawerViewType === "create" && <UpsertQuestForm onClose={onClose} />}
 			</Box>
 		</Drawer>
 	);

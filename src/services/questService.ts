@@ -26,8 +26,6 @@ const getAllQuests = async (
 		if (params.endDate) queryParams.append("endDate", params.endDate);
 	}
 
-	console.log(`endpoints.parties}/${partyId}/quests?${queryParams.toString()}`);
-
 	const response = (
 		await apiClient.get(
 			`${endpoints.parties}/${partyId}/quests?${queryParams.toString()}`,
@@ -73,8 +71,6 @@ const updateQuest = async (
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
-
-	console.log("Updated quest response: ", response);
 
 	return response.result;
 };

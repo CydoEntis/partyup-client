@@ -7,8 +7,11 @@ import { useParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
 import QuestSearchBar from "../quest/QuestSearchBar";
+type PartyTabsProps = {
+	onOpen: () => void;
+};
 
-function PartyTabs() {
+function PartyTabs({ onOpen }: PartyTabsProps) {
 	const { partyId } = useParams();
 	const {
 		getQuests,
@@ -37,8 +40,6 @@ function PartyTabs() {
 	const handlePageChange = (newPage: number) => {
 		setPage(newPage);
 	};
-
-	const { handleViewQuest } = useQuestDrawer();
 
 	return (
 		<Tabs
@@ -92,7 +93,7 @@ function PartyTabs() {
 									<QuestCard
 										key={quest.id}
 										quest={quest}
-										onClick={handleViewQuest}
+										onClick={onOpen}
 									/>
 							  ))}
 					</SimpleGridLayout>

@@ -27,6 +27,7 @@ type QuestState = {
 		params?: QueryParams,
 	) => Promise<PaginatedQuests>;
 	getQuest: (partyId: string, questId: string) => Promise<Quest>;
+	setQuest: (quest: Quest | null) => void;
 	createQuest: (partyId: string, quest: CreateQuest) => Promise<Quest>;
 	updateQuest: (
 		partyId: string,
@@ -104,6 +105,10 @@ export const useQuestStore = create<QuestState>((set) => ({
 				error: null,
 			}));
 		}
+	},
+
+	setQuest: (quest: Quest | null) => {
+		set({quest: quest})
 	},
 
 	createQuest: async (partyId: string, quest: CreateQuest): Promise<Quest> => {

@@ -36,12 +36,24 @@ function QuestSearchBar() {
 	}, [partyId]);
 
 	useEffect(() => {
-		const params: Record<string, string> = {};
+		const currentParams = Object.fromEntries(searchParams.entries());
+
+		// Update currentParams with new values
+		const params: Record<string, string> = { ...currentParams };
 		if (searchTerm) params.search = searchTerm;
+		else delete params.search;
+
 		if (selectedFilter) params.filter = selectedFilter;
+		else delete params.filter;
+
 		if (startDate) params.startDate = startDate.toISOString();
+		else delete params.startDate;
+
 		if (endDate) params.endDate = endDate.toISOString();
+		else delete params.endDate;
+
 		if (order) params.order = order;
+
 		setSearchParams(params);
 	}, [searchTerm, selectedFilter, startDate, endDate, order, setSearchParams]);
 
@@ -57,8 +69,6 @@ function QuestSearchBar() {
 		if (searchParams.has("order")) params.order = searchParams.get("order")!;
 
 		if (partyId) {
-			console.log(params);
-
 			getQuests(partyId, params);
 		}
 	}, [searchParams, partyId, getQuests]);

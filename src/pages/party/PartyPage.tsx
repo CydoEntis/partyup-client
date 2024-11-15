@@ -36,7 +36,7 @@ function PartyPage({}: Props) {
 		fetchParty();
 	}, [partyId, getParty]);
 
-	const { questViewType, openedQuest, closeQuest, handleNewQuest } =
+	const { questViewType, openedQuest, closeQuest, handleNewQuest, handleViewQuest } =
 		useQuestDrawer();
 
 	const {
@@ -81,7 +81,7 @@ function PartyPage({}: Props) {
 				<div>No party found</div>
 			)}
 
-			<PartyTabs />
+			<PartyTabs onOpen={handleViewQuest} />
 		</Box>
 	);
 }

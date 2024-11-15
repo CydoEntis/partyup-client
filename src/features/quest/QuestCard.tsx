@@ -22,6 +22,7 @@ import {
 } from "react-router-dom";
 import { PriorityLevel } from "../../shared/types/prioty.types";
 import PriortyBadge from "../../components/badge/PriortyBadge";
+import useQuestStore from "../../stores/useQuestStore";
 
 type QuestCardProps = {
 	quest: Quest;
@@ -29,8 +30,13 @@ type QuestCardProps = {
 };
 
 function QuestCard({ quest, onClick }: QuestCardProps) {
-	const { partyId } = useParams();
+	const { setQuest } = useQuestStore();
 	const percent = getPercentage(quest.completedSteps, quest.steps.length);
+
+	const setQuestHandler = () => {
+		setQuest(quest);
+		onClick();
+	};
 
 	return (
 		<Card
@@ -41,8 +47,9 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 			padding="lg"
 			radius="md"
 			withBorder
-			component={NavLink}
-			to={`/parties/${partyId}/quests/${quest.id}`}
+			onClick={setQuestHandler}
+			// component={NavLink}
+			// to={`/parties/${partyId}/quests/${quest.id}`}
 		>
 			<Group
 				pb={12}
