@@ -1,5 +1,6 @@
 import { Color } from "./color.types";
 import { Member } from "./member.types";
+import { QuestStats } from "./quest.types";
 
 export type Party = {
 	id: number;
@@ -12,6 +13,7 @@ export type Party = {
 	createdAt: Date;
 	updatedAt: Date;
 	dueDate: Date;
+	questStats: QuestStats;
 };
 
 export type PaginatedParties = {

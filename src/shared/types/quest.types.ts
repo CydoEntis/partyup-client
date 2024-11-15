@@ -47,3 +47,9 @@ export type UpdateQuest = {
 	memberIds: Number[];
 	steps: Step[];
 };
+
+export type QuestStats = {
+	completedQuests: number;
+	inProgressQuests: number;
+	pastDueQuests: number;
+}
