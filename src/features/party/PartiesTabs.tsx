@@ -15,7 +15,7 @@ import { Eye, LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import { useEffect, useState } from "react";
 import { useSearchParams, NavLink } from "react-router-dom";
-import usePartiestore from "../../stores/usePartyStore";
+import usePartyStore from "../../stores/usePartyStore";
 import PartyCard from "./PartyCard";
 import Members from "../../components/avatar/Members";
 import { formatDate } from "../../shared/utils/date.utils";
@@ -25,7 +25,7 @@ function PartiesTabs() {
 		getParties,
 		parties,
 		loading: { list },
-	} = usePartiestore();
+	} = usePartyStore();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 

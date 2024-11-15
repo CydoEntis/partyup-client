@@ -5,7 +5,7 @@ import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
 import ViewQuest from "./ViewQuest";
 import UpsertQuestForm from "./UpsertQuestForm";
-import QuestOptions from "./QuestOptions";
+import MenuOptions from "../../components/menu/MenuOptions";
 import { Edit, Trash2 } from "lucide-react";
 
 export type QuestDrawerType = "create" | "edit" | "view";
@@ -63,7 +63,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 		setIsEditing(true);
 	};
 
-	const questOptions = [
+	const menuOptions = [
 		{
 			icon: <Edit size={16} />,
 			text: "Edit",
@@ -89,7 +89,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 			>
 				<Group justify="space-between">
 					<Title size="2rem">{quest ? quest.title : "Create Quest"}</Title>
-					{quest && !isEditing && <QuestOptions options={questOptions} />}
+					{quest && !isEditing && <MenuOptions options={menuOptions} />}
 				</Group>
 				{isEditing && quest ? (
 					<UpsertQuestForm

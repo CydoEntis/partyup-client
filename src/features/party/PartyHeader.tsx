@@ -1,7 +1,10 @@
 import InvitePartyMember from "./InvitePartyMember";
-import { ActionIcon, Box, Button, Flex, Group, Title } from "@mantine/core";
-import { Edit, Plus } from "lucide-react";
+import { Box, Button, Flex, Group, Title } from "@mantine/core";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import { Member } from "../../shared/types/member.types";
+import MenuOptions from "../../components/menu/MenuOptions";
+import { useParams } from "react-router-dom";
+import usePartyStore from "../../stores/usePartyStore";
 
 type PartyHeaderProps = {
 	title: string;
@@ -18,6 +21,28 @@ function PartyHeader({
 	handleNewQuest,
 	openMemberInvite,
 }: PartyHeaderProps) {
+	const { deleteParty } = usePartyStore();
+	const { partyId } = useParams();
+
+	const handleDelete = async () => {
+		if (partyId) {
+			deleteParty(partyId);
+		}
+	};
+
+	const menuOptions = [
+		{
+			icon: <Edit size={16} />,
+			text: "Edit",
+			onClick: handleEditParty,
+		},
+		{
+			icon: <Trash2 size={16} />,
+			text: "Delete",
+			onClick: handleDelete,
+		},
+	];
+
 	return (
 		<Box
 			bg="secondary"
@@ -36,13 +61,7 @@ function PartyHeader({
 				>
 					<Group>
 						<Title size="2.5rem">{title}</Title>
-						<ActionIcon
-							variant="transparent"
-							color="violet"
-							onClick={handleEditParty}
-						>
-							<Edit size={20} />
-						</ActionIcon>
+						<MenuOptions options={menuOptions} />
 					</Group>
 					<Button
 						variant="light"
@@ -63,3 +82,6 @@ function PartyHeader({
 }
 
 export default PartyHeader;
+function deleteQuest(partyId: string) {
+	throw new Error("Function not implemented.");
+}

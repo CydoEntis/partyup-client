@@ -3,7 +3,7 @@ import { Ellipsis } from "lucide-react";
 import { ReactNode } from "react";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 
-type QuestOptionProps = {
+type MenuOptionsProps = {
 	options: {
 		icon: ReactNode;
 		text: string;
@@ -11,7 +11,7 @@ type QuestOptionProps = {
 	}[];
 };
 
-function QuestOptions({ options }: QuestOptionProps) {
+function MenuOptionss({ options }: MenuOptionsProps) {
 	const { isLightMode } = useGetColorTheme();
 
 	return (
@@ -44,4 +44,4 @@ function QuestOptions({ options }: QuestOptionProps) {
 	);
 }
 
-export default QuestOptions;
+export default MenuOptionss;

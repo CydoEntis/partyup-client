@@ -29,7 +29,7 @@ type Partiestate = {
 	deleteParty: (id: string) => Promise<void>;
 };
 
-export const usePartiestore = create<Partiestate>((set, get) => ({
+export const usePartyStore = create<Partiestate>((set, get) => ({
 	recentParties: [],
 	parties: null,
 	party: null,
@@ -210,4 +210,4 @@ export const usePartiestore = create<Partiestate>((set, get) => ({
 	},
 }));
 
-export default usePartiestore;
+export default usePartyStore;
