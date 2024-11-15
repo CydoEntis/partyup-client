@@ -84,6 +84,4 @@ function PartyHeader({
 }
 
 export default PartyHeader;
-function deleteQuest(partyId: string) {
-	throw new Error("Function not implemented.");
-}
+

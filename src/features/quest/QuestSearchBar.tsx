@@ -102,10 +102,7 @@ function QuestSearchBar() {
 	};
 
 	return (
-		<Group
-			pb="16"
-			align="end"
-		>
+		<Group align="end">
 			<TextInput
 				leftSection={<Search size="20" />}
 				value={searchTerm}

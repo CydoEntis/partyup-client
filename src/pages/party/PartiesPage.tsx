@@ -1,36 +1,40 @@
-import { useEffect } from "react";
-import usePartytore from "../../stores/usePartyStore";
-import { Box, Flex, Group, Title } from "@mantine/core";
-import PartiesTabs from "../../features/party/PartiesTabs";
+import { ActionIcon, Flex, Group, Tooltip } from "@mantine/core";
+import PageHeader from "../../components/header/PageHeader";
+import QuestSearchBar from "../../features/quest/QuestSearchBar";
+import { LayoutGrid, LayoutList } from "lucide-react";
 
 type Props = {};
 
 function PartiesPage({}: Props) {
 	return (
-		<Box>
-			<Box
-				bg="secondary"
-				p={16}
+		<PageHeader title="Joined Parties">
+			<Flex
+				align="end"
+				justify="space-between"
 			>
-				<Flex
-					justify="space-between"
-					align="center"
-					w="100%"
-					pb={16}
-				>
-					<Group
-						align="center"
-						w="100%"
-						justify="space-between"
-					>
-						<Group>
-							<Title size="2.5rem">Your Parties</Title>
-						</Group>
-					</Group>
-				</Flex>
-			</Box>
-			<PartiesTabs />
-		</Box>
+				<QuestSearchBar />
+				<Group>
+					<Tooltip label="Grid View">
+						<ActionIcon
+							size="lg"
+							variant="light"
+							color="violet"
+						>
+							<LayoutGrid size={20} />
+						</ActionIcon>
+					</Tooltip>
+					<Tooltip label="List View">
+						<ActionIcon
+							size="lg"
+							variant="light"
+							color="violet"
+						>
+							<LayoutList size={20} />
+						</ActionIcon>
+					</Tooltip>
+				</Group>
+			</Flex>
+		</PageHeader>
 	);
 }
 
