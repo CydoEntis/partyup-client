@@ -49,6 +49,7 @@ export type UpdateQuest = {
 };
 
 export type QuestStats = {
+	totalQuests: number;
 	completedQuests: number;
 	inProgressQuests: number;
 	pastDueQuests: number;

@@ -109,29 +109,24 @@ function PartiesTabs() {
 				value="grid"
 				p={16}
 			>
-				<Stack
-					justify="space-between"
-					h="75vh"
-				>
-					<ScrollArea>
-						<SimpleGridLayout cols={6}>
-							{list
-								? Array.from({ length: 12 }).map((_, index) => (
-										<Skeleton
-											key={index}
-											height={350}
-											mb="md"
-										/>
-								  ))
-								: parties &&
-								  parties.items.map((party) => (
-										<PartyCard
-											key={party.id}
-											party={party}
-										/>
-								  ))}
-						</SimpleGridLayout>
-					</ScrollArea>
+				<Stack justify="space-between">
+					<SimpleGridLayout cols={6}>
+						{list
+							? Array.from({ length: 12 }).map((_, index) => (
+									<Skeleton
+										key={index}
+										height={350}
+										mb="md"
+									/>
+							  ))
+							: parties &&
+							  parties.items.map((party) => (
+									<PartyCard
+										key={party.id}
+										party={party}
+									/>
+							  ))}
+					</SimpleGridLayout>
 					<Flex justify="center">
 						<Pagination
 							total={parties?.totalPages || 1}
