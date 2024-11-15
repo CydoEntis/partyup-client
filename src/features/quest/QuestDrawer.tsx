@@ -4,7 +4,6 @@ import { useParams, useSearchParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
 import { useEffect, useState } from "react";
 import ViewQuest from "./ViewQuest";
-import useDrawerTypeHandler from "../../hooks/useDrawerData";
 import UpsertQuestForm from "./UpsertQuestForm";
 import QuestOptions from "./QuestOptions";
 import { Edit, Trash2 } from "lucide-react";
@@ -16,23 +15,16 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const questId = searchParams.get("questId");
 	const { quest, deleteQuest, getQuest, setQuest } = useQuestStore();
-	const { setDrawer, drawerTitle, drawerViewType } = useDrawerTypeHandler({
-		defaultTitle: "Create Quest",
-		defaultView: "create",
-	});
 
 	const [isDrawerOpen, setIsDrawerOpen] = useState(isOpened);
-
-	console.log(quest);
+	const [isEditing, setIsEditing] = useState(false); 
 
 	const fetchQuest = async () => {
 		if (partyId && questId) {
 			const fetchedQuest = await getQuest(partyId, questId);
 			if (fetchedQuest) {
-				setDrawer("view", fetchedQuest.title);
 				setQuest(fetchedQuest);
-			} else {
-				setDrawer("create", "Create Quest");
+				setIsEditing(false); 
 			}
 			setIsDrawerOpen(true);
 		}
@@ -40,7 +32,6 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 
 	useEffect(() => {
 		if (quest) {
-			setDrawer("view", quest.title);
 			setIsDrawerOpen(true);
 		} else if (questId) {
 			fetchQuest();
@@ -49,9 +40,9 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 		}
 	}, [quest, questId, partyId, isOpened]);
 
-  const handleClose = () => {
-		setDrawer("create", "Create Quest");
+	const handleClose = () => {
 		setQuest(null);
+		setIsEditing(false); 
 		setIsDrawerOpen(false);
 
 		const newParams = new URLSearchParams(searchParams);
@@ -61,20 +52,15 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 		onClose();
 	};
 
-	const handleEdit = () => {
-		if (quest) {
-			setDrawer(
-				drawerViewType === "edit" ? "view" : "edit",
-				`Editing: ${quest.title}`,
-			);
-		}
-	};
-
 	const handleDelete = async () => {
 		if (partyId && questId) {
 			deleteQuest(partyId, questId);
 			handleClose();
 		}
+	};
+
+	const handleEdit = () => {
+		setIsEditing(true);
 	};
 
 	const questOptions = [
@@ -102,18 +88,19 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 				h="100%"
 			>
 				<Group justify="space-between">
-					<Title size="2rem">{drawerTitle}</Title>
-					{(drawerViewType === "edit" || drawerViewType === "view") &&
-						quest && <QuestOptions options={questOptions} />}
+					<Title size="2rem">{quest ? quest.title : "Create Quest"}</Title>
+					{quest && !isEditing && <QuestOptions options={questOptions} />}
 				</Group>
-				{drawerViewType === "view" && <ViewQuest />}
-				{drawerViewType === "edit" && quest && (
+				{isEditing && quest ? (
 					<UpsertQuestForm
-						onClose={onClose}
+						onClose={handleClose}
 						quest={quest}
 					/>
+				) : quest ? (
+					<ViewQuest />
+				) : (
+					<UpsertQuestForm onClose={handleClose} />
 				)}
-				{drawerViewType === "create" && <UpsertQuestForm onClose={onClose} />}
 			</Box>
 		</Drawer>
 	);
