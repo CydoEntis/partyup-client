@@ -3,7 +3,7 @@ import { Box, Button, Flex, Group, Title } from "@mantine/core";
 import { Edit, Plus, Trash2 } from "lucide-react";
 import { Member } from "../../shared/types/member.types";
 import MenuOptions from "../../components/menu/MenuOptions";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import usePartyStore from "../../stores/usePartyStore";
 
 type PartyHeaderProps = {
@@ -23,10 +23,12 @@ function PartyHeader({
 }: PartyHeaderProps) {
 	const { deleteParty } = usePartyStore();
 	const { partyId } = useParams();
+	const navigate = useNavigate();
 
 	const handleDelete = async () => {
 		if (partyId) {
 			deleteParty(partyId);
+			navigate(`/parties`);
 		}
 	};
 

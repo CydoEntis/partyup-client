@@ -5,7 +5,7 @@ import {
 	PaginatedParties,
 	UpdateParty,
 } from "../shared/types/party.types";
-import partieservice from "../services/partyService";
+import partyService from "../services/partyService";
 import { QueryParams } from "../shared/types/query-params.types";
 
 type Partiestate = {
@@ -53,7 +53,7 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 				orderOn: "updatedAt",
 				pageSize: 5,
 			};
-			const parties = await partieservice.getAllParties(queryParams);
+			const parties = await partyService.getAllParties(queryParams);
 			set({ recentParties: parties.items });
 		} catch (error) {
 			set({ error: "Failed to fetch parties" });
@@ -69,8 +69,8 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 			error: null,
 		}));
 		try {
-			console.log("PArams: ", params)
-			const parties = await partieservice.getAllParties(params);
+			console.log("PArams: ", params);
+			const parties = await partyService.getAllParties(params);
 			set({ parties });
 			return parties;
 		} catch (error) {
@@ -95,7 +95,7 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 			error: null,
 		}));
 		try {
-			const party = await partieservice.getPartyById(+partyId);
+			const party = await partyService.getPartyById(+partyId);
 			set({ party });
 			return party;
 		} catch (error) {
@@ -112,25 +112,35 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 			error: null,
 		}));
 		try {
-			const newParty = await partieservice.createParty(party);
-			set((state) => ({
-				parties: state.parties
-					? {
-							...state.parties,
-							items: [newParty, ...state.parties.items],
-							totalCount: state.parties.totalCount + 1,
-					  }
-					: {
-							items: [newParty],
-							totalCount: 1,
-							totalPages: 1,
-							currentPage: 1,
-							hasNextPage: false,
-							hasPreviousPage: false,
-							pageRange: [],
-					  },
-			}));
-			set({ party: newParty });
+			const newParty = await partyService.createParty(party);
+
+			set((state) => {
+				const updatedRecentParties = [newParty, ...state.recentParties].slice(
+					0,
+					5,
+				);
+
+				return {
+					parties: state.parties
+						? {
+								...state.parties,
+								items: [newParty, ...state.parties.items],
+								totalCount: state.parties.totalCount + 1,
+						  }
+						: {
+								items: [newParty],
+								totalCount: 1,
+								totalPages: 1,
+								currentPage: 1,
+								hasNextPage: false,
+								hasPreviousPage: false,
+								pageRange: [],
+						  },
+					recentParties: updatedRecentParties,
+					party: newParty,
+				};
+			});
+
 			return newParty;
 		} catch (error) {
 			set({ error: "Failed to create party" });
@@ -149,7 +159,7 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 			error: null,
 		}));
 		try {
-			const updatedParty = await partieservice.updateParty(
+			const updatedParty = await partyService.updateParty(
 				Number(partyId),
 				updatedDetails,
 			);
@@ -165,6 +175,15 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 					: party,
 			);
 
+			const updatedRecentParties = get().recentParties.map((party) =>
+				party.id === Number(partyId)
+					? {
+							...party,
+							...updatedParty,
+					  }
+					: party,
+			);
+
 			set((state) => ({
 				party: {
 					...state.party,
@@ -175,9 +194,8 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 					...state.parties!,
 					items: updatedParties,
 				},
+				recentParties: updatedRecentParties,
 			}));
-
-			console.log("Updated parties: ", updatedParties);
 		} catch (error) {
 			set({ error: "Failed to update party details" });
 			throw error;
@@ -192,15 +210,24 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 			error: null,
 		}));
 		try {
-			await partieservice.deleteParty(+partyId);
-			set((state) => ({
-				parties: {
-					...state.parties!,
-					items:
-						state.parties?.items.filter((party) => party.id !== +partyId) || [],
-					totalCount: (state.parties?.totalCount || 0) - 1,
-				},
-			}));
+			await partyService.deleteParty(+partyId);
+
+			set((state) => {
+				const filteredParties =
+					state.parties?.items.filter((party) => party.id !== +partyId) || [];
+				const updatedRecentParties = state.recentParties.filter(
+					(party) => party.id !== +partyId,
+				);
+
+				return {
+					parties: {
+						...state.parties!,
+						items: filteredParties,
+						totalCount: filteredParties.length,
+					},
+					recentParties: updatedRecentParties,
+				};
+			});
 		} catch (error) {
 			set({ error: "Failed to delete party" });
 			throw error;
