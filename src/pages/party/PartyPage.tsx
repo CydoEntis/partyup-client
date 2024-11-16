@@ -10,7 +10,7 @@ import PartyHeader from "../../features/party/header/PartyHeader";
 import usePartyStore from "../../stores/usePartyStore";
 import PartyHeaderSkeleton from "../../features/loading-skeletons/PartyHeaderSkeleton";
 import usePartyDrawer from "../../hooks/usePartyDrawer";
-import { Box } from "@mantine/core";
+import { Box, Center, SimpleGrid, Skeleton, Stack, Title } from "@mantine/core";
 import PartyFooter from "../../features/party/footer/PartyFooter";
 import QuestListBody from "../../features/quest/body/QuestListBody";
 import useQuestStore from "../../stores/useQuestStore";
@@ -26,7 +26,7 @@ function PartyPage({}: Props) {
 	const {
 		getParty,
 		party,
-		loading: { detail },
+		loading: { detail: loadingParty },
 	} = usePartyStore();
 	const {
 		getQuests,
@@ -36,7 +36,7 @@ function PartyPage({}: Props) {
 
 	const [page, setPage] = useState(1);
 
-	console.log("Current layout: ", layout)
+	console.log("Current layout: ", layout);
 
 	useEffect(() => {
 		const fetchQuests = async () => {
@@ -90,6 +90,34 @@ function PartyPage({}: Props) {
 		handleEditParty,
 	} = usePartyDrawer();
 
+	if (loadingParty)
+		return (
+			<>
+				<Box mih="100vh">
+					<PartyHeaderSkeleton />
+					<Box p={32}>
+						<SimpleGrid cols={6}>
+							{Array.from({ length: 24 }).map((_, index) => (
+								<Skeleton
+									key={index}
+									height={350}
+									mb="md"
+								/>
+							))}
+						</SimpleGrid>
+					</Box>
+				</Box>
+			</>
+		);
+
+	if(!party) return (
+		<Stack align="center" justify="center" mih="95vh">
+			<Center>
+				<Title>Sorry, We Couldn't find the party you were looking for</Title>
+			</Center>
+		</Stack>
+	);
+
 	return (
 		<Box>
 			<InviteMemberModal
@@ -109,23 +137,19 @@ function PartyPage({}: Props) {
 					party={party}
 				/>
 			)}
-			{detail ? (
-				<PartyHeaderSkeleton />
-			) : party ? (
-				<PartyHeader
-					party={party}
-					handleEditParty={handleEditParty}
-					handleNewQuest={handleNewQuest}
-					openMemberInvite={openMemberInvite}
-				/>
-			) : (
-				<div>No party found</div>
-			)}
+			<PartyHeader
+				handleEditParty={handleEditParty}
+				handleNewQuest={handleNewQuest}
+				openMemberInvite={openMemberInvite}
+			/>
 			<QuestListBody
 				quests={quests.items}
 				layout={layout}
 				handleViewQuest={handleViewQuest}
 				loading={loadingList}
+				handleCreateQuest={function (): void {
+					throw new Error("Function not implemented.");
+				}}
 			/>
 
 			<PartyFooter

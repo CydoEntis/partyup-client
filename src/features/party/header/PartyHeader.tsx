@@ -12,24 +12,36 @@ import DateRangePicker from "../../../components/input/DateRangePicker";
 import OrderSwitch from "../../../components/input/OrderSwitch";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
 import { useForm } from "@mantine/form";
-import { Party } from "../../../shared/types/party.types";
+import PartyHeaderSkeleton from "../../loading-skeletons/PartyHeaderSkeleton";
+import { useEffect } from "react";
 
 type PartyHeaderProps = {
-	party: Party;
 	handleEditParty: () => void;
 	handleNewQuest: () => void;
 	openMemberInvite: () => void;
 };
 
 function PartyHeader({
-	party,
 	handleEditParty,
 	handleNewQuest,
 	openMemberInvite,
 }: PartyHeaderProps) {
-	const { deleteParty } = usePartyStore();
+	const {
+		deleteParty,
+		getParty,
+		party,
+		loading: { detail: loadingParty },
+	} = usePartyStore();
 	const { partyId } = useParams();
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (partyId) {
+			getParty(partyId).catch((error) => {
+				console.error("Error fetching party:", error);
+			});
+		}
+	}, [partyId, getParty]);
 
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
@@ -76,6 +88,27 @@ function PartyHeader({
 			New Quest
 		</Button>
 	);
+
+	if (loadingParty) {
+		return (
+			<PageHeader title="">
+				<PartyHeaderSkeleton />
+			</PageHeader>
+		);
+	}
+
+	if (!party) {
+		return (
+			<PageHeader title="Party Not Found">
+				<Title
+					size="lg"
+				>
+					We couldn't find the party you're looking for. Try refreshing the page
+					or checking the URL.
+				</Title>
+			</PageHeader>
+		);
+	}
 
 	return (
 		<PageHeader
