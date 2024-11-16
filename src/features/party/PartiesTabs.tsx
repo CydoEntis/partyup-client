@@ -15,7 +15,7 @@ import { Eye, LayoutGrid, LayoutList } from "lucide-react";
 import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
 import { useEffect, useState } from "react";
 import { useSearchParams, NavLink } from "react-router-dom";
-import usePartyStore from "../../stores/usePartyStore";
+import usePartiestore from "../../stores/usePartyStore";
 import PartyCard from "./PartyCard";
 import Members from "../../components/avatar/Members";
 import { formatDate } from "../../shared/utils/date.utils";
@@ -25,7 +25,7 @@ function PartiesTabs() {
 		getParties,
 		parties,
 		loading: { list },
-	} = usePartyStore();
+	} = usePartiestore();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 
@@ -109,24 +109,29 @@ function PartiesTabs() {
 				value="grid"
 				p={16}
 			>
-				<Stack justify="space-between">
-					<SimpleGridLayout cols={6}>
-						{list
-							? Array.from({ length: 12 }).map((_, index) => (
-									<Skeleton
-										key={index}
-										height={350}
-										mb="md"
-									/>
-							  ))
-							: parties &&
-							  parties.items.map((party) => (
-									<PartyCard
-										key={party.id}
-										party={party}
-									/>
-							  ))}
-					</SimpleGridLayout>
+				<Stack
+					justify="space-between"
+					h="75vh"
+				>
+					<ScrollArea>
+						<SimpleGridLayout cols={6}>
+							{list
+								? Array.from({ length: 12 }).map((_, index) => (
+										<Skeleton
+											key={index}
+											height={350}
+											mb="md"
+										/>
+								  ))
+								: parties &&
+								  parties.items.map((party) => (
+										<PartyCard
+											key={party.id}
+											party={party}
+										/>
+								  ))}
+						</SimpleGridLayout>
+					</ScrollArea>
 					<Flex justify="center">
 						<Pagination
 							total={parties?.totalPages || 1}

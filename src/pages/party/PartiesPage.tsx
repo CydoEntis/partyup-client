@@ -1,27 +1,18 @@
-import {
-	ActionIcon,
-	Box,
-	Flex,
-	Group,
-	Pagination,
-	Skeleton,
-	Tooltip,
-} from "@mantine/core";
+import { Box, Flex, Pagination } from "@mantine/core";
 import PageHeader from "../../components/header/PageHeader";
 import QuestSearchBar from "../../features/quest/QuestSearchBar";
-import { LayoutGrid, LayoutList } from "lucide-react";
 import PageFooter from "../../components/footer/PageFooter";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import usePartyStore from "../../stores/usePartyStore";
-import SimpleGridLayout from "../../components/layout/SimpleGridLayout";
-import PartyCard from "../../features/party/PartyCard";
 import PartyGridView from "../../features/party/PartyGridView";
 import LayoutOptions from "../../components/layout/LayoutOptions";
+import PartyListView from "../../features/party/PartyListView";
+import useUserStore from "../../stores/useUserStore";
+import { GridType } from "../../shared/types/auth.types";
 
-type Props = {};
-
-function PartiesPage({}: Props) {
+function PartiesPage() {
+	const { layout } = useUserStore();
 	const {
 		getParties,
 		parties,
@@ -33,9 +24,7 @@ function PartiesPage({}: Props) {
 	useEffect(() => {
 		const fetchParties = async () => {
 			try {
-				const params = {
-					pageNumber: page,
-				};
+				const params = { pageNumber: page };
 				await getParties(params);
 			} catch (error) {
 				console.error("Error fetching party or quests:", error);
@@ -66,17 +55,23 @@ function PartiesPage({}: Props) {
 			</PageHeader>
 			<Box p={32}>
 				{parties ? (
-					<PartyGridView
-						loading={list}
-						parties={parties?.items}
-					/>
-				) : null}
+					layout === "grid" ? (
+						<PartyGridView
+							loading={list}
+							parties={parties.items}
+						/>
+					) : (
+						<PartyListView parties={parties.items} />
+					)
+				) : (
+					<p>Loading...</p>
+				)}
 			</Box>
 			<PageFooter>
 				<>
 					{parties && parties.totalPages > 1 ? (
 						<Pagination
-							total={parties?.totalPages || 1}
+							total={parties.totalPages || 1}
 							value={page}
 							onChange={handlePageChange}
 							color="violet"
