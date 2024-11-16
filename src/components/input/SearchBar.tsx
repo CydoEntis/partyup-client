@@ -14,16 +14,21 @@ function SearchBar({ form, onSearch }: SearchBarProps) {
 
 	useEffect(() => {
 		const search = searchParams.get("search") || "";
-		form.setFieldValue("search", search);
-	}, [searchParams, form]);
+		if (search !== form.values.search) {
+			form.setFieldValue("search", search);
+		}
+	}, [searchParams]);
 
 	const handleSearch = () => {
 		const searchTerm = form.values.search.trim();
-		setSearchParams({ search: searchTerm });
+		if (searchTerm !== searchParams.get("search")) {
+			setSearchParams({ search: searchTerm });
+		}
+		onSearch();
 	};
 
 	return (
-		<form onSubmit={form.onSubmit(onSearch)}>
+		<form onSubmit={form.onSubmit(handleSearch)}>
 			<Group gap={8}>
 				<TextInput
 					leftSection={<Search size="20" />}
@@ -33,7 +38,7 @@ function SearchBar({ form, onSearch }: SearchBarProps) {
 				<Button
 					variant="light"
 					color="violet"
-					onClick={handleSearch}
+					type="submit"
 				>
 					Search
 				</Button>

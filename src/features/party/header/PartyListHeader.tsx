@@ -10,7 +10,9 @@ import { useForm } from "@mantine/form";
 type Props = {};
 
 function PartyListHeader({}: Props) {
-	const form = useForm<{ search: string }>();
+	const form = useForm<{ search: string }>({
+		initialValues: { search: "" },
+	});
 
 	const filterOptions = [
 		{ label: "Title", value: "title" },
@@ -18,7 +20,9 @@ function PartyListHeader({}: Props) {
 		{ label: "Last Updated", value: "last-updated" },
 	];
 
-	const searchHandler = () => {};
+	const searchHandler = () => {
+		console.log("Searching for:", form.values.search);
+	};
 
 	return (
 		<PageHeader title="Joined Parties">
