@@ -16,7 +16,7 @@ function UserLevel({ user }: UserLevelProps) {
 		>
 			<Group
 				gap={8}
-				w={200}
+				w={220}
 			>
 				<UserAvatar avatar={user.avatar} />
 				<Stack gap={1}>

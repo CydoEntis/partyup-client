@@ -10,18 +10,30 @@ import {
 	rem,
 	Paper,
 	Flex,
+	Indicator,
 } from "@mantine/core";
 import Members from "../../components/avatar/Members";
 import { NavLink } from "react-router-dom";
 import { Party } from "../../shared/types/party.types";
-import { CalendarFoldIcon, CalendarX, CheckCircle2, CircleCheck, Loader } from "lucide-react";
+import {
+	CalendarFoldIcon,
+	CalendarX,
+	CircleCheck,
+	Crown,
+	Loader,
+	Users,
+} from "lucide-react";
 import { formatDate } from "../../shared/utils/date.utils";
+import UserAvatar from "../../components/avatar/UserAvatar";
 
 type PartyCardProps = {
 	party: Party;
 };
 
 function PartyCard({ party }: PartyCardProps) {
+	const creator = party.members.find(
+		(member) => member.role.toLowerCase() === "creator",
+	);
 	return (
 		<Card
 			component={NavLink}
@@ -35,11 +47,6 @@ function PartyCard({ party }: PartyCardProps) {
 			withBorder
 			mih={350}
 		>
-			<Box
-				bg={party.color}
-				w="100%"
-				h="1px"
-			></Box>
 			<Stack
 				mt="md"
 				mb="xs"
@@ -48,6 +55,11 @@ function PartyCard({ party }: PartyCardProps) {
 			>
 				<Group justify="space-between">
 					<Group>
+						<Indicator
+							color={party.color}
+							size={8}
+							processing
+						/>
 						<Title
 							size="1.5rem"
 							fw={600}
@@ -64,13 +76,36 @@ function PartyCard({ party }: PartyCardProps) {
 				</Text>
 			</Stack>
 
-			<Stack gap={4}>
-				<Text size="xs">Members</Text>
-				<Members
-					members={party.members}
-					numOfMembersToShow={3}
-				/>
-			</Stack>
+			<Flex
+				justify="space-between"
+				align="center"
+			>
+				{creator && (
+					<Stack gap={8}>
+						<Group gap={4}>
+							<Crown
+								color="yellow"
+								size={14}
+							/>
+							<Text size="xs">Creator</Text>
+						</Group>
+						<Tooltip label={creator.displayName}>
+							<UserAvatar avatar={creator.avatar} />
+						</Tooltip>
+					</Stack>
+				)}
+
+				<Stack gap={4}>
+					<Group gap={4}>
+						<Users size={14} />
+						<Text size="xs">Members</Text>
+					</Group>
+					<Members
+						members={party.members}
+						numOfMembersToShow={3}
+					/>
+				</Stack>
+			</Flex>
 
 			<Stack>
 				<Paper
