@@ -10,6 +10,11 @@ import LayoutOptions from "../../components/layout/LayoutOptions";
 import PartyListView from "../../features/party/PartyListView";
 import useUserStore from "../../stores/useUserStore";
 import { GridType } from "../../shared/types/auth.types";
+import SearchBar from "../../components/input/SearchBar";
+import Filter from "../../components/input/Filter";
+import DateRangePicker from "../../components/input/DateRangePicker";
+import OrderSwitch from "../../components/input/OrderSwitch";
+import PartyListHeader from "../../features/party/header/PartyListHeader";
 
 function PartiesPage() {
 	const { layout } = useUserStore();
@@ -42,17 +47,10 @@ function PartiesPage() {
 		setPage(newPage);
 	};
 
+
 	return (
 		<Box>
-			<PageHeader title="Joined Parties">
-				<Flex
-					align="end"
-					justify="space-between"
-				>
-					<QuestSearchBar />
-					<LayoutOptions />
-				</Flex>
-			</PageHeader>
+			<PartyListHeader />
 			<Box p={32}>
 				{parties ? (
 					layout === "grid" ? (

@@ -6,9 +6,10 @@ import { useSearchParams } from "react-router-dom";
 
 type SearchBarProps = {
 	form: UseFormReturnType<{ search: string }>;
+	onSearch: () => void;
 };
 
-function SearchBar({ form }: SearchBarProps) {
+function SearchBar({ form, onSearch }: SearchBarProps) {
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	useEffect(() => {
@@ -22,20 +23,22 @@ function SearchBar({ form }: SearchBarProps) {
 	};
 
 	return (
-		<Group gap={8}>
-			<TextInput
-				leftSection={<Search size="20" />}
-				{...form.getInputProps("search")}
-				placeholder="Search"
-			/>
-			<Button
-				variant="light"
-				color="violet"
-				onClick={handleSearch}
-			>
-				Search
-			</Button>
-		</Group>
+		<form onSubmit={form.onSubmit(onSearch)}>
+			<Group gap={8}>
+				<TextInput
+					leftSection={<Search size="20" />}
+					{...form.getInputProps("search")}
+					placeholder="Search"
+				/>
+				<Button
+					variant="light"
+					color="violet"
+					onClick={handleSearch}
+				>
+					Search
+				</Button>
+			</Group>
+		</form>
 	);
 }
 
