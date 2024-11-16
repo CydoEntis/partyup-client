@@ -1,18 +1,18 @@
-import InvitePartyMember from "./InvitePartyMember";
+import InvitePartyMember from "../InvitePartyMember";
 import { Box, Button, Flex, Group, Stack, Title } from "@mantine/core";
 import { Edit, Plus, Trash2 } from "lucide-react";
-import { Member } from "../../shared/types/member.types";
-import MenuOptions from "../../components/menu/MenuOptions";
+import { Member } from "../../../shared/types/member.types";
+import MenuOptions from "../../../components/menu/MenuOptions";
 import { useNavigate, useParams } from "react-router-dom";
-import usePartyStore from "../../stores/usePartyStore";
-import PageHeader from "../../components/header/PageHeader";
-import SearchBar from "../../components/input/SearchBar";
-import Filter from "../../components/input/Filter";
-import DateRangePicker from "../../components/input/DateRangePicker";
-import OrderSwitch from "../../components/input/OrderSwitch";
-import LayoutOptions from "../../components/layout/LayoutOptions";
+import usePartyStore from "../../../stores/usePartyStore";
+import PageHeader from "../../../components/header/PageHeader";
+import SearchBar from "../../../components/input/SearchBar";
+import Filter from "../../../components/input/Filter";
+import DateRangePicker from "../../../components/input/DateRangePicker";
+import OrderSwitch from "../../../components/input/OrderSwitch";
+import LayoutOptions from "../../../components/layout/LayoutOptions";
 import { useForm } from "@mantine/form";
-import { Party } from "../../shared/types/party.types";
+import { Party } from "../../../shared/types/party.types";
 
 type PartyHeaderProps = {
 	party: Party;
