@@ -13,7 +13,7 @@ function InvitePartyMember({
 	members,
 }: InvitePartyMemberProps) {
 	return (
-		<Group>
+		<Group pb={16}>
 			<Group align="center">
 				<Users2 size={20} />
 				<Text>Assign to Party</Text>

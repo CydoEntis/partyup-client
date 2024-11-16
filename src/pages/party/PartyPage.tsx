@@ -71,8 +71,7 @@ function PartyPage({}: Props) {
 				<PartyHeaderSkeleton />
 			) : party ? (
 				<PartyHeader
-					title={party.title}
-					members={party.members}
+					party={party}
 					handleEditParty={handleEditParty}
 					handleNewQuest={handleNewQuest}
 					openMemberInvite={openMemberInvite}
