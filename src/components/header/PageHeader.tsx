@@ -16,7 +16,8 @@ function PageHeader({ title, optionsComp, actionBtn, children }: PageHeaderProps
 	return (
 		<Box
 			bg="secondary"
-			p={16}
+			px={32}
+			py={16}
 			className={`border-b ${isLightMode ? "border-[#DCDEE0]" : "border-[#3A3A3A]"}`}
 		>
 			<Flex

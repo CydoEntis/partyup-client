@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+	GridType,
 	LoginCredentials,
 	RegisterCredentials,
 	Tokens,
@@ -12,6 +13,7 @@ import { Avatar } from "../shared/types/avatar.types";
 
 type UserState = {
 	user: User | null;
+	layout: GridType;
 	loading: {
 		session: boolean;
 		refresh: boolean;
@@ -21,6 +23,7 @@ type UserState = {
 		getUser: boolean;
 	};
 	error: string | null;
+	setLayout: (layout: GridType) => void;
 	restoreSession: () => void;
 	refreshTokens: (tokens: Tokens) => Promise<Tokens>;
 	register: (credentials: RegisterCredentials) => Promise<void>;
@@ -34,6 +37,7 @@ type UserState = {
 
 export const useUserStore = create<UserState>((set, get) => ({
 	user: null,
+	layout: "grid",
 	loading: {
 		session: false,
 		refresh: false,
@@ -43,7 +47,9 @@ export const useUserStore = create<UserState>((set, get) => ({
 		getUser: false,
 	},
 	error: null,
-
+	setLayout: (layout: GridType) => {
+		set({ layout });
+	},
 	restoreSession: () => {
 		set((state) => ({
 			loading: { ...state.loading, session: true },
@@ -286,7 +292,7 @@ export const useUserStore = create<UserState>((set, get) => ({
 				const updatedUser = {
 					...currentUser,
 					avatar: avatar,
-					currency: Math.max(newCurrency, 0), 
+					currency: Math.max(newCurrency, 0),
 				};
 				const storedUser = localStorageService.getItem<User>("questLog");
 				if (storedUser) {
@@ -298,7 +304,7 @@ export const useUserStore = create<UserState>((set, get) => ({
 				}
 				return { user: updatedUser };
 			}
-			return {}; 
+			return {};
 		});
 	},
 }));

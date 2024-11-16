@@ -49,3 +49,5 @@ export type QuestCompletionByDay = {
 	date: string;
 	questCount: number;
 };
+
+export type GridType = "grid" | "list" | "kanban";

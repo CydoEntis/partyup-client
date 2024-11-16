@@ -4,7 +4,6 @@ import RegisterPage from "../pages/auth/RegisterPage";
 import PartiesPage from "../pages/party/PartiesPage";
 import PartyPage from "../pages/party/PartyPage";
 import PrivateGuard from "../guards/PrivateGuard";
-import PublicGuard from "../guards/PublicGuard";
 import PrivateLayout from "../components/layout/PrivateLayout";
 import PublicLayout from "../components/layout/PublicLayout";
 import DashboardPage from "../pages/dashboard/DashboardPage";
