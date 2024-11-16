@@ -66,11 +66,11 @@ function PartiesPage() {
 						layout={layout}
 						onOpen={openCreateParty}
 					/>
-					<PartyListFooter
+					{/* <PartyListFooter
 						totalPages={parties?.totalPages || 1}
 						onPageChange={handlePageChange}
 						page={page}
-					/>
+					/> */}
 				</>
 			</Box>
 		</>

@@ -37,7 +37,7 @@ type UserState = {
 
 export const useUserStore = create<UserState>((set, get) => ({
 	user: null,
-	layout: "list",
+	layout: "grid",
 	loading: {
 		session: false,
 		refresh: false,

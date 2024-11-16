@@ -4,15 +4,17 @@ import { useState } from "react";
 
 type FilterProps = {
 	filterOptions: Record<string, string>[];
+	handleFiltering: (filter: string) => void;
 };
 
-function Filter({ filterOptions }: FilterProps) {
+function Filter({ filterOptions, handleFiltering }: FilterProps) {
 	const [selectedFilter, setSelectedFilter] = useState<string | null>(
 		"created-at",
 	);
 
 	const handleFilterChange = (value: string, isChecked: boolean) => {
 		setSelectedFilter(isChecked ? value : null);
+		handleFiltering(value)
 	};
 
 	return (

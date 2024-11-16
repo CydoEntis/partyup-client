@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router-dom";
 
 type SearchBarProps = {
 	form: UseFormReturnType<{ search: string }>;
-	onSearch: () => void;
+	onSearch: (search: string) => void;
 };
 
 function SearchBar({ form, onSearch }: SearchBarProps) {
@@ -19,12 +19,12 @@ function SearchBar({ form, onSearch }: SearchBarProps) {
 		}
 	}, [searchParams]);
 
-	const handleSearch = () => {
-		const searchTerm = form.values.search.trim();
+	const handleSearch = (values: { search: string }) => {
+		const searchTerm = values.search.trim();
 		if (searchTerm !== searchParams.get("search")) {
 			setSearchParams({ search: searchTerm });
 		}
-		onSearch();
+		onSearch(searchTerm);
 	};
 
 	return (

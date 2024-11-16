@@ -6,10 +6,13 @@ import SearchBar from "../../../components/input/SearchBar";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
 import Filter from "../../../components/input/Filter";
 import { useForm } from "@mantine/form";
+import usePartyStore from "../../../stores/usePartyStore";
+import { QueryParams } from "../../../shared/types/query-params.types";
 
 type Props = {};
 
 function PartyListHeader({}: Props) {
+	const { getParties } = usePartyStore();
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
@@ -20,9 +23,20 @@ function PartyListHeader({}: Props) {
 		{ label: "Last Updated", value: "last-updated" },
 	];
 
-	const searchHandler = () => {
-		console.log("Searching for:", form.values.search);
+	const searchHandler = (search: string) => {
+		const params: QueryParams = {
+			search,
+		};
+		getParties(params);
 	};
+
+	const filterHandler = (filter: string) => {
+		const params: QueryParams = {
+			filter
+		}
+
+		getParties(params);
+	}
 
 	return (
 		<PageHeader title="Joined Parties">
@@ -35,7 +49,7 @@ function PartyListHeader({}: Props) {
 						form={form}
 						onSearch={searchHandler}
 					/>
-					<Filter filterOptions={filterOptions} />
+					<Filter filterOptions={filterOptions} handleFiltering={filterHandler}/>
 					<DateRangePicker />
 					<OrderSwitch />
 				</Group>

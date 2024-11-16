@@ -15,10 +15,10 @@ const getAllParties = async (
 	const queryParams = new URLSearchParams();
 
 	if (params) {
-		if (params.searchValue)
-			queryParams.append("searchValue", params.searchValue);
+		if (params.search)
+			queryParams.append("search", params.search);
 		if (params.orderOn) queryParams.append("orderOn", params.orderOn);
-		if (params.orderBy) queryParams.append("orderBy", params.orderBy);
+		if (params.filter) queryParams.append("filter", params.filter);
 		if (params.pageNumber)
 			queryParams.append("pageNumber", params.pageNumber.toString());
 		if (params.pageSize)
