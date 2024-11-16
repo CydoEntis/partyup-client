@@ -4,15 +4,19 @@ import {
 	Indicator,
 	NavLink as MantineNavLink,
 	Stack,
+	Text
 } from "@mantine/core";
 
 import {
+	Book,
+	BookOpen,
 	FolderClosed,
 	FolderOpen,
 	LayoutGrid,
 	LogOut,
 	PlusCircle,
 	ShoppingBag,
+	SquareLibrary,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import usePartyStore from "../../stores/usePartyStore";
@@ -42,12 +46,12 @@ function PrivateNavLinks({
 		loading: { recent },
 	} = usePartyStore();
 	const logoutHandler = useLogout();
-	const [isRecentOpen, setIsRecentOpen] = useState(false);
+	const [isRecentOpen, setIsRecentOpen] = useState(true);
 
 	useEffect(() => {
 		const fetchRecentParties = async () => {
 			await getRecentParties();
-			setIsRecentOpen(recentParties.length > 0);
+			// setIsRecentOpen(recentParties.length > 0);
 		};
 		fetchRecentParties();
 	}, [recentParties.length]);
@@ -94,7 +98,7 @@ function PrivateNavLinks({
 						<MantineNavLink
 							component={NavLink}
 							to="/parties"
-							leftSection={<FolderClosed size={20} />}
+							leftSection={<SquareLibrary size={20} />}
 							label="Your Parties"
 							className="rounded-md"
 							color="violet"
@@ -102,12 +106,13 @@ function PrivateNavLinks({
 						<MantineNavLink
 							label="Most Recent"
 							className="rounded-md"
-							leftSection={<FolderOpen size={20} />}
+							leftSection={isRecentOpen ? <BookOpen size={20} /> : <Book size={20} />}
 							variant="subtle"
 							color="gray"
 							opened={isRecentOpen}
 							onClick={toggleRecentOpen}
 						>
+							{recentParties.length === 0 ? <Text size="xs">No recent parties</Text>: null}
 							{recentParties?.map((party) => (
 								<MantineNavLink
 									key={party.id}

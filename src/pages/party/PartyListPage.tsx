@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Title } from "@mantine/core";
+import { Box } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import usePartyStore from "../../stores/usePartyStore";
@@ -8,7 +8,6 @@ import PartyListBody from "../../features/party/body/PartyListBody";
 import PartyListFooter from "../../features/party/footer/PartyListFooter";
 import PartyDrawer from "../../features/party/PartyDrawer";
 import { useDisclosure } from "@mantine/hooks";
-import { PlusCircle } from "lucide-react";
 
 function PartiesPage() {
 	const { layout } = useUserStore();
