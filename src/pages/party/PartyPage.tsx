@@ -96,27 +96,42 @@ function PartyPage({}: Props) {
 				<Box mih="100vh">
 					<PartyHeaderSkeleton />
 					<Box p={32}>
-						<SimpleGrid cols={6}>
-							{Array.from({ length: 24 }).map((_, index) => (
+						{layout === "grid" ? (
+							<SimpleGrid cols={6}>
+								{Array.from({ length: 24 }).map((_, index) => (
+									<Skeleton
+										key={index}
+										height={350}
+										mb="md"
+									/>
+								))}
+							</SimpleGrid>
+						) : (
+							Array.from({ length: 12 }).map((_, index) => (
 								<Skeleton
 									key={index}
-									height={350}
+									height={50}
 									mb="md"
 								/>
-							))}
-						</SimpleGrid>
+							))
+						)}
 					</Box>
 				</Box>
 			</>
 		);
 
-	if(!party) return (
-		<Stack align="center" justify="center" mih="95vh">
-			<Center>
-				<Title>Sorry, We Couldn't find the party you were looking for</Title>
-			</Center>
-		</Stack>
-	);
+	if (!party)
+		return (
+			<Stack
+				align="center"
+				justify="center"
+				mih="95vh"
+			>
+				<Center>
+					<Title>Sorry, We Couldn't find the party you were looking for</Title>
+				</Center>
+			</Stack>
+		);
 
 	return (
 		<Box>
@@ -138,6 +153,7 @@ function PartyPage({}: Props) {
 				/>
 			)}
 			<PartyHeader
+				party={party}
 				handleEditParty={handleEditParty}
 				handleNewQuest={handleNewQuest}
 				openMemberInvite={openMemberInvite}
