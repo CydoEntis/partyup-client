@@ -22,7 +22,7 @@ function Filter({ filterOptions }: FilterProps) {
 		>
 			<Menu.Target>
 				<ActionIcon
-					size="log"
+					size="lg"
 					variant="light"
 					color="violet"
 				>

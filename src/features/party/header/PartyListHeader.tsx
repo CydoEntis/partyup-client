@@ -1,5 +1,5 @@
 import PageHeader from "../../../components/header/PageHeader";
-import { Flex } from "@mantine/core";
+import { Flex, Group } from "@mantine/core";
 import DateRangePicker from "../../../components/input/DateRangePicker";
 import OrderSwitch from "../../../components/input/OrderSwitch";
 import SearchBar from "../../../components/input/SearchBar";
@@ -26,13 +26,15 @@ function PartyListHeader({}: Props) {
 				align="end"
 				justify="space-between"
 			>
-				<SearchBar
-					form={form}
-					onSearch={searchHandler}
-				/>
-				<Filter filterOptions={filterOptions} />
-				<DateRangePicker />
-				<OrderSwitch />
+				<Group align="end">
+					<SearchBar
+						form={form}
+						onSearch={searchHandler}
+					/>
+					<Filter filterOptions={filterOptions} />
+					<DateRangePicker />
+					<OrderSwitch />
+				</Group>
 				<LayoutOptions />
 			</Flex>
 		</PageHeader>
