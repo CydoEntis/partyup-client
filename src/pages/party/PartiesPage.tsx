@@ -51,20 +51,7 @@ function PartiesPage() {
 	return (
 		<Box>
 			<PartyListHeader />
-			<Box p={32}>
-				{parties ? (
-					layout === "grid" ? (
-						<PartyGridView
-							loading={list}
-							parties={parties.items}
-						/>
-					) : (
-						<PartyListView parties={parties.items} />
-					)
-				) : (
-					<p>Loading...</p>
-				)}
-			</Box>
+
 			<PageFooter>
 				<>
 					{parties && parties.totalPages > 1 ? (
