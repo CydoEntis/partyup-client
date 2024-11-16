@@ -1,43 +1,53 @@
-import { DateInput } from "@mantine/dates";
-import React, { useState } from "react";
+import { DatePickerInput } from "@mantine/dates";
+import { Text } from "@mantine/core";
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Stack } from "@mantine/core";
 
 type Props = {};
 
 function DateRangePicker({}: Props) {
-	const [startDate, setStartDate] = useState<Date | null>(null);
-	const [endDate, setEndDate] = useState<Date | null>(null);
+	const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
+	const [searchParams, setSearchParams] = useSearchParams();
 
-	const handleDateChange = (date: Date | null, type: "start" | "end") => {
-		if (date) {
-			const updatedDate = new Date(date);
-			if (type === "start") {
-				updatedDate.setHours(0, 0, 0, 0);
-				setStartDate(updatedDate);
-			} else {
-				updatedDate.setHours(23, 59, 59, 999);
-				setEndDate(updatedDate);
-			}
-		} else {
-			if (type === "start") setStartDate(null);
-			else setEndDate(null);
+	useEffect(() => {
+		const startDateParam = searchParams.get("startDate");
+		const endDateParam = searchParams.get("endDate");
+
+		if (startDateParam || endDateParam) {
+			setValue([
+				startDateParam ? new Date(startDateParam) : null,
+				endDateParam ? new Date(endDateParam) : null,
+			]);
 		}
+	}, [searchParams]);
+
+	const handleDateChange = (selectedRange: [Date | null, Date | null]) => {
+		setValue(selectedRange);
+
+		const [startDate, endDate] = selectedRange;
+
+		const updatedParams: Record<string, string> = {};
+		if (startDate) updatedParams.startDate = startDate.toISOString();
+		if (endDate) updatedParams.endDate = endDate.toISOString();
+
+		setSearchParams({
+			...Object.fromEntries(searchParams.entries()),
+			...updatedParams,
+		});
 	};
 
 	return (
-		<>
-			<DateInput
-				value={startDate}
-				onChange={(date) => handleDateChange(date, "start")}
-				label="Start Date"
-				placeholder="Start Date"
+		<Stack gap={2}>
+			<Text size="sm">Select a Date Range</Text>
+			<DatePickerInput
+			placeholder="Select date range"
+				type="range"
+				allowSingleDateInRange
+				value={value}
+				onChange={handleDateChange}
 			/>
-			<DateInput
-				value={endDate}
-				onChange={(date) => handleDateChange(date, "end")}
-				label="End Date"
-				placeholder="End Date"
-			/>
-		</>
+		</Stack>
 	);
 }
 

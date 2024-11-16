@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
-import PartiesPage from "../pages/party/PartiesPage";
+import PartyListPage from "../pages/party/PartyListPage";
 import PartyPage from "../pages/party/PartyPage";
 import PrivateGuard from "../guards/PrivateGuard";
 import PrivateLayout from "../components/layout/PrivateLayout";
@@ -33,7 +33,7 @@ const protectedRoutes = [
 	},
 	{
 		path: "parties",
-		element: <PartiesPage />,
+		element: <PartyListPage />,
 	},
 	{
 		path: "parties/:partyId/quests",
