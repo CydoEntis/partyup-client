@@ -7,9 +7,9 @@ import useQuestStore from "../../stores/useQuestStore";
 
 const filterOptions = [
 	{ label: "Title", value: "title" },
-	{ label: "Created", value: "created" },
-	{ label: "Last Updated", value: "lastUpdated" },
-	{ label: "Due Date", value: "dueDate" },
+	{ label: "Created", value: "created-at" },
+	{ label: "Last Updated", value: "last-updated" },
+	{ label: "Due Date", value: "due-date" },
 ];
 
 function QuestSearchBar() {
