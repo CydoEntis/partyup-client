@@ -15,16 +15,23 @@ import Filter from "../../components/input/Filter";
 import DateRangePicker from "../../components/input/DateRangePicker";
 import OrderSwitch from "../../components/input/OrderSwitch";
 import PartyListHeader from "../../features/party/header/PartyListHeader";
+import PartyListBody from "../../features/party/body/PartyListBody";
+import PartyListFooter from "../../features/party/footer/PartyListFooter";
 
 function PartiesPage() {
 	const { layout } = useUserStore();
+	const [searchParams, setSearchParams] = useSearchParams();
+
 	const {
 		getParties,
 		parties,
-		loading: { list },
+		loading: { list: loadingList },
 	} = usePartyStore();
-	const [searchParams, setSearchParams] = useSearchParams();
+	
 	const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+	const handlePageChange = (newPage: number) => {
+		setPage(newPage);
+	};
 
 	useEffect(() => {
 		const fetchParties = async () => {
@@ -43,27 +50,19 @@ function PartiesPage() {
 		setSearchParams({ page: page.toString() });
 	}, [page, setSearchParams]);
 
-	const handlePageChange = (newPage: number) => {
-		setPage(newPage);
-	};
-
-
 	return (
 		<Box>
 			<PartyListHeader />
-
-			<PageFooter>
+			{parties && (
 				<>
-					{parties && parties.totalPages > 1 ? (
-						<Pagination
-							total={parties.totalPages || 1}
-							value={page}
-							onChange={handlePageChange}
-							color="violet"
-						/>
-					) : null}
+					<PartyListBody
+						parties={parties.items}
+						loading={loadingList}
+						layout={layout}
+					/>
+					<PartyListFooter totalPages={parties.totalPages} onPageChange={handlePageChange} page={page} />
 				</>
-			</PageFooter>
+			)}
 		</Box>
 	);
 }
