@@ -36,6 +36,8 @@ function PartyPage({}: Props) {
 
 	const [page, setPage] = useState(1);
 
+	console.log("Current layout: ", layout)
+
 	useEffect(() => {
 		const fetchQuests = async () => {
 			if (partyId) {
@@ -51,7 +53,7 @@ function PartyPage({}: Props) {
 		};
 
 		fetchQuests();
-	}, [partyId, getQuests, page]);
+	}, [partyId, getQuests, page, layout]);
 
 	const handlePageChange = (newPage: number) => {
 		setPage(newPage);
