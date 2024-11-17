@@ -1,17 +1,15 @@
-import PageHeader from "../../../components/header/PageHeader";
 import { Flex, Group } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import PageHeader from "../../../components/header/PageHeader";
 import DateRangePicker from "../../../components/input/DateRangePicker";
 import OrderSwitch from "../../../components/input/OrderSwitch";
 import SearchBar from "../../../components/input/SearchBar";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
-import Filter from "../../../components/input/Filter";
-import { useForm } from "@mantine/form";
-import usePartyStore from "../../../stores/usePartyStore";
 import { useQueryParams } from "../../../hooks/useQueryParams";
+import usePartyStore from "../../../stores/usePartyStore";
+import Filter from "../../../components/input/Filter";
 
-type Props = {};
-
-function PartyListHeader({}: Props) {
+function PartyListHeader() {
 	const { getParties } = usePartyStore();
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
@@ -25,21 +23,29 @@ function PartyListHeader({}: Props) {
 		{ label: "Last Updated", value: "last-updated" },
 	];
 
-	const currentParams = getSearchParams();
-
+	// Handlers that always fetch fresh params
 	const searchHandler = (search: string) => {
+		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, search });
 		getParties({ ...currentParams, search });
 	};
 
 	const filterHandler = (filter: string) => {
+		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, filter });
 		getParties({ ...currentParams, filter });
 	};
 
 	const orderHandler = (orderBy: string) => {
+		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, orderBy });
 		getParties({ ...currentParams, orderBy });
+	};
+
+	const dateRangeHandler = (startDate: string, endDate: string) => {
+		const currentParams = getSearchParams();
+		updateQueryParams({ ...currentParams, startDate, endDate });
+		getParties({ ...currentParams, startDate, endDate });
 	};
 
 	return (
@@ -57,7 +63,7 @@ function PartyListHeader({}: Props) {
 						filterOptions={filterOptions}
 						handleFiltering={filterHandler}
 					/>
-					<DateRangePicker />
+					<DateRangePicker onDateChange={dateRangeHandler} />
 					<OrderSwitch onOrderBy={orderHandler} />
 				</Group>
 				<LayoutOptions />

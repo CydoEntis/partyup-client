@@ -18,7 +18,7 @@ function PartiesPage() {
 	} = usePartyStore();
 
 	const { getSearchParams, updateQueryParams } = useQueryParams();
-	const { pageNumber = 1, search, filter, orderBy } = getSearchParams();
+	const { pageNumber = 1, search, filter, orderBy, startDate, endDate } = getSearchParams();
 
 	const [currentPage, setCurrentPage] = useState(pageNumber);
 
@@ -29,13 +29,15 @@ function PartiesPage() {
 			search,
 			filter,
 			orderBy,
+			startDate,
+			endDate
 		});
 	};
 
 	useEffect(() => {
 		const fetchParties = async () => {
 			try {
-				const params = { pageNumber: currentPage, search, filter, orderBy };
+				const params = { pageNumber: currentPage, search, filter, orderBy, startDate, endDate };
 				await getParties(params);
 			} catch (error) {
 				console.error("Error fetching parties:", error);
@@ -61,7 +63,7 @@ function PartiesPage() {
 				mih="50vh"
 				pos="relative"
 			>
-				<PartyListHeader />
+				<PartyListHeader  />
 				<PartyListBody
 					parties={parties?.items || []}
 					loading={loadingList}

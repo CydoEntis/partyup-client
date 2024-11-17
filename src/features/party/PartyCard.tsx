@@ -67,6 +67,7 @@ function PartyCard({ party }: PartyCardProps) {
 							{party.title}
 						</Title>
 					</Group>
+					<p>{formatDate(party.createdAt)}</p>
 				</Group>
 				<Text
 					size="sm"

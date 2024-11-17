@@ -1,53 +1,58 @@
 import { DatePickerInput } from "@mantine/dates";
-import { Text } from "@mantine/core";
-import { useSearchParams } from "react-router-dom";
+import { Text, Stack, Group, Button } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { Stack } from "@mantine/core";
+import { useQueryParams } from "../../hooks/useQueryParams";
 
-type Props = {};
+type DateRangePickerProps = {
+	onDateChange: (startDate: string, endDate: string) => void;
+};
 
-function DateRangePicker({}: Props) {
-	const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
-	const [searchParams, setSearchParams] = useSearchParams();
-
-	useEffect(() => {
-		const startDateParam = searchParams.get("startDate");
-		const endDateParam = searchParams.get("endDate");
-
-		if (startDateParam || endDateParam) {
-			setValue([
-				startDateParam ? new Date(startDateParam) : null,
-				endDateParam ? new Date(endDateParam) : null,
-			]);
-		}
-	}, [searchParams]);
+function DateRangePicker({ onDateChange }: DateRangePickerProps) {
+	const [value, setValue] = useState<[Date | null, Date | null]>();
 
 	const handleDateChange = (selectedRange: [Date | null, Date | null]) => {
 		setValue(selectedRange);
 
-		const [startDate, endDate] = selectedRange;
+		// const [startDate, endDate] = selectedRange;
+		// const stringifiedStartDate = startDate?.toISOString() || "";
+		// const stringifiedEndDate = endDate?.toISOString() || "";
 
-		const updatedParams: Record<string, string> = {};
-		if (startDate) updatedParams.startDate = startDate.toISOString();
-		if (endDate) updatedParams.endDate = endDate.toISOString();
+		// updateQueryParams({
+		// 	startDate: startDate ? stringifiedStartDate : undefined,
+		// 	endDate: endDate ? stringifiedEndDate : undefined,
+		// });
+	};
 
-		setSearchParams({
-			...Object.fromEntries(searchParams.entries()),
-			...updatedParams,
-		});
+	const handleFilterDates = () => {
+		if (value) {
+			const [startDate, endDate] = value;
+			const stringifiedStartDate = startDate?.toISOString() || "";
+			const stringifiedEndDate = endDate?.toISOString() || "";
+
+			onDateChange(stringifiedStartDate, stringifiedEndDate);
+		}
 	};
 
 	return (
-		<Stack gap={2}>
-			<Text size="sm">Select a Date Range</Text>
-			<DatePickerInput
-			placeholder="Select date range"
-				type="range"
-				allowSingleDateInRange
-				value={value}
-				onChange={handleDateChange}
-			/>
-		</Stack>
+		<Group align="end">
+			<Stack gap={2}>
+				<Text size="sm">Select a Date Range</Text>
+				<DatePickerInput
+					placeholder="Select date range"
+					type="range"
+					allowSingleDateInRange
+					value={value}
+					onChange={handleDateChange}
+				/>
+			</Stack>
+			<Button
+				variant="light"
+				color="violet"
+				onClick={handleFilterDates}
+			>
+				Filter Dates
+			</Button>
+		</Group>
 	);
 }
 
