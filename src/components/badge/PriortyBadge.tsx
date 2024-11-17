@@ -20,6 +20,21 @@ function PriortyBadge({ priority }: PriorityBadgeProps) {
 		}
 	};
 
+	const mapPriortyLevelToLabel = (priorityLevel: PriorityLevel) => {
+		switch (priorityLevel) {
+			case 4:
+				return "critical";
+			case 3:
+				return "high";
+			case 2:
+				return "medium";
+			case 1:
+				return "low";
+			default:
+				return "low";
+		}
+	};
+
 	const badgeColor = getBadgeColor(priority);
 
 	return (
@@ -27,7 +42,7 @@ function PriortyBadge({ priority }: PriorityBadgeProps) {
 			variant="light"
 			color={badgeColor}
 		>
-			{priority}
+			{mapPriortyLevelToLabel(priority)}
 		</Badge>
 	);
 }

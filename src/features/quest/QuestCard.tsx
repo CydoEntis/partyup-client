@@ -38,6 +38,8 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 		onClick();
 	};
 
+
+
 	return (
 		<Card
 			key={quest.id}
