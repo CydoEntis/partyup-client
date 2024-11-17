@@ -12,11 +12,11 @@ export const useQueryParams = () => {
 			if (value !== undefined && value !== null && value !== "") {
 				updatedParams.set(key, value.toString());
 			} else {
-				updatedParams.delete(key); 
+				updatedParams.delete(key);
 			}
 		});
 
-		setSearchParams(updatedParams); 
+		setSearchParams(updatedParams);
 	};
 
 	const getQueryParam = (key: string) => {
@@ -45,5 +45,14 @@ export const useQueryParams = () => {
 		};
 	};
 
-	return { updateQueryParams, getSearchParams, getQueryParam };
+	const clearQueryParams = () => {
+		setSearchParams({});
+	};
+
+	return {
+		updateQueryParams,
+		getSearchParams,
+		getQueryParam,
+		clearQueryParams,
+	};
 };

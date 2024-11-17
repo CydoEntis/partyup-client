@@ -1,4 +1,4 @@
-import { Flex, Group } from "@mantine/core";
+import { ActionIcon, Flex, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import PageHeader from "../../../components/header/PageHeader";
 import DateRangePicker from "../../../components/input/DateRangePicker";
@@ -8,6 +8,8 @@ import LayoutOptions from "../../../components/layout/LayoutOptions";
 import { useQueryParams } from "../../../hooks/useQueryParams";
 import usePartyStore from "../../../stores/usePartyStore";
 import Filter from "../../../components/input/Filter";
+import { X } from "lucide-react";
+import ClearParams from "../../../components/input/ClearParams";
 
 function PartyListHeader() {
 	const { getParties } = usePartyStore();
@@ -15,7 +17,8 @@ function PartyListHeader() {
 		initialValues: { search: "" },
 	});
 
-	const { updateQueryParams, getSearchParams } = useQueryParams();
+	const { updateQueryParams, getSearchParams, clearQueryParams } =
+		useQueryParams();
 
 	const sortOptions = [
 		{ label: "Title", value: "title" },
@@ -50,9 +53,13 @@ function PartyListHeader() {
 	};
 
 	const dateRangeHandler = (startDate: string, endDate: string) => {
-		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, startDate, endDate });
 		getParties({ ...currentParams, startDate, endDate });
+	};
+
+	const clearAllFilters = () => {
+		clearQueryParams();
+		getParties();
 	};
 
 	return (
@@ -74,6 +81,7 @@ function PartyListHeader() {
 					/>
 					<DateRangePicker onDateChange={dateRangeHandler} />
 					<OrderSwitch onOrderBy={orderHandler} />
+					<ClearParams onClear={clearAllFilters} />
 				</Group>
 				<LayoutOptions />
 			</Flex>

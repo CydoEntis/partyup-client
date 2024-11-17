@@ -1,4 +1,12 @@
-import { ActionIcon, Checkbox, Menu, SimpleGrid, Stack, Text } from "@mantine/core";
+import {
+	ActionIcon,
+	Checkbox,
+	Menu,
+	SimpleGrid,
+	Stack,
+	Text,
+	Tooltip,
+} from "@mantine/core";
 import { Settings2 } from "lucide-react";
 import { useState } from "react";
 
@@ -9,7 +17,12 @@ type FilterProps = {
 	handleSorting: (filter: string) => void;
 };
 
-function Filter({ sortOptions, dateOptions, handleSorting, handleDateFiltering }: FilterProps) {
+function Filter({
+	sortOptions,
+	dateOptions,
+	handleSorting,
+	handleDateFiltering,
+}: FilterProps) {
 	const [selectedSort, setSelectedSort] = useState<string | null>("title");
 	const [selectedDate, setSelectedDate] = useState<string | null>("created-at");
 
@@ -34,18 +47,25 @@ function Filter({ sortOptions, dateOptions, handleSorting, handleDateFiltering }
 			shadow="md"
 			width={300}
 		>
-			<Menu.Target>
-				<ActionIcon
-					size="lg"
-					variant="light"
-					color="violet"
-				>
-					<Settings2 size={20} />
-				</ActionIcon>
-			</Menu.Target>
+			<Tooltip label="Filter">
+				<Menu.Target>
+					<ActionIcon
+						size="lg"
+						variant="light"
+						color="violet"
+					>
+						<Settings2 size={20} />
+					</ActionIcon>
+				</Menu.Target>
+			</Tooltip>
 
 			<Menu.Dropdown p={8}>
-				<Text size="xs" ta="center">Search Filters</Text>
+				<Text
+					size="xs"
+					ta="center"
+				>
+					Search Filters
+				</Text>
 				<SimpleGrid cols={2}>
 					{/* Sort by options */}
 					<Stack py={8}>
