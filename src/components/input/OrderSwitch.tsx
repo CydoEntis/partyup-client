@@ -2,13 +2,16 @@ import { ActionIcon } from "@mantine/core";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 
-type Props = {};
+type OrderSwitchProps = {
+	onOrderBy: (order: string) => void
+};
 
-function OrderSwitch({}: Props) {
+function OrderSwitch({onOrderBy}: OrderSwitchProps) {
 	const [order, setOrder] = useState<"asc" | "desc">("desc");
 
 	const toggleOrder = () => {
 		setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+		onOrderBy(order);
 	};
 
 	return (

@@ -1,8 +1,6 @@
 import { Button, Group, TextInput } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Search } from "lucide-react";
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 
 type SearchBarProps = {
 	form: UseFormReturnType<{ search: string }>;
@@ -10,20 +8,10 @@ type SearchBarProps = {
 };
 
 function SearchBar({ form, onSearch }: SearchBarProps) {
-	const [searchParams, setSearchParams] = useSearchParams();
 
-	useEffect(() => {
-		const search = searchParams.get("search") || "";
-		if (search !== form.values.search) {
-			form.setFieldValue("search", search);
-		}
-	}, [searchParams]);
 
 	const handleSearch = (values: { search: string }) => {
 		const searchTerm = values.search.trim();
-		if (searchTerm !== searchParams.get("search")) {
-			setSearchParams({ search: searchTerm });
-		}
 		onSearch(searchTerm);
 	};
 

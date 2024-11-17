@@ -7,7 +7,7 @@ import LayoutOptions from "../../../components/layout/LayoutOptions";
 import Filter from "../../../components/input/Filter";
 import { useForm } from "@mantine/form";
 import usePartyStore from "../../../stores/usePartyStore";
-import { QueryParams } from "../../../shared/types/query-params.types";
+import { useQueryParams } from "../../../hooks/useQueryParams";
 
 type Props = {};
 
@@ -17,27 +17,30 @@ function PartyListHeader({}: Props) {
 		initialValues: { search: "" },
 	});
 
+	const { updateQueryParams, getSearchParams } = useQueryParams();
+
 	const filterOptions = [
 		{ label: "Title", value: "title" },
 		{ label: "Created", value: "created-at" },
 		{ label: "Last Updated", value: "last-updated" },
 	];
 
+	const currentParams = getSearchParams();
+
 	const searchHandler = (search: string) => {
-		const params: QueryParams = {
-			search,
-		};
-		getParties(params);
+		updateQueryParams({ ...currentParams, search });
+		getParties({ ...currentParams, search });
 	};
 
 	const filterHandler = (filter: string) => {
-		const params: QueryParams = {
-			filter,
-			orderBy: "asc"
-		}
+		updateQueryParams({ ...currentParams, filter });
+		getParties({ ...currentParams, filter });
+	};
 
-		getParties(params);
-	}
+	const orderHandler = (orderBy: string) => {
+		updateQueryParams({ ...currentParams, orderBy });
+		getParties({ ...currentParams, orderBy });
+	};
 
 	return (
 		<PageHeader title="Joined Parties">
@@ -50,9 +53,12 @@ function PartyListHeader({}: Props) {
 						form={form}
 						onSearch={searchHandler}
 					/>
-					<Filter filterOptions={filterOptions} handleFiltering={filterHandler}/>
+					<Filter
+						filterOptions={filterOptions}
+						handleFiltering={filterHandler}
+					/>
 					<DateRangePicker />
-					<OrderSwitch />
+					<OrderSwitch onOrderBy={orderHandler} />
 				</Group>
 				<LayoutOptions />
 			</Flex>

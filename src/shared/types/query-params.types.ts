@@ -6,4 +6,5 @@ export type QueryParams = {
 	pageSize?: number;
 	startDate?: string;
 	endDate?: string;
+	[key: string]: string | number | undefined;
 };

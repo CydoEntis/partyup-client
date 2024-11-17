@@ -14,16 +14,11 @@ const getAllParties = async (
 ): Promise<PaginatedParties> => {
 	const queryParams = new URLSearchParams();
 
-	if (params) {
-		if (params.search)
-			queryParams.append("search", params.search);
-		if (params.orderBy) queryParams.append("orderBy", params.orderBy);
-		if (params.filter) queryParams.append("filter", params.filter);
-		if (params.pageNumber)
-			queryParams.append("pageNumber", params.pageNumber.toString());
-		if (params.pageSize)
-			queryParams.append("pageSize", params.pageSize.toString());
-	}
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value) queryParams.append(key, value.toString());
+	});
+
+	console.log("Query Params: ", queryParams);
 
 	const response = (
 		await apiClient.get(`${endpoints.parties}?${queryParams.toString()}`)
@@ -41,8 +36,7 @@ const getPartyById = async (partyId: number): Promise<Party> => {
 };
 
 const createParty = async (party: CreateParty): Promise<Party> => {
-	const response = (await apiClient.post(`${endpoints.parties}`, party))
-		.data;
+	const response = (await apiClient.post(`${endpoints.parties}`, party)).data;
 	if (!response.isSuccess) throw new Error();
 
 	return response.result;
@@ -80,9 +74,8 @@ const updatePartyLeader = async (
 };
 
 const deleteParty = async (partyId: number): Promise<void> => {
-	const response = (
-		await apiClient.delete(`${endpoints.parties}/${partyId}`)
-	).data;
+	const response = (await apiClient.delete(`${endpoints.parties}/${partyId}`))
+		.data;
 	if (!response.isSuccess) throw new Error();
 };
 

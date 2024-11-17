@@ -1,34 +1,41 @@
 import { Box } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useDisclosure } from "@mantine/hooks";
 import usePartyStore from "../../stores/usePartyStore";
 import useUserStore from "../../stores/useUserStore";
 import PartyListHeader from "../../features/party/header/PartyListHeader";
 import PartyListBody from "../../features/party/body/PartyListBody";
-import PartyListFooter from "../../features/party/footer/PartyListFooter";
 import PartyDrawer from "../../features/party/PartyDrawer";
-import { useDisclosure } from "@mantine/hooks";
+import { useQueryParams } from "../../hooks/useQueryParams";
+import PartyListFooter from "../../features/party/footer/PartyListFooter";
 
 function PartiesPage() {
 	const { layout } = useUserStore();
-	const [searchParams, setSearchParams] = useSearchParams();
-
 	const {
 		getParties,
 		parties,
 		loading: { list: loadingList },
 	} = usePartyStore();
 
-	const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+	const { getSearchParams, updateQueryParams } = useQueryParams();
+	const { pageNumber = 1, search, filter, orderBy } = getSearchParams();
+
+	const [currentPage, setCurrentPage] = useState(pageNumber);
 
 	const handlePageChange = (newPage: number) => {
-		setPage(newPage);
+		setCurrentPage(newPage);
+		updateQueryParams({
+			pageNumber: newPage,
+			search,
+			filter,
+			orderBy,
+		});
 	};
 
 	useEffect(() => {
 		const fetchParties = async () => {
 			try {
-				const params = { pageNumber: page };
+				const params = { pageNumber: currentPage, search, filter, orderBy };
 				await getParties(params);
 			} catch (error) {
 				console.error("Error fetching parties:", error);
@@ -36,11 +43,7 @@ function PartiesPage() {
 		};
 
 		fetchParties();
-	}, [getParties, page, layout]);
-
-	useEffect(() => {
-		setSearchParams({ page: page.toString() });
-	}, [page, setSearchParams]);
+	}, [getParties, currentPage, search, filter, orderBy, layout]);
 
 	const [
 		createPartyOpened,
@@ -59,19 +62,17 @@ function PartiesPage() {
 				pos="relative"
 			>
 				<PartyListHeader />
-				<>
-					<PartyListBody
-						parties={parties?.items || []}
-						loading={loadingList}
-						layout={layout}
-						onOpen={openCreateParty}
-					/>
-					{/* <PartyListFooter
-						totalPages={parties?.totalPages || 1}
-						onPageChange={handlePageChange}
-						page={page}
-					/> */}
-				</>
+				<PartyListBody
+					parties={parties?.items || []}
+					loading={loadingList}
+					layout={layout}
+					onOpen={openCreateParty}
+				/>
+				<PartyListFooter
+					totalPages={parties?.totalPages || 1}
+					onPageChange={handlePageChange}
+					page={pageNumber}
+				/>
 			</Box>
 		</>
 	);
