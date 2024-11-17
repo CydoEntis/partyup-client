@@ -27,26 +27,24 @@ function PartyListHeader() {
 		{ label: "Updated On", value: "updated-at" },
 	];
 
+	const currentParams = getSearchParams();
+
 	const searchHandler = (search: string) => {
-		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, search });
 		getParties({ ...currentParams, search });
 	};
 
 	const sortByHandler = (sortBy: string) => {
-		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, sortBy });
 		getParties({ ...currentParams, sortBy });
 	};
 
 	const dateFilterHandler = (filterDate: string) => {
-		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, filterDate });
 		getParties({ ...currentParams, filterDate });
 	};
 
 	const orderHandler = (orderBy: string) => {
-		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, orderBy });
 		getParties({ ...currentParams, orderBy });
 	};

@@ -114,6 +114,7 @@ function PartyCard({ party }: PartyCardProps) {
 					p={8}
 					mt={16}
 					bg="secondary"
+					shadow="none"
 				>
 					<Stack
 						gap={8}
