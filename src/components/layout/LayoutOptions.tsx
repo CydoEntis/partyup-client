@@ -28,15 +28,17 @@ function LayoutOptions() {
 			shadow="md"
 			transitionProps={{ transition: "fade-down", duration: 300 }}
 		>
-			<Menu.Target>
-				<ActionIcon
-					size="lg"
-					variant="light"
-					color="violet"
-				>
-					{layoutIcon}
-				</ActionIcon>
-			</Menu.Target>
+			<Tooltip label="Page Layout">
+				<Menu.Target>
+					<ActionIcon
+						size="lg"
+						variant="light"
+						color="violet"
+					>
+						{layoutIcon}
+					</ActionIcon>
+				</Menu.Target>
+			</Tooltip>
 
 			<Menu.Dropdown>
 				<Menu.Item
