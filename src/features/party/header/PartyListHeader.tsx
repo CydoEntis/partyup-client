@@ -24,7 +24,7 @@ function PartyListHeader() {
 
 	const dateOptions = [
 		{ label: "Created On", value: "created-at" },
-		{ label: "Last Updated", value: "last-updated" },
+		{ label: "Updated On", value: "updated-at" },
 	];
 
 	const searchHandler = (search: string) => {
@@ -33,16 +33,16 @@ function PartyListHeader() {
 		getParties({ ...currentParams, search });
 	};
 
-	const sortByHandler = (filter: string) => {
+	const sortByHandler = (sortBy: string) => {
 		const currentParams = getSearchParams();
-		updateQueryParams({ ...currentParams, filter });
-		getParties({ ...currentParams, filter });
+		updateQueryParams({ ...currentParams, sortBy });
+		getParties({ ...currentParams, sortBy });
 	};
 
-	const dateFilterHandler = (filter: string) => {
+	const dateFilterHandler = (filterDate: string) => {
 		const currentParams = getSearchParams();
-		updateQueryParams({ ...currentParams, filter });
-		getParties({ ...currentParams, filter });
+		updateQueryParams({ ...currentParams, filterDate });
+		getParties({ ...currentParams, filterDate });
 	};
 
 	const orderHandler = (orderBy: string) => {
