@@ -53,22 +53,30 @@ function PartyCard({ party }: PartyCardProps) {
 				gap={8}
 				style={{ flex: 1 }}
 			>
-				<Group justify="space-between">
-					<Group>
-						<Indicator
-							color={party.color}
-							size={8}
-							processing
-						/>
-						<Title
-							size="1.5rem"
-							fw={600}
-						>
-							{party.title}
-						</Title>
-					</Group>
-					<p>{formatDate(party.createdAt)}</p>
+				<Group
+					w="100%"
+
+				>
+					<Indicator
+						color={party.color}
+						size={8}
+						processing
+					/>
+					<Title
+						size="1.5rem"
+						fw={600}
+						className="truncate ..."
+						style={{
+							flex: 1,
+							whiteSpace: "nowrap",
+							overflow: "hidden",
+							textOverflow: "ellipsis",
+						}}
+					>
+						{party.title}
+					</Title>
 				</Group>
+
 				<Text
 					size="sm"
 					c="dimmed"
