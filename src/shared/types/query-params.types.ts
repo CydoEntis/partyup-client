@@ -1,6 +1,7 @@
 export type QueryParams = {
 	search?: string;
-	filter?: string;
+	sortBy?: string;
+	filterDate?: string;
 	orderBy?: string;
 	pageNumber?: number;
 	pageSize?: number;
