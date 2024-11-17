@@ -32,7 +32,8 @@ function PartyListHeader({}: Props) {
 
 	const filterHandler = (filter: string) => {
 		const params: QueryParams = {
-			filter
+			filter,
+			orderBy: "asc"
 		}
 
 		getParties(params);

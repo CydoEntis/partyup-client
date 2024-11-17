@@ -17,7 +17,7 @@ const getAllParties = async (
 	if (params) {
 		if (params.search)
 			queryParams.append("search", params.search);
-		if (params.orderOn) queryParams.append("orderOn", params.orderOn);
+		if (params.orderBy) queryParams.append("orderBy", params.orderBy);
 		if (params.filter) queryParams.append("filter", params.filter);
 		if (params.pageNumber)
 			queryParams.append("pageNumber", params.pageNumber.toString());
