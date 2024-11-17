@@ -1,4 +1,4 @@
-import { ActionIcon, Checkbox, Menu, SimpleGrid, Stack } from "@mantine/core";
+import { ActionIcon, Checkbox, Menu, SimpleGrid, Stack, Text } from "@mantine/core";
 import { Settings2 } from "lucide-react";
 import { useState } from "react";
 
@@ -9,13 +9,23 @@ type FilterProps = {
 };
 
 function Filter({ sortOptions, dateOptions, handleFiltering }: FilterProps) {
-	const [selectedFilter, setSelectedFilter] = useState<string | null>(
-		"created-at",
-	);
+	const [selectedSort, setSelectedSort] = useState<string | null>("title");
+	const [selectedDate, setSelectedDate] = useState<string | null>("created-at");
 
-	const handleFilterChange = (value: string, isChecked: boolean) => {
-		setSelectedFilter(isChecked ? value : null);
-		handleFiltering(value);
+	// Handle sort option change
+	const handleSortChange = (value: string, isChecked: boolean) => {
+		if (isChecked || selectedDate) {
+			setSelectedSort(isChecked ? value : selectedSort);
+			handleFiltering(isChecked ? value : selectedSort!);
+		}
+	};
+
+	// Handle date option change
+	const handleDateChange = (value: string, isChecked: boolean) => {
+		if (isChecked || selectedSort) {
+			setSelectedDate(isChecked ? value : selectedDate);
+			handleFiltering(isChecked ? value : selectedDate!);
+		}
 	};
 
 	return (
@@ -34,7 +44,9 @@ function Filter({ sortOptions, dateOptions, handleFiltering }: FilterProps) {
 			</Menu.Target>
 
 			<Menu.Dropdown p={8}>
+				<Text size="xs" ta="center">Search Filters</Text>
 				<SimpleGrid cols={2}>
+					{/* Sort by options */}
 					<Stack py={8}>
 						<Stack gap={0}>
 							<Menu.Label>Sort By</Menu.Label>
@@ -43,15 +55,17 @@ function Filter({ sortOptions, dateOptions, handleFiltering }: FilterProps) {
 						{sortOptions.map(({ label, value }) => (
 							<Checkbox
 								key={value}
-								checked={selectedFilter === value}
+								checked={selectedSort === value}
 								onChange={(event) =>
-									handleFilterChange(value, event.currentTarget.checked)
+									handleSortChange(value, event.currentTarget.checked)
 								}
 								label={label}
+								disabled={selectedSort === value}
 							/>
 						))}
 					</Stack>
 
+					{/* Date filter options */}
 					<Stack py={8}>
 						<Stack gap={0}>
 							<Menu.Label>Filter Date</Menu.Label>
@@ -60,11 +74,12 @@ function Filter({ sortOptions, dateOptions, handleFiltering }: FilterProps) {
 						{dateOptions.map(({ label, value }) => (
 							<Checkbox
 								key={value}
-								checked={selectedFilter === value}
+								checked={selectedDate === value}
 								onChange={(event) =>
-									handleFilterChange(value, event.currentTarget.checked)
+									handleDateChange(value, event.currentTarget.checked)
 								}
 								label={label}
+								disabled={selectedDate === value}
 							/>
 						))}
 					</Stack>
