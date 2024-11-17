@@ -17,13 +17,16 @@ function PartyListHeader() {
 
 	const { updateQueryParams, getSearchParams } = useQueryParams();
 
-	const filterOptions = [
+	const sortOptions = [
 		{ label: "Title", value: "title" },
-		{ label: "Created", value: "created-at" },
+		{ label: "Priority", value: "priority" },
+	];
+
+	const dateOptions = [
+		{ label: "Created On", value: "created-at" },
 		{ label: "Last Updated", value: "last-updated" },
 	];
 
-	// Handlers that always fetch fresh params
 	const searchHandler = (search: string) => {
 		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, search });
@@ -60,7 +63,8 @@ function PartyListHeader() {
 						onSearch={searchHandler}
 					/>
 					<Filter
-						filterOptions={filterOptions}
+						sortOptions={sortOptions}
+						dateOptions={dateOptions}
 						handleFiltering={filterHandler}
 					/>
 					<DateRangePicker onDateChange={dateRangeHandler} />

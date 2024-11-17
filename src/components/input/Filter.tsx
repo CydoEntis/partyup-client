@@ -1,26 +1,27 @@
-import { ActionIcon, Checkbox, Menu, Stack } from "@mantine/core";
+import { ActionIcon, Checkbox, Menu, SimpleGrid, Stack } from "@mantine/core";
 import { Settings2 } from "lucide-react";
 import { useState } from "react";
 
 type FilterProps = {
-	filterOptions: Record<string, string>[];
+	sortOptions: Record<string, string>[];
+	dateOptions: Record<string, string>[];
 	handleFiltering: (filter: string) => void;
 };
 
-function Filter({ filterOptions, handleFiltering }: FilterProps) {
+function Filter({ sortOptions, dateOptions, handleFiltering }: FilterProps) {
 	const [selectedFilter, setSelectedFilter] = useState<string | null>(
 		"created-at",
 	);
 
 	const handleFilterChange = (value: string, isChecked: boolean) => {
 		setSelectedFilter(isChecked ? value : null);
-		handleFiltering(value)
+		handleFiltering(value);
 	};
 
 	return (
 		<Menu
 			shadow="md"
-			width={200}
+			width={300}
 		>
 			<Menu.Target>
 				<ActionIcon
@@ -33,20 +34,41 @@ function Filter({ filterOptions, handleFiltering }: FilterProps) {
 			</Menu.Target>
 
 			<Menu.Dropdown p={8}>
-				<Menu.Label>Filter</Menu.Label>
-				<Menu.Divider />
-				<Stack py={8}>
-					{filterOptions.map(({ label, value }) => (
-						<Checkbox
-							key={value}
-							checked={selectedFilter === value}
-							onChange={(event) =>
-								handleFilterChange(value, event.currentTarget.checked)
-							}
-							label={label}
-						/>
-					))}
-				</Stack>
+				<SimpleGrid cols={2}>
+					<Stack py={8}>
+						<Stack gap={0}>
+							<Menu.Label>Sort By</Menu.Label>
+							<Menu.Divider />
+						</Stack>
+						{sortOptions.map(({ label, value }) => (
+							<Checkbox
+								key={value}
+								checked={selectedFilter === value}
+								onChange={(event) =>
+									handleFilterChange(value, event.currentTarget.checked)
+								}
+								label={label}
+							/>
+						))}
+					</Stack>
+
+					<Stack py={8}>
+						<Stack gap={0}>
+							<Menu.Label>Filter Date</Menu.Label>
+							<Menu.Divider />
+						</Stack>
+						{dateOptions.map(({ label, value }) => (
+							<Checkbox
+								key={value}
+								checked={selectedFilter === value}
+								onChange={(event) =>
+									handleFilterChange(value, event.currentTarget.checked)
+								}
+								label={label}
+							/>
+						))}
+					</Stack>
+				</SimpleGrid>
 			</Menu.Dropdown>
 		</Menu>
 	);
