@@ -1,7 +1,6 @@
 import InvitePartyMember from "../InvitePartyMember";
-import { Box, Button, Flex, Group, Stack, Title } from "@mantine/core";
+import { Button, Flex, Group, Stack, Title } from "@mantine/core";
 import { Edit, Plus, Trash2 } from "lucide-react";
-import { Member } from "../../../shared/types/member.types";
 import MenuOptions from "../../../components/menu/MenuOptions";
 import { useNavigate, useParams } from "react-router-dom";
 import usePartyStore from "../../../stores/usePartyStore";
@@ -13,6 +12,9 @@ import OrderSwitch from "../../../components/input/OrderSwitch";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
 import { useForm } from "@mantine/form";
 import { Party } from "../../../shared/types/party.types";
+import { useQueryParams } from "../../../hooks/useQueryParams";
+import useQuestStore from "../../../stores/useQuestStore";
+import ClearParams from "../../../components/input/ClearParams";
 
 type PartyHeaderProps = {
 	party: Party;
@@ -27,6 +29,7 @@ function PartyHeader({
 	handleNewQuest,
 	openMemberInvite,
 }: PartyHeaderProps) {
+	const { getQuests } = useQuestStore();
 	const { deleteParty } = usePartyStore();
 	const { partyId } = useParams();
 	const navigate = useNavigate();
@@ -35,15 +38,65 @@ function PartyHeader({
 		initialValues: { search: "" },
 	});
 
-	const searchHandler = () => {
-		console.log("Searching for:", form.values.search);
+	const { updateQueryParams, getSearchParams, clearQueryParams } =
+		useQueryParams();
+
+	const sortOptions = [
+		{ label: "Title", value: "title" },
+		{ label: "Priority", value: "priority" },
+		{ label: "Created At", value: "created-at" },
+		{ label: "Updated At", value: "updated-at" },
+		{ label: "Due Date", value: "due-date" },
+	];
+
+	const dateOptions = [
+		{ label: "Created On", value: "created-at" },
+		{ label: "Updated On", value: "updated-at" },
+	];
+
+	const currentParams = getSearchParams();
+
+	const searchHandler = (search: string) => {
+		updateQueryParams({ ...currentParams, search });
+		if (partyId) {
+			getQuests(partyId, { ...currentParams, search });
+		}
 	};
 
-	const filterOptions = [
-		{ label: "Title", value: "title" },
-		{ label: "Created", value: "created-at" },
-		{ label: "Last Updated", value: "last-updated" },
-	];
+	const sortByHandler = (sortBy: string) => {
+		updateQueryParams({ ...currentParams, sortBy });
+		if (partyId) {
+			getQuests(partyId, { ...currentParams, sortBy });
+		}
+	};
+
+	const dateFilterHandler = (filterDate: string) => {
+		updateQueryParams({ ...currentParams, filterDate });
+		if (partyId) {
+			getQuests(partyId, { ...currentParams, filterDate });
+		}
+	};
+
+	const orderHandler = (orderBy: string) => {
+		updateQueryParams({ ...currentParams, orderBy });
+		if (partyId) {
+			getQuests(partyId, { ...currentParams, orderBy });
+		}
+	};
+
+	const dateRangeHandler = (startDate: string, endDate: string) => {
+		updateQueryParams({ ...currentParams, startDate, endDate });
+		if (partyId) {
+			getQuests(partyId, { ...currentParams, startDate, endDate });
+		}
+	};
+
+	const clearAllFilters = () => {
+		clearQueryParams();
+		if (partyId) {
+			getQuests(partyId);
+		}
+	};
 
 	const handleDelete = async () => {
 		if (partyId) {
@@ -98,9 +151,15 @@ function PartyHeader({
 							form={form}
 							onSearch={searchHandler}
 						/>
-						<Filter filterOptions={filterOptions} />
-						<DateRangePicker />
-						<OrderSwitch />
+						<Filter
+							sortOptions={sortOptions}
+							dateOptions={dateOptions}
+							handleSorting={sortByHandler}
+							handleDateFiltering={dateFilterHandler}
+						/>
+						<DateRangePicker onDateChange={dateRangeHandler} />
+						<OrderSwitch onOrderBy={orderHandler} />
+						<ClearParams onClear={clearAllFilters} />
 					</Group>
 					<LayoutOptions />
 				</Flex>

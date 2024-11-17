@@ -7,7 +7,7 @@ type OrderSwitchProps = {
 };
 
 function OrderSwitch({onOrderBy}: OrderSwitchProps) {
-	const [order, setOrder] = useState<"asc" | "desc">("desc");
+	const [order, setOrder] = useState<"asc" | "desc">("asc");
 
 	const toggleOrder = () => {
 		setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));

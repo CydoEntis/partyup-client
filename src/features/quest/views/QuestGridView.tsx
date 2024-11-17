@@ -1,5 +1,4 @@
-import { Skeleton } from "@mantine/core";
-import SimpleGridLayout from "../../../components/layout/SimpleGridLayout";
+import { SimpleGrid, Skeleton } from "@mantine/core";
 import QuestCard from "../QuestCard";
 import { Quest } from "../../../shared/types/quest.types";
 
@@ -11,7 +10,7 @@ type PartyGridViewProps = {
 
 function PartyGridView({ loading, quests, onViewQuest }: PartyGridViewProps) {
 	return (
-		<SimpleGridLayout cols={6}>
+		<SimpleGrid cols={6}>
 			{loading
 				? Array.from({ length: 12 }).map((_, index) => (
 						<Skeleton
@@ -28,7 +27,7 @@ function PartyGridView({ loading, quests, onViewQuest }: PartyGridViewProps) {
 							onClick={onViewQuest}
 						/>
 				  ))}
-		</SimpleGridLayout>
+		</SimpleGrid>
 	);
 }
 

@@ -14,17 +14,9 @@ const getAllQuests = async (
 ): Promise<PaginatedQuests> => {
 	const queryParams = new URLSearchParams();
 
-	if (params) {
-		if (params.search) queryParams.append("search", params.search);
-		if (params.orderOn) queryParams.append("orderOn", params.orderOn);
-		if (params.filter) queryParams.append("filter", params.filter);
-		if (params.pageNumber)
-			queryParams.append("pageNumber", params.pageNumber.toString());
-		if (params.pageSize)
-			queryParams.append("pageSize", params.pageSize.toString());
-		if (params.startDate) queryParams.append("startDate", params.startDate);
-		if (params.endDate) queryParams.append("endDate", params.endDate);
-	}
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value) queryParams.append(key, value.toString());
+	});
 
 	const response = (
 		await apiClient.get(

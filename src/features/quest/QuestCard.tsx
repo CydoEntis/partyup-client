@@ -56,7 +56,7 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 				justify="space-between"
 			>
 				<PriortyBadge priority={quest.priority} />
-				<p>{formatDate(quest.createdAt)}</p>
+				<p>Created At: {formatDate(quest.createdAt)}</p>
 			</Group>
 
 			<Stack
