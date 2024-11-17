@@ -25,7 +25,8 @@ export const useQueryParams = () => {
 
 	const getSearchParams = (): QueryParams => {
 		const search = getQueryParam("search");
-		const filter = getQueryParam("filter");
+		const sortBy = getQueryParam("sortBy");
+		const filterDate = getQueryParam("filterDate");
 		const orderBy = getQueryParam("orderBy");
 		const pageNumber = getQueryParam("pageNumber");
 		const pageSize = getQueryParam("pageSize");
@@ -34,7 +35,8 @@ export const useQueryParams = () => {
 
 		return {
 			search,
-			filter,
+			sortBy,
+			filterDate,
 			orderBy,
 			pageNumber: pageNumber ? Number(pageNumber) : 1,
 			pageSize: pageSize ? Number(pageSize) : 24,

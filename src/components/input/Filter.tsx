@@ -5,10 +5,11 @@ import { useState } from "react";
 type FilterProps = {
 	sortOptions: Record<string, string>[];
 	dateOptions: Record<string, string>[];
-	handleFiltering: (filter: string) => void;
+	handleDateFiltering: (filter: string) => void;
+	handleSorting: (filter: string) => void;
 };
 
-function Filter({ sortOptions, dateOptions, handleFiltering }: FilterProps) {
+function Filter({ sortOptions, dateOptions, handleSorting, handleDateFiltering }: FilterProps) {
 	const [selectedSort, setSelectedSort] = useState<string | null>("title");
 	const [selectedDate, setSelectedDate] = useState<string | null>("created-at");
 
@@ -16,7 +17,7 @@ function Filter({ sortOptions, dateOptions, handleFiltering }: FilterProps) {
 	const handleSortChange = (value: string, isChecked: boolean) => {
 		if (isChecked || selectedDate) {
 			setSelectedSort(isChecked ? value : selectedSort);
-			handleFiltering(isChecked ? value : selectedSort!);
+			handleSorting(isChecked ? value : selectedSort!);
 		}
 	};
 
@@ -24,7 +25,7 @@ function Filter({ sortOptions, dateOptions, handleFiltering }: FilterProps) {
 	const handleDateChange = (value: string, isChecked: boolean) => {
 		if (isChecked || selectedSort) {
 			setSelectedDate(isChecked ? value : selectedDate);
-			handleFiltering(isChecked ? value : selectedDate!);
+			handleDateFiltering(isChecked ? value : selectedDate!);
 		}
 	};
 

@@ -33,7 +33,13 @@ function PartyListHeader() {
 		getParties({ ...currentParams, search });
 	};
 
-	const filterHandler = (filter: string) => {
+	const sortByHandler = (filter: string) => {
+		const currentParams = getSearchParams();
+		updateQueryParams({ ...currentParams, filter });
+		getParties({ ...currentParams, filter });
+	};
+
+	const dateFilterHandler = (filter: string) => {
 		const currentParams = getSearchParams();
 		updateQueryParams({ ...currentParams, filter });
 		getParties({ ...currentParams, filter });
@@ -65,7 +71,8 @@ function PartyListHeader() {
 					<Filter
 						sortOptions={sortOptions}
 						dateOptions={dateOptions}
-						handleFiltering={filterHandler}
+						handleSorting={sortByHandler}
+						handleDateFiltering={dateFilterHandler}
 					/>
 					<DateRangePicker onDateChange={dateRangeHandler} />
 					<OrderSwitch onOrderBy={orderHandler} />
