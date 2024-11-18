@@ -53,8 +53,8 @@ function PartyCard({ party }: PartyCardProps) {
 				gap={8}
 				style={{ flex: 1 }}
 			>
-				<p>Created: {formatDate(party.createdAt)}</p>
-				<p>Updated: {formatDate(party.updatedAt)}</p>
+				{/* <p>Created: {formatDate(party.createdAt)}</p>
+				<p>Updated: {formatDate(party.updatedAt)}</p> */}
 				<Group w="100%">
 					<Indicator
 						color={party.color}

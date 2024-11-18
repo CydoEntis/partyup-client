@@ -8,3 +8,8 @@ export const dateOptions = [
 	{ label: "Created On", value: "created-at" },
 	{ label: "Updated On", value: "updated-at" },
 ];
+
+export const orderOptions = [
+	{ label: "Ascending", value: "asc" },
+	{ label: "Descending", value: "desc" },
+];

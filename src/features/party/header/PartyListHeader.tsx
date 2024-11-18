@@ -9,6 +9,7 @@ import PartyFilterModal from "../../filters/PartyFilterModal";
 import { useRef } from "react";
 import { Settings2 } from "lucide-react";
 import usePartyQueryUpdater from "../../../hooks/usePartyQueryUpdater";
+import OrderSwitch from "../../../components/input/OrderSwitch";
 
 function PartyListHeader() {
 	const form = useForm<{ search: string }>({
@@ -37,15 +38,15 @@ function PartyListHeader() {
 					align="end"
 					justify="space-between"
 				>
+					<SearchBar
+						form={form}
+						onSearch={handleSearchSubmit}
+						onClear={clearSearchParam}
+						resetCallback={(reset) => {
+							callbacksRef.current.search = reset;
+						}}
+					/>
 					<Group align="end">
-						<SearchBar
-							form={form}
-							onSearch={handleSearchSubmit}
-							onClear={clearSearchParam}
-							resetCallback={(reset) => {
-								callbacksRef.current.search = reset;
-							}}
-						/>
 						<ActionIcon
 							size="lg"
 							variant="light"
@@ -54,8 +55,9 @@ function PartyListHeader() {
 						>
 							<Settings2 size={20} />
 						</ActionIcon>
+						{/* <OrderSwitch /> */}
+						<LayoutOptions />
 					</Group>
-					<LayoutOptions />
 				</Flex>
 			</PageHeader>
 		</>
