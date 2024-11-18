@@ -16,7 +16,7 @@ type FilterProps = {
 	priorityOptions?: Record<string, string>[];
 	handleDateFiltering: (filter: string) => void;
 	handleSorting: (filter: string) => void;
-	handleFiltering: (filter: string) => void;
+	handlePriority?: (filter: string) => void; // Fix the typo here to handlePriority
 	resetCallback?: (resetFunction: () => void) => void;
 };
 
@@ -26,7 +26,7 @@ function Filter({
 	priorityOptions,
 	handleSorting,
 	handleDateFiltering,
-	handleFiltering,
+	handlePriority, // Fix the typo here
 	resetCallback,
 }: FilterProps) {
 	const [selectedSort, setSelectedSort] = useState<string | null>("title");
@@ -50,7 +50,9 @@ function Filter({
 	const handlePriorityChange = (value: string, isChecked: boolean) => {
 		if (isChecked || selectedPriority) {
 			setSelectedPriority(isChecked ? value : selectedPriority);
-			handleFiltering(isChecked ? value : selectedPriority!);
+			if (handlePriority) {
+				handlePriority(isChecked ? value : selectedPriority!); // Check if handlePriority is defined
+			}
 		}
 	};
 
@@ -62,14 +64,16 @@ function Filter({
 		// Trigger parent handlers with defaults
 		handleSorting("title");
 		handleDateFiltering("created-at");
-		handleFiltering("");
+		if (handlePriority) {
+			handlePriority(""); // Check if handlePriority is defined before calling
+		}
 	};
 
-		useEffect(() => {
-			if (resetCallback) {
-				resetCallback(resetFilters);
-			}
-		}, [resetCallback]);
+	useEffect(() => {
+		if (resetCallback) {
+			resetCallback(resetFilters);
+		}
+	}, [resetCallback]);
 
 	return (
 		<Menu

@@ -45,7 +45,6 @@ function PartyHeader({
 
 	// Custom hook for handling query updates
 	const {
-		updateQueryParams,
 		clearAllParams,
 		handleSearch,
 		handleSort,
@@ -55,16 +54,13 @@ function PartyHeader({
 		handleDateRange,
 	} = useQueryUpdater(partyId);
 
-	// Refs for reset callbacks
 	const callbacksRef = useRef<Record<string, () => void>>({});
 
-	// Handle clear all filters
 	const clearAllFilters = () => {
 		Object.values(callbacksRef.current).forEach((reset) => reset());
 		clearAllParams();
 	};
 
-	// Handle party deletion
 	const handleDelete = async () => {
 		if (partyId) {
 			await deleteParty(partyId);
@@ -72,7 +68,6 @@ function PartyHeader({
 		}
 	};
 
-	// Menu options
 	const menuOptions = [
 		{ icon: <Edit size={16} />, text: "Edit", onClick: handleEditParty },
 		{ icon: <Trash2 size={16} />, text: "Delete", onClick: handleDelete },
@@ -120,7 +115,7 @@ function PartyHeader({
 							priorityOptions={priorityOptions}
 							handleSorting={handleSort}
 							handleDateFiltering={handleDateFilter}
-							handleFiltering={handlePriorityFilter}
+							handlePriority={handlePriorityFilter}
 							resetCallback={(reset) => {
 								callbacksRef.current.filter = reset;
 							}}

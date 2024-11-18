@@ -33,7 +33,7 @@ function DateRangePicker({
 
 	return (
 		<Group align="end">
-			<Stack>
+			<Stack gap={2}>
 				<Text size="sm">Select a Date Range</Text>
 				<DatePickerInput
 					placeholder="Select date range"

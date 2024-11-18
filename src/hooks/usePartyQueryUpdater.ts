@@ -1,17 +1,17 @@
-import useQuestStore from "../stores/useQuestStore";
+import usePartyStore from "../stores/usePartyStore";
 import { useQueryParams } from "./useQueryParams";
 
-const useQuestQueryUpdater = (partyId: string | undefined) => {
+const usePartyQueryUpdater = () => {
 	const { updateQueryParams, getSearchParams, clearQueryParams } =
 		useQueryParams();
-	const { getQuests } = useQuestStore();
+	const { getParties } = usePartyStore();
 
 	const currentParams = getSearchParams();
 
 	const updateAndFetch = (params: Record<string, any>) => {
 		const updatedParams = { ...currentParams, ...params };
 		updateQueryParams(updatedParams);
-		if (partyId) getQuests(partyId, updatedParams);
+		getParties(updatedParams);
 	};
 
 	return {
@@ -27,4 +27,4 @@ const useQuestQueryUpdater = (partyId: string | undefined) => {
 	};
 };
 
-export default useQuestQueryUpdater;
+export default usePartyQueryUpdater;
