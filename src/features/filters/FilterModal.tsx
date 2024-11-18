@@ -18,6 +18,7 @@ type FilterModalProps = {
 	sortOptions?: Array<{ label: string; value: string }>;
 	dateOptions?: Array<{ label: string; value: string }>;
 	orderOptions?: Array<{ label: string; value: string }>;
+	priorityOptions?: Array<{ label: string; value: string }>;
 };
 
 function FilterModal({
@@ -26,6 +27,7 @@ function FilterModal({
 	sortOptions,
 	dateOptions,
 	orderOptions,
+	priorityOptions,
 }: FilterModalProps) {
 	const { clearAllFilterParams, applyFilters } = usePartyQueryUpdater();
 
@@ -57,6 +59,7 @@ function FilterModal({
 			onClose={handleCloseFilterModal}
 			centered
 			title="Filters"
+			size="lg"
 		>
 			<form
 				onSubmit={form.onSubmit((values) => handleApplyFilters(values))}
@@ -72,7 +75,7 @@ function FilterModal({
 						}
 					/>
 
-					<SimpleGrid cols={3}>
+					<SimpleGrid cols={4}>
 						{sortOptions && (
 							<Stack py={8}>
 								<Stack gap={0}>
@@ -102,6 +105,24 @@ function FilterModal({
 										key={value}
 										checked={form.values.filterDate === value}
 										onChange={() => form.setFieldValue("filterDate", value)}
+										label={label}
+										color="violet"
+									/>
+								))}
+							</Stack>
+						)}
+
+						{priorityOptions && (
+							<Stack py={8}>
+								<Stack gap={0}>
+									<Text>Order</Text>
+									<Divider />
+								</Stack>
+								{priorityOptions.map(({ label, value }) => (
+									<Checkbox
+										key={value}
+										checked={form.values.priority === value}
+										onChange={() => form.setFieldValue("priority", value)}
 										label={label}
 										color="violet"
 									/>

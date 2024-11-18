@@ -18,3 +18,8 @@ export const priorityOptions = [
 	{ label: "Medium", value: "2" },
 	{ label: "Low", value: "1" },
 ];
+
+export const orderOptions = [
+	{ label: "Ascending", value: "asc" },
+	{ label: "Descending", value: "desc" },
+];

@@ -1,24 +1,24 @@
 import InvitePartyMember from "../InvitePartyMember";
-import { Button, Flex, Group, Stack, Title } from "@mantine/core";
-import { Edit, Plus, Trash2 } from "lucide-react";
+import { ActionIcon, Button, Flex, Group, Stack, Title } from "@mantine/core";
+import { Edit, Plus, Settings2, Trash2 } from "lucide-react";
 import MenuOptions from "../../../components/menu/MenuOptions";
 import { useNavigate, useParams } from "react-router-dom";
 import usePartyStore from "../../../stores/usePartyStore";
 import PageHeader from "../../../components/header/PageHeader";
 import SearchBar from "../../../components/input/SearchBar";
-import DateRangePicker from "../../../components/input/DateRangePicker";
-import OrderSwitch from "../../../components/input/OrderSwitch";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
 import { useForm } from "@mantine/form";
 import { Party } from "../../../shared/types/party.types";
-import ClearParams from "../../../components/input/ClearParams";
 import { useRef } from "react";
-import useQueryUpdater from "../../../hooks/useQuestQueryUpdater";
 import {
 	sortOptions,
 	priorityOptions,
 	dateOptions,
+	orderOptions,
 } from "../../../shared/options/quest-filter.options";
+import usePartyQueryUpdater from "../../../hooks/usePartyQueryUpdater";
+import { useDisclosure } from "@mantine/hooks";
+import FilterModal from "../../filters/FilterModal";
 
 type PartyHeaderProps = {
 	party: Party;
@@ -37,27 +37,19 @@ function PartyHeader({
 	const { partyId } = useParams();
 	const navigate = useNavigate();
 
-	// Form for search input
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
 
-	// Custom hook for handling query updates
-	const {
-		clearAllParams,
-		handleSearch,
-		handleSort,
-		handleDateFilter,
-		handlePriorityFilter,
-		handleOrder,
-		handleDateRange,
-	} = useQueryUpdater(partyId);
+	const { handleSearch, clearSearchParam } = usePartyQueryUpdater();
 
 	const callbacksRef = useRef<Record<string, () => void>>({});
 
-	const clearAllFilters = () => {
-		Object.values(callbacksRef.current).forEach((reset) => reset());
-		clearAllParams();
+	const [isFilterOpened, { open: openFilters, close: closeFilters }] =
+		useDisclosure(false);
+
+	const handleSearchSubmit = () => {
+		handleSearch(form.values.search);
 	};
 
 	const handleDelete = async () => {
@@ -85,53 +77,54 @@ function PartyHeader({
 	);
 
 	return (
-		<PageHeader
-			title={party.title}
-			optionsComp={partyOptions}
-			actionBtn={newMemberBtn}
-		>
-			<Stack gap={16}>
-				<Title size="lg">{party.description}</Title>
-				<InvitePartyMember
-					members={party.members}
-					onOpenHandler={openMemberInvite}
-				/>
-				<Flex
-					align="end"
-					justify="space-between"
-				>
-					<Group align="end">
+		<>
+			<FilterModal
+				filterOpened={isFilterOpened}
+				sortOptions={sortOptions}
+				dateOptions={dateOptions}
+				orderOptions={orderOptions}
+				priorityOptions={priorityOptions}
+				handleCloseFilterModal={closeFilters}
+			/>
+			<PageHeader
+				title={party.title}
+				optionsComp={partyOptions}
+				actionBtn={newMemberBtn}
+			>
+				<Stack gap={16}>
+					<Title size="lg">{party.description}</Title>
+					<InvitePartyMember
+						members={party.members}
+						onOpenHandler={openMemberInvite}
+					/>
+					<Flex
+						align="end"
+						justify="space-between"
+					>
 						<SearchBar
 							form={form}
-							onSearch={handleSearch}
+							onSearch={handleSearchSubmit}
+							onClear={clearSearchParam}
 							resetCallback={(reset) => {
 								callbacksRef.current.search = reset;
 							}}
 						/>
-						{/* <Filter
-							sortOptions={sortOptions}
-							dateOptions={dateOptions}
-							priorityOptions={priorityOptions}
-							handleSorting={handleSort}
-							handleDateFiltering={handleDateFilter}
-							handlePriority={handlePriorityFilter}
-							resetCallback={(reset) => {
-								callbacksRef.current.filter = reset;
-							}}
-						/> */}
-						<DateRangePicker
-							onDateChange={handleDateRange}
-							resetCallback={(reset) => {
-								callbacksRef.current.dateRange = reset;
-							}}
-						/>
-						<OrderSwitch onOrderBy={handleOrder} />
-						<ClearParams onClear={clearAllFilters} />
-					</Group>
-					<LayoutOptions />
-				</Flex>
-			</Stack>
-		</PageHeader>
+
+						<Group align="end">
+							<ActionIcon
+								size="lg"
+								variant="light"
+								color="violet"
+								onClick={openFilters}
+							>
+								<Settings2 size={20} />
+							</ActionIcon>
+							<LayoutOptions />
+						</Group>
+					</Flex>
+				</Stack>
+			</PageHeader>
+		</>
 	);
 }
 
