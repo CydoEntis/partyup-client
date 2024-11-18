@@ -43,14 +43,18 @@ function PartyHeader({
 		initialValues: { search: "" },
 	});
 
-	const getPartiesCallback = async (params: Record<string, any>) => {
+	const getQuestsCallBack = async (params: Record<string, any>) => {
 		if (partyId) {
 			await getQuests(partyId, params);
 		}
 	};
 
-	const { handleSearch, clearSearchParam, applyFilters, clearAllFilterParams } =
-		useQueryUpdater({ fetchCallback: getPartiesCallback });
+	const {
+		handleSearch,
+		resetSearchAndFetch,
+		applyFilters,
+		resetFiltersAndFetch,
+	} = useQueryUpdater({ fetchCallback: getQuestsCallBack });
 
 	const callbacksRef = useRef<Record<string, () => void>>({});
 
@@ -67,7 +71,7 @@ function PartyHeader({
 	};
 
 	const handleClearFilters = () => {
-		clearAllFilterParams();
+		resetFiltersAndFetch();
 		closeFilters();
 	};
 
@@ -125,7 +129,7 @@ function PartyHeader({
 						<SearchBar
 							form={form}
 							onSearch={handleSearchSubmit}
-							onClear={clearSearchParam}
+							onClear={resetSearchAndFetch}
 							resetCallback={(reset) => {
 								callbacksRef.current.search = reset;
 							}}

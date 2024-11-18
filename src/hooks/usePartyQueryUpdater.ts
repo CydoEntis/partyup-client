@@ -1,10 +1,12 @@
 import { useQueryParams } from "./useQueryParams";
 
 type UseQueryUpdaterOptions = {
-	fetchCallback: (params: Record<string, any>) => void; // Function to fetch data
+	fetchCallback: (params: Record<string, any>) => void;
 };
 
-const useQueryUpdater = ({ fetchCallback }: UseQueryUpdaterOptions) => {
+const useQueryUpdater = ({
+	fetchCallback,
+}: UseQueryUpdaterOptions) => {
 	const {
 		updateQueryParams,
 		getSearchParams,
@@ -33,6 +35,17 @@ const useQueryUpdater = ({ fetchCallback }: UseQueryUpdaterOptions) => {
 		fetchCallback(updatedParams);
 	};
 
+	const resetFiltersAndFetch = () => {
+		clearAllFilterParams();
+		fetchCallback({});
+	};
+
+	const resetSearchAndFetch = () => {
+		clearAllFilterParams();
+		clearSearchParam();
+		fetchCallback({});
+	};
+
 	return {
 		updateQueryParams,
 		clearAllFilterParams,
@@ -40,6 +53,8 @@ const useQueryUpdater = ({ fetchCallback }: UseQueryUpdaterOptions) => {
 		applyFilters,
 		handleSearch,
 		updateAndFetch,
+		resetFiltersAndFetch,
+		resetSearchAndFetch,
 	};
 };
 

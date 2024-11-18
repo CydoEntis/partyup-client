@@ -18,13 +18,13 @@ import useQueryUpdater from "../../../hooks/usePartyQueryUpdater";
 import usePartyStore from "../../../stores/usePartyStore";
 
 function PartyListHeader() {
-	const {getParties} = usePartyStore();
+	const { getParties } = usePartyStore();
 
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
 
-	const { handleSearch, clearSearchParam, applyFilters, clearAllFilterParams } =
+	const { handleSearch, resetSearchAndFetch, applyFilters, resetFiltersAndFetch } =
 		useQueryUpdater({ fetchCallback: getParties });
 
 	const callbacksRef = useRef<Record<string, () => void>>({});
@@ -42,7 +42,7 @@ function PartyListHeader() {
 	};
 
 	const handleClearFilters = () => {
-		clearAllFilterParams();
+		resetFiltersAndFetch();
 		closeFilters();
 	};
 
@@ -54,8 +54,8 @@ function PartyListHeader() {
 				dateOptions={dateOptions}
 				orderOptions={orderOptions}
 				handleCloseFilterModal={closeFilters}
-				onApplyFilters={handleApplyFilters} 
-				onClearFilters={handleClearFilters} 
+				onApplyFilters={handleApplyFilters}
+				onClearFilters={handleClearFilters}
 			/>
 			<PageHeader title="Joined Parties">
 				<Flex
@@ -65,7 +65,7 @@ function PartyListHeader() {
 					<SearchBar
 						form={form}
 						onSearch={handleSearchSubmit}
-						onClear={clearSearchParam}
+						onClear={resetSearchAndFetch}
 						resetCallback={(reset) => {
 							callbacksRef.current.search = reset;
 						}}
