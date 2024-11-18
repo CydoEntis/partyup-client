@@ -7,7 +7,9 @@ import usePartyStore from "../../../stores/usePartyStore";
 import PageHeader from "../../../components/header/PageHeader";
 import SearchBar from "../../../components/input/SearchBar";
 import Filter from "../../../components/input/Filter";
-import DateRangePicker, { DateRangePickerHandle } from "../../../components/input/DateRangePicker";
+import DateRangePicker, {
+	DateRangePickerHandle,
+} from "../../../components/input/DateRangePicker";
 import OrderSwitch from "../../../components/input/OrderSwitch";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
 import { useForm } from "@mantine/form";
@@ -55,9 +57,16 @@ function PartyHeader({
 		{ label: "Updated On", value: "updated-at" },
 	];
 
+	const priorityOptions = [
+		{ label: "Critical", value: "4" },
+		{ label: "High", value: "3" },
+		{ label: "Medium", value: "2" },
+		{ label: "low", value: "1" },
+	];
+
 	const currentParams = getSearchParams();
 
-	 const dateRangePickerRef = useRef<DateRangePickerHandle>(null);
+	const dateRangePickerRef = useRef<DateRangePickerHandle>(null);
 
 	const searchHandler = (search: string) => {
 		updateQueryParams({ ...currentParams, search });
@@ -77,6 +86,13 @@ function PartyHeader({
 		updateQueryParams({ ...currentParams, filterDate });
 		if (partyId) {
 			getQuests(partyId, { ...currentParams, filterDate });
+		}
+	};
+
+	const filterByHandler = (priority: string) => {
+		updateQueryParams({ ...currentParams, priority });
+		if (partyId) {
+			getQuests(partyId, { ...currentParams, priority });
 		}
 	};
 
@@ -162,6 +178,8 @@ function PartyHeader({
 							dateOptions={dateOptions}
 							handleSorting={sortByHandler}
 							handleDateFiltering={dateFilterHandler}
+							priorityOptions={priorityOptions}
+							handleFiltering={filterByHandler}
 						/>
 						<DateRangePicker
 							onDateChange={dateRangeHandler}

@@ -32,6 +32,7 @@ export const useQueryParams = () => {
 		const pageSize = getQueryParam("pageSize");
 		const startDate = getQueryParam("startDate");
 		const endDate = getQueryParam("endDate");
+		const priority = getQueryParam("priority");
 
 		return {
 			search,
@@ -42,6 +43,7 @@ export const useQueryParams = () => {
 			pageSize: pageSize ? Number(pageSize) : 24,
 			startDate,
 			endDate,
+			priority
 		};
 	};
 

@@ -13,20 +13,24 @@ import { useState } from "react";
 type FilterProps = {
 	sortOptions: Record<string, string>[];
 	dateOptions: Record<string, string>[];
+	priorityOptions?: Record<string, string>[];
 	handleDateFiltering: (filter: string) => void;
 	handleSorting: (filter: string) => void;
+	handleFiltering: (filter: string) => void;
 };
 
 function Filter({
 	sortOptions,
 	dateOptions,
+	priorityOptions,
 	handleSorting,
 	handleDateFiltering,
+	handleFiltering,
 }: FilterProps) {
 	const [selectedSort, setSelectedSort] = useState<string | null>("title");
 	const [selectedDate, setSelectedDate] = useState<string | null>("created-at");
+	const [selectedPriority, setSelectedPriority] = useState<string | null>("");
 
-	// Handle sort option change
 	const handleSortChange = (value: string, isChecked: boolean) => {
 		if (isChecked || selectedDate) {
 			setSelectedSort(isChecked ? value : selectedSort);
@@ -34,7 +38,6 @@ function Filter({
 		}
 	};
 
-	// Handle date option change
 	const handleDateChange = (value: string, isChecked: boolean) => {
 		if (isChecked || selectedSort) {
 			setSelectedDate(isChecked ? value : selectedDate);
@@ -42,10 +45,17 @@ function Filter({
 		}
 	};
 
+	const handlePriorityChange = (value: string, isChecked: boolean) => {
+		if (isChecked || selectedPriority) {
+			setSelectedPriority(isChecked ? value : selectedPriority);
+			handleFiltering(isChecked ? value : selectedPriority!);
+		}
+	};
+
 	return (
 		<Menu
 			shadow="md"
-			width={300}
+			width={450}
 		>
 			<Tooltip label="Filter">
 				<Menu.Target>
@@ -66,11 +76,10 @@ function Filter({
 				>
 					Search Filters
 				</Text>
-				<SimpleGrid cols={2}>
-					{/* Sort by options */}
+				<SimpleGrid cols={3}>
 					<Stack py={8}>
 						<Stack gap={0}>
-							<Menu.Label>Sort By</Menu.Label>
+							<Menu.Label>Sort</Menu.Label>
 							<Menu.Divider />
 						</Stack>
 						{sortOptions.map(({ label, value }) => (
@@ -86,10 +95,9 @@ function Filter({
 						))}
 					</Stack>
 
-					{/* Date filter options */}
 					<Stack py={8}>
 						<Stack gap={0}>
-							<Menu.Label>Filter Date</Menu.Label>
+							<Menu.Label>Date</Menu.Label>
 							<Menu.Divider />
 						</Stack>
 						{dateOptions.map(({ label, value }) => (
@@ -101,6 +109,24 @@ function Filter({
 								}
 								label={label}
 								disabled={selectedDate === value}
+							/>
+						))}
+					</Stack>
+
+					<Stack py={8}>
+						<Stack gap={0}>
+							<Menu.Label>Priority</Menu.Label>
+							<Menu.Divider />
+						</Stack>
+						{priorityOptions?.map(({ label, value }) => (
+							<Checkbox
+								key={value}
+								checked={selectedPriority === value}
+								onChange={(event) =>
+									handlePriorityChange(value, event.currentTarget.checked)
+								}
+								color="violet"
+								label={label}
 							/>
 						))}
 					</Stack>
