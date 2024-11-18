@@ -6,9 +6,8 @@ import LayoutOptions from "../../../components/layout/LayoutOptions";
 
 import { useDisclosure } from "@mantine/hooks";
 import FilterModal from "../../filters/FilterModal";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Settings2 } from "lucide-react";
-import usePartyQueryUpdater from "../../../hooks/usePartyQueryUpdater";
 import {
 	dateOptions,
 	orderOptions,
@@ -16,21 +15,52 @@ import {
 } from "../../../shared/options/party-filter.options";
 import useQueryUpdater from "../../../hooks/usePartyQueryUpdater";
 import usePartyStore from "../../../stores/usePartyStore";
+import { useLocation } from "react-router-dom";
 
 function PartyListHeader() {
 	const { getParties } = usePartyStore();
+	const location = useLocation();
 
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
 
-	const { handleSearch, resetSearchAndFetch, applyFilters, resetFiltersAndFetch } =
-		useQueryUpdater({ fetchCallback: getParties });
+	const {
+		handleSearch,
+		resetSearchAndFetch,
+		applyFilters,
+		resetFiltersAndFetch,
+	} = useQueryUpdater({ fetchCallback: getParties });
 
 	const callbacksRef = useRef<Record<string, () => void>>({});
 
 	const [isFilterOpened, { open: openFilters, close: closeFilters }] =
 		useDisclosure(false);
+
+	const parseQueryParams = () => {
+		const searchParams = new URLSearchParams(location.search);
+
+		const searchQuery = searchParams.get("search");
+		if (searchQuery) {
+			form.setFieldValue("search", searchQuery);
+			handleSearch(searchQuery);
+		}
+
+		const filters = {
+			sortBy: searchParams.get("sortBy") || "title",
+			filterDate: searchParams.get("filterDate") || "created-at",
+			priority: searchParams.get("priority") || "",
+			startDate: searchParams.get("startDate") || "",
+			endDate: searchParams.get("endDate") || "",
+			orderBy: searchParams.get("orderBy") || "desc",
+		};
+
+		applyFilters(filters);
+	};
+
+	useEffect(() => {
+		parseQueryParams();
+	}, [location.search]);
 
 	const handleSearchSubmit = () => {
 		handleSearch(form.values.search);

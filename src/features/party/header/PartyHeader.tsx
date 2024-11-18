@@ -2,14 +2,14 @@ import InvitePartyMember from "../InvitePartyMember";
 import { ActionIcon, Button, Flex, Group, Stack, Title } from "@mantine/core";
 import { Edit, Plus, Settings2, Trash2 } from "lucide-react";
 import MenuOptions from "../../../components/menu/MenuOptions";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import usePartyStore from "../../../stores/usePartyStore";
 import PageHeader from "../../../components/header/PageHeader";
 import SearchBar from "../../../components/input/SearchBar";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
 import { useForm } from "@mantine/form";
 import { Party } from "../../../shared/types/party.types";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
 	sortOptions,
 	priorityOptions,
@@ -38,10 +38,37 @@ function PartyHeader({
 	const { getQuests } = useQuestStore();
 	const { partyId } = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
+
+	const parseQueryParams = () => {
+		const searchParams = new URLSearchParams(location.search);
+
+		const searchQuery = searchParams.get("search");
+		if (searchQuery) {
+			form.setFieldValue("search", searchQuery);
+			handleSearch(searchQuery);
+		}
+
+		const filters = {
+			sortBy: searchParams.get("sortBy") || "title",
+			filterDate: searchParams.get("filterDate") || "created-at",
+			priority: searchParams.get("priority") || "",
+			startDate: searchParams.get("startDate") || "",
+			endDate: searchParams.get("endDate") || "",
+			orderBy: searchParams.get("orderBy") || "desc",
+		};
+
+		applyFilters(filters);
+	};
+
+	useEffect(() => {
+		parseQueryParams();
+	}, [location.search]);
+
 
 	const getQuestsCallBack = async (params: Record<string, any>) => {
 		if (partyId) {
