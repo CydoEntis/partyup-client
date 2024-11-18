@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import usePartyStore from "../../../stores/usePartyStore";
 import PageHeader from "../../../components/header/PageHeader";
 import SearchBar from "../../../components/input/SearchBar";
-import Filter from "../../../components/input/Filter";
 import DateRangePicker from "../../../components/input/DateRangePicker";
 import OrderSwitch from "../../../components/input/OrderSwitch";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
@@ -109,7 +108,7 @@ function PartyHeader({
 								callbacksRef.current.search = reset;
 							}}
 						/>
-						<Filter
+						{/* <Filter
 							sortOptions={sortOptions}
 							dateOptions={dateOptions}
 							priorityOptions={priorityOptions}
@@ -119,7 +118,7 @@ function PartyHeader({
 							resetCallback={(reset) => {
 								callbacksRef.current.filter = reset;
 							}}
-						/>
+						/> */}
 						<DateRangePicker
 							onDateChange={handleDateRange}
 							resetCallback={(reset) => {

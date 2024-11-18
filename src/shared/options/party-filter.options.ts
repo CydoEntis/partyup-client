@@ -1,9 +1,7 @@
 export const sortOptions = [
 	{ label: "Title", value: "title" },
-	{ label: "Priority", value: "priority" },
-	{ label: "Created At", value: "" },
+	{ label: "Created At", value: "created-at" },
 	{ label: "Updated At", value: "updated-at" },
-	{ label: "Due Date", value: "due-date" },
 ];
 
 export const dateOptions = [

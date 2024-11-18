@@ -1,6 +1,7 @@
 import { DatePickerInput } from "@mantine/dates";
-import { Group, Stack, Text, Button } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { Group, Stack, Text, ActionIcon } from "@mantine/core";
+import { X } from "lucide-react";
+import { useState, useEffect } from "react";
 
 type DateRangePickerProps = {
 	onDateChange: (startDate: string, endDate: string) => void;
@@ -15,11 +16,12 @@ function DateRangePicker({
 
 	const handleFilterDates = () => {
 		const [startDate, endDate] = value;
-		const stringifiedStartDate = startDate?.toISOString() || "";
-		const stringifiedEndDate = endDate?.toISOString() || "";
+		const stringifiedStartDate = startDate ? startDate.toISOString() : "";
+		const stringifiedEndDate = endDate ? endDate.toISOString() : "";
 		onDateChange(stringifiedStartDate, stringifiedEndDate);
 	};
 
+	// Reset date range
 	const resetDateRange = () => {
 		setValue([null, null]);
 		onDateChange("", "");
@@ -27,29 +29,40 @@ function DateRangePicker({
 
 	useEffect(() => {
 		if (resetCallback) {
-			resetCallback(resetDateRange);
+			resetCallback(resetDateRange); 
 		}
 	}, [resetCallback]);
 
+	useEffect(() => {
+		handleFilterDates();
+	}, [value]);
+
 	return (
-		<Group align="end">
-			<Stack gap={2}>
+		<Group
+			align="end"
+			w="100%"
+		>
+			<Stack
+				gap={2}
+				w="85%"
+			>
 				<Text size="sm">Select a Date Range</Text>
 				<DatePickerInput
 					placeholder="Select date range"
 					type="range"
 					allowSingleDateInRange
 					value={value}
-					onChange={setValue}
+					onChange={setValue} // Update value when user selects a date range
 				/>
 			</Stack>
-			<Button
+			<ActionIcon
+				size="lg"
 				variant="light"
 				color="violet"
-				onClick={handleFilterDates}
+				onClick={resetDateRange}
 			>
-				Filter Dates
-			</Button>
+				<X />
+			</ActionIcon>
 		</Group>
 	);
 }

@@ -1,15 +1,23 @@
-import { Button, Group, Stack, TextInput, Text } from "@mantine/core";
+import {
+	Button,
+	Group,
+	Stack,
+	TextInput,
+	Text,
+	ActionIcon,
+} from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useEffect } from "react";
 
 type SearchBarProps = {
 	form: UseFormReturnType<{ search: string }>;
 	onSearch: (search: string) => void;
+	onClear: () => void;
 	resetCallback?: (resetFunction: () => void) => void;
 };
 
-function SearchBar({ form, onSearch, resetCallback }: SearchBarProps) {
+function SearchBar({ form, onSearch, resetCallback, onClear}: SearchBarProps) {
 	const handleSearch = (values: { search: string }) => {
 		const searchTerm = values.search.trim();
 		onSearch(searchTerm);
@@ -18,6 +26,7 @@ function SearchBar({ form, onSearch, resetCallback }: SearchBarProps) {
 	const resetSearch = () => {
 		form.setFieldValue("search", "");
 		onSearch("");
+		onClear();
 	};
 
 	useEffect(() => {
@@ -28,11 +37,25 @@ function SearchBar({ form, onSearch, resetCallback }: SearchBarProps) {
 
 	return (
 		<form onSubmit={form.onSubmit(handleSearch)}>
-			<Group gap={8} align="end">
+			<Group
+				gap={8}
+				align="end"
+			>
 				<Stack gap={2}>
 					<Text size="sm">Search</Text>
 					<TextInput
 						leftSection={<Search size="20" />}
+						rightSection={
+							form.values.search && (
+								<ActionIcon
+									variant="light"
+									color="violet"
+									onClick={resetSearch}
+								>
+									<X size={18} />
+								</ActionIcon>
+							)
+						}
 						{...form.getInputProps("search")}
 						placeholder="Search by title"
 					/>

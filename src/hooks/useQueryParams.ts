@@ -1,10 +1,14 @@
 import { useSearchParams } from "react-router-dom";
-import { QueryParams } from "../shared/types/query-params.types"; // Import the existing type
+import { QueryParams } from "../shared/types/query-params.types";
 
 export const useQueryParams = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const updateQueryParams = (newParams: QueryParams) => {
+		// Preserve the existing search value
+		const currentSearch = searchParams.get("search");
+
+		// Create a new URLSearchParams object and apply the new params
 		const updatedParams = new URLSearchParams(searchParams);
 
 		Object.keys(newParams).forEach((key) => {
@@ -16,6 +20,12 @@ export const useQueryParams = () => {
 			}
 		});
 
+		// Re-set the search parameter to the previous value (if it's not being updated)
+		if (currentSearch && !newParams.search) {
+			updatedParams.set("search", currentSearch);
+		}
+
+		// Update the query parameters without clearing the search term
 		setSearchParams(updatedParams);
 	};
 
@@ -43,18 +53,26 @@ export const useQueryParams = () => {
 			pageSize: pageSize ? Number(pageSize) : 24,
 			startDate,
 			endDate,
-			priority
+			priority,
 		};
 	};
 
-	const clearQueryParams = () => {
-		setSearchParams({});
+	const clearAllFilterParams = () => {
+		const { search } = Object.fromEntries(searchParams.entries());
+		setSearchParams({ search: search || "" });
+	};
+
+	const clearSearchParam = () => {
+		const updatedParams = new URLSearchParams(searchParams);
+		updatedParams.delete("search");
+		setSearchParams(updatedParams);
 	};
 
 	return {
 		updateQueryParams,
 		getSearchParams,
 		getQueryParam,
-		clearQueryParams,
+		clearAllFilterParams,
+		clearSearchParam,
 	};
 };

@@ -1,9 +1,13 @@
-import usePartyStore from "../stores/usePartyStore";
 import { useQueryParams } from "./useQueryParams";
+import usePartyStore from "../stores/usePartyStore";
 
 const usePartyQueryUpdater = () => {
-	const { updateQueryParams, getSearchParams, clearQueryParams } =
-		useQueryParams();
+	const {
+		updateQueryParams,
+		getSearchParams,
+		clearAllFilterParams,
+		clearSearchParam,
+	} = useQueryParams();
 	const { getParties } = usePartyStore();
 
 	const currentParams = getSearchParams();
@@ -14,16 +18,23 @@ const usePartyQueryUpdater = () => {
 		getParties(updatedParams);
 	};
 
+	const applyFilters = (filters: Record<string, any>) => {
+		const { search, ...otherFilters } = filters;
+		updateQueryParams({ ...currentParams, ...otherFilters });
+		getParties({ ...currentParams, ...otherFilters });
+	};
+
+	const handleSearch = (search: string) => {
+		updateQueryParams({ ...currentParams, search });
+		getParties({ ...currentParams, search });
+	};
+
 	return {
 		updateQueryParams,
-		clearAllParams: clearQueryParams,
-		handleSearch: (search: string) => updateAndFetch({ search }),
-		handleSort: (sortBy: string) => updateAndFetch({ sortBy }),
-		handleDateFilter: (filterDate: string) => updateAndFetch({ filterDate }),
-		handlePriorityFilter: (priority: string) => updateAndFetch({ priority }),
-		handleOrder: (orderBy: string) => updateAndFetch({ orderBy }),
-		handleDateRange: (startDate: string, endDate: string) =>
-			updateAndFetch({ startDate, endDate }),
+		clearAllFilterParams,
+		clearSearchParam,
+		applyFilters,
+		handleSearch,
 	};
 };
 
