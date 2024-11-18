@@ -12,6 +12,7 @@ export const dateOptions = [
 ];
 
 export const priorityOptions = [
+	{ label: "All", value: "" },
 	{ label: "Critical", value: "4" },
 	{ label: "High", value: "3" },
 	{ label: "Medium", value: "2" },
