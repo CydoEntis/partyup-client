@@ -8,7 +8,7 @@ import {
 	Tooltip,
 } from "@mantine/core";
 import { Settings2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type FilterProps = {
 	sortOptions: Record<string, string>[];
@@ -17,6 +17,7 @@ type FilterProps = {
 	handleDateFiltering: (filter: string) => void;
 	handleSorting: (filter: string) => void;
 	handleFiltering: (filter: string) => void;
+	resetCallback?: (resetFunction: () => void) => void;
 };
 
 function Filter({
@@ -26,6 +27,7 @@ function Filter({
 	handleSorting,
 	handleDateFiltering,
 	handleFiltering,
+	resetCallback,
 }: FilterProps) {
 	const [selectedSort, setSelectedSort] = useState<string | null>("title");
 	const [selectedDate, setSelectedDate] = useState<string | null>("created-at");
@@ -51,6 +53,23 @@ function Filter({
 			handleFiltering(isChecked ? value : selectedPriority!);
 		}
 	};
+
+	const resetFilters = () => {
+		setSelectedSort("title");
+		setSelectedDate("created-at");
+		setSelectedPriority("");
+
+		// Trigger parent handlers with defaults
+		handleSorting("title");
+		handleDateFiltering("created-at");
+		handleFiltering("");
+	};
+
+		useEffect(() => {
+			if (resetCallback) {
+				resetCallback(resetFilters);
+			}
+		}, [resetCallback]);
 
 	return (
 		<Menu

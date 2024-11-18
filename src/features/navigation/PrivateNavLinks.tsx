@@ -91,6 +91,7 @@ function PrivateNavLinks({
 		handleClose();
 	};
 
+
 	return (
 		<>
 			<AccountManagementModal

@@ -68,6 +68,8 @@ function PartyHeader({
 
 	const dateRangePickerRef = useRef<DateRangePickerHandle>(null);
 
+	const filterRef = useRef<null | (() => void)>(null);
+
 	const searchHandler = (search: string) => {
 		updateQueryParams({ ...currentParams, search });
 		if (partyId) {
@@ -111,10 +113,15 @@ function PartyHeader({
 	};
 
 	const clearAllFilters = () => {
-		clearQueryParams();
+		if (filterRef.current) {
+			filterRef.current();
+		}
+
 		if (dateRangePickerRef.current) {
 			dateRangePickerRef.current.reset();
 		}
+
+		clearQueryParams();
 		if (partyId) {
 			getQuests(partyId);
 		}
@@ -180,6 +187,7 @@ function PartyHeader({
 							handleDateFiltering={dateFilterHandler}
 							priorityOptions={priorityOptions}
 							handleFiltering={filterByHandler}
+							resetCallback={(reset) => (filterRef.current = reset)}
 						/>
 						<DateRangePicker
 							onDateChange={dateRangeHandler}
