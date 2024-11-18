@@ -5,11 +5,11 @@ import SearchBar from "../../../components/input/SearchBar";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
 
 import { useDisclosure } from "@mantine/hooks";
-import PartyFilterModal from "../../filters/PartyFilterModal";
+import FilterModal from "../../filters/FilterModal";
 import { useRef } from "react";
 import { Settings2 } from "lucide-react";
 import usePartyQueryUpdater from "../../../hooks/usePartyQueryUpdater";
-import OrderSwitch from "../../../components/input/OrderSwitch";
+import { dateOptions, orderOptions, sortOptions } from "../../../shared/options/party-filter.options";
 
 function PartyListHeader() {
 	const form = useForm<{ search: string }>({
@@ -29,8 +29,11 @@ function PartyListHeader() {
 
 	return (
 		<>
-			<PartyFilterModal
+			<FilterModal
 				filterOpened={isFilterOpened}
+				sortOptions={sortOptions}
+				dateOptions={dateOptions}
+				orderOptions={orderOptions}
 				handleCloseFilterModal={closeFilters}
 			/>
 			<PageHeader title="Joined Parties">
@@ -55,7 +58,6 @@ function PartyListHeader() {
 						>
 							<Settings2 size={20} />
 						</ActionIcon>
-						{/* <OrderSwitch /> */}
 						<LayoutOptions />
 					</Group>
 				</Flex>

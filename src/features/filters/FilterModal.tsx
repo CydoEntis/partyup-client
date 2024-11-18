@@ -10,21 +10,22 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import DateRangePicker from "../../components/input/DateRangePicker";
-import {
-	sortOptions,
-	dateOptions,
-	orderOptions,
-} from "../../shared/options/party-filter.options";
 import usePartyQueryUpdater from "../../hooks/usePartyQueryUpdater";
 
 type FilterModalProps = {
 	filterOpened: boolean;
 	handleCloseFilterModal: () => void;
+	sortOptions?: Array<{ label: string; value: string }>;
+	dateOptions?: Array<{ label: string; value: string }>;
+	orderOptions?: Array<{ label: string; value: string }>;
 };
 
 function FilterModal({
 	filterOpened,
 	handleCloseFilterModal,
+	sortOptions,
+	dateOptions,
+	orderOptions,
 }: FilterModalProps) {
 	const { clearAllFilterParams, applyFilters } = usePartyQueryUpdater();
 
@@ -35,7 +36,7 @@ function FilterModal({
 			priority: "",
 			startDate: "",
 			endDate: "",
-			orderBy: "desc"
+			orderBy: "desc",
 		},
 	});
 
@@ -70,53 +71,61 @@ function FilterModal({
 							form.setValues({ startDate, endDate })
 						}
 					/>
-					<SimpleGrid cols={3}>
-						<Stack py={8}>
-							<Stack gap={0}>
-								<Text>Sort</Text>
-								<Divider />
-							</Stack>
-							{sortOptions.map(({ label, value }) => (
-								<Checkbox
-									key={value}
-									checked={form.values.sortBy === value}
-									onChange={() => form.setFieldValue("sortBy", value)}
-									label={label}
-									color="violet"
-								/>
-							))}
-						</Stack>
 
-						<Stack py={8}>
-							<Stack gap={0}>
-								<Text>Date</Text>
-								<Divider />
+					<SimpleGrid cols={3}>
+						{sortOptions && (
+							<Stack py={8}>
+								<Stack gap={0}>
+									<Text>Sort</Text>
+									<Divider />
+								</Stack>
+								{sortOptions.map(({ label, value }) => (
+									<Checkbox
+										key={value}
+										checked={form.values.sortBy === value}
+										onChange={() => form.setFieldValue("sortBy", value)}
+										label={label}
+										color="violet"
+									/>
+								))}
 							</Stack>
-							{dateOptions.map(({ label, value }) => (
-								<Checkbox
-									key={value}
-									checked={form.values.filterDate === value}
-									onChange={() => form.setFieldValue("filterDate", value)}
-									label={label}
-									color="violet"
-								/>
-							))}
-						</Stack>
-						<Stack py={8}>
-							<Stack gap={0}>
-								<Text>Order</Text>
-								<Divider />
+						)}
+
+						{dateOptions && (
+							<Stack py={8}>
+								<Stack gap={0}>
+									<Text>Date</Text>
+									<Divider />
+								</Stack>
+								{dateOptions.map(({ label, value }) => (
+									<Checkbox
+										key={value}
+										checked={form.values.filterDate === value}
+										onChange={() => form.setFieldValue("filterDate", value)}
+										label={label}
+										color="violet"
+									/>
+								))}
 							</Stack>
-							{orderOptions.map(({ label, value }) => (
-								<Checkbox
-									key={value}
-									checked={form.values.orderBy === value}
-									onChange={() => form.setFieldValue("orderBy", value)}
-									label={label}
-									color="violet"
-								/>
-							))}
-						</Stack>
+						)}
+
+						{orderOptions && (
+							<Stack py={8}>
+								<Stack gap={0}>
+									<Text>Order</Text>
+									<Divider />
+								</Stack>
+								{orderOptions.map(({ label, value }) => (
+									<Checkbox
+										key={value}
+										checked={form.values.orderBy === value}
+										onChange={() => form.setFieldValue("orderBy", value)}
+										label={label}
+										color="violet"
+									/>
+								))}
+							</Stack>
+						)}
 					</SimpleGrid>
 
 					<Flex gap={8}>
