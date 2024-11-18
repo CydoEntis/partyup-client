@@ -7,17 +7,19 @@ import usePartyStore from "../../../stores/usePartyStore";
 import PageHeader from "../../../components/header/PageHeader";
 import SearchBar from "../../../components/input/SearchBar";
 import Filter from "../../../components/input/Filter";
-import DateRangePicker, {
-	DateRangePickerHandle,
-} from "../../../components/input/DateRangePicker";
+import DateRangePicker from "../../../components/input/DateRangePicker";
 import OrderSwitch from "../../../components/input/OrderSwitch";
 import LayoutOptions from "../../../components/layout/LayoutOptions";
 import { useForm } from "@mantine/form";
 import { Party } from "../../../shared/types/party.types";
-import { useQueryParams } from "../../../hooks/useQueryParams";
-import useQuestStore from "../../../stores/useQuestStore";
 import ClearParams from "../../../components/input/ClearParams";
 import { useRef } from "react";
+import useQueryUpdater from "../../../hooks/useQuestQueryUpdater";
+import {
+	sortOptions,
+	priorityOptions,
+	dateOptions,
+} from "../../../shared/options/quest-filter.options";
 
 type PartyHeaderProps = {
 	party: Party;
@@ -32,123 +34,48 @@ function PartyHeader({
 	handleNewQuest,
 	openMemberInvite,
 }: PartyHeaderProps) {
-	const { getQuests } = useQuestStore();
 	const { deleteParty } = usePartyStore();
 	const { partyId } = useParams();
 	const navigate = useNavigate();
 
+	// Form for search input
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
 
-	const { updateQueryParams, getSearchParams, clearQueryParams } =
-		useQueryParams();
+	// Custom hook for handling query updates
+	const {
+		updateQueryParams,
+		clearAllParams,
+		handleSearch,
+		handleSort,
+		handleDateFilter,
+		handlePriorityFilter,
+		handleOrder,
+		handleDateRange,
+	} = useQueryUpdater(partyId);
 
-	const sortOptions = [
-		{ label: "Title", value: "title" },
-		{ label: "Priority", value: "priority" },
-		{ label: "Created At", value: "" },
-		{ label: "Updated At", value: "updated-at" },
-		{ label: "Due Date", value: "due-date" },
-	];
+	// Refs for reset callbacks
+	const callbacksRef = useRef<Record<string, () => void>>({});
 
-	const dateOptions = [
-		{ label: "Created On", value: "created-at" },
-		{ label: "Updated On", value: "updated-at" },
-	];
-
-	const priorityOptions = [
-		{ label: "Critical", value: "4" },
-		{ label: "High", value: "3" },
-		{ label: "Medium", value: "2" },
-		{ label: "low", value: "1" },
-	];
-
-	const currentParams = getSearchParams();
-
-	const dateRangePickerRef = useRef<DateRangePickerHandle>(null);
-	const filterRef = useRef<null | (() => void)>(null);
-	const searchResetRef = useRef<null | (() => void)>(null);
-
-	const searchHandler = (search: string) => {
-		updateQueryParams({ ...currentParams, search });
-		if (partyId) {
-			getQuests(partyId, { ...currentParams, search });
-		}
-	};
-
-	const sortByHandler = (sortBy: string) => {
-		updateQueryParams({ ...currentParams, sortBy });
-		if (partyId) {
-			getQuests(partyId, { ...currentParams, sortBy });
-		}
-	};
-
-	const dateFilterHandler = (filterDate: string) => {
-		updateQueryParams({ ...currentParams, filterDate });
-		if (partyId) {
-			getQuests(partyId, { ...currentParams, filterDate });
-		}
-	};
-
-	const filterByHandler = (priority: string) => {
-		updateQueryParams({ ...currentParams, priority });
-		if (partyId) {
-			getQuests(partyId, { ...currentParams, priority });
-		}
-	};
-
-	const orderHandler = (orderBy: string) => {
-		updateQueryParams({ ...currentParams, orderBy });
-		if (partyId) {
-			getQuests(partyId, { ...currentParams, orderBy });
-		}
-	};
-
-	const dateRangeHandler = (startDate: string, endDate: string) => {
-		updateQueryParams({ ...currentParams, startDate, endDate });
-		if (partyId) {
-			getQuests(partyId, { ...currentParams, startDate, endDate });
-		}
-	};
-
+	// Handle clear all filters
 	const clearAllFilters = () => {
-		if (filterRef.current) {
-			filterRef.current();
-		}
-
-		if (dateRangePickerRef.current) {
-			dateRangePickerRef.current.reset();
-		}
-
-		if (searchResetRef.current) {
-			searchResetRef.current();
-		}
-
-		clearQueryParams();
-		if (partyId) {
-			getQuests(partyId);
-		}
+		Object.values(callbacksRef.current).forEach((reset) => reset());
+		clearAllParams();
 	};
 
+	// Handle party deletion
 	const handleDelete = async () => {
 		if (partyId) {
-			deleteParty(partyId);
+			await deleteParty(partyId);
 			navigate(`/parties`);
 		}
 	};
 
+	// Menu options
 	const menuOptions = [
-		{
-			icon: <Edit size={16} />,
-			text: "Edit",
-			onClick: handleEditParty,
-		},
-		{
-			icon: <Trash2 size={16} />,
-			text: "Delete",
-			onClick: handleDelete,
-		},
+		{ icon: <Edit size={16} />, text: "Edit", onClick: handleEditParty },
+		{ icon: <Trash2 size={16} />, text: "Delete", onClick: handleDelete },
 	];
 
 	const partyOptions = <MenuOptions options={menuOptions} />;
@@ -182,25 +109,29 @@ function PartyHeader({
 					<Group align="end">
 						<SearchBar
 							form={form}
-							onSearch={searchHandler}
-							resetCallback={(resetFunction) => {
-								searchResetRef.current = resetFunction;
+							onSearch={handleSearch}
+							resetCallback={(reset) => {
+								callbacksRef.current.search = reset;
 							}}
 						/>
 						<Filter
 							sortOptions={sortOptions}
 							dateOptions={dateOptions}
-							handleSorting={sortByHandler}
-							handleDateFiltering={dateFilterHandler}
 							priorityOptions={priorityOptions}
-							handleFiltering={filterByHandler}
-							resetCallback={(reset) => (filterRef.current = reset)}
+							handleSorting={handleSort}
+							handleDateFiltering={handleDateFilter}
+							handleFiltering={handlePriorityFilter}
+							resetCallback={(reset) => {
+								callbacksRef.current.filter = reset;
+							}}
 						/>
 						<DateRangePicker
-							onDateChange={dateRangeHandler}
-							ref={dateRangePickerRef}
+							onDateChange={handleDateRange}
+							resetCallback={(reset) => {
+								callbacksRef.current.dateRange = reset;
+							}}
 						/>
-						<OrderSwitch onOrderBy={orderHandler} />
+						<OrderSwitch onOrderBy={handleOrder} />
 						<ClearParams onClear={clearAllFilters} />
 					</Group>
 					<LayoutOptions />
