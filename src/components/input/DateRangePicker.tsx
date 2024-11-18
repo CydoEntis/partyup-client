@@ -1,6 +1,6 @@
 import { DatePickerInput } from "@mantine/dates";
 import { Text, Stack, Group, Button } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
 type DateRangePickerProps = {
@@ -8,19 +8,19 @@ type DateRangePickerProps = {
 };
 
 function DateRangePicker({ onDateChange }: DateRangePickerProps) {
-	const [value, setValue] = useState<[Date | null, Date | null]>();
+	const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
+	const { getSearchParams } = useQueryParams();
+
+	useEffect(() => {
+		const params = getSearchParams();
+
+		if (!params.startDate && !params.endDate) {
+			setValue([null, null]);
+		}
+	}, [getSearchParams().startDate, getSearchParams().endDate]); 
 
 	const handleDateChange = (selectedRange: [Date | null, Date | null]) => {
 		setValue(selectedRange);
-
-		// const [startDate, endDate] = selectedRange;
-		// const stringifiedStartDate = startDate?.toISOString() || "";
-		// const stringifiedEndDate = endDate?.toISOString() || "";
-
-		// updateQueryParams({
-		// 	startDate: startDate ? stringifiedStartDate : undefined,
-		// 	endDate: endDate ? stringifiedEndDate : undefined,
-		// });
 	};
 
 	const handleFilterDates = () => {
