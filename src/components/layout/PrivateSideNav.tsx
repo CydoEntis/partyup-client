@@ -11,7 +11,12 @@ import { useEffect } from "react";
 import useAvatarStore from "../../stores/useAvatarStore";
 import PrivateNavLinks from "../../features/navigation/PrivateNavLinks";
 
-function PrivateSideNav() {
+type PrivateSideNavProps = {
+	opened: boolean;
+	closeNav: () => void;
+};
+
+function PrivateSideNav({ opened, closeNav }: PrivateSideNavProps) {
 	const { isLightMode } = useGetColorTheme();
 	const { user } = useUserStore();
 	const [openedNewParty, { open: openNewParty, close: closeNewParty }] =
@@ -61,6 +66,7 @@ function PrivateSideNav() {
 						user={user}
 						onOpenNewParty={openNewParty}
 						onOpenAvatarShop={openAvatarShop}
+						closeNav={closeNav}
 					/>
 				)}
 			</AppShell.Navbar>

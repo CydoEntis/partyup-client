@@ -4,7 +4,7 @@ import {
 	Indicator,
 	NavLink as MantineNavLink,
 	Stack,
-	Text
+	Text,
 } from "@mantine/core";
 
 import {
@@ -24,7 +24,7 @@ import useLogout from "../../hooks/useLogout";
 import { useEffect, useState } from "react";
 import { User } from "../../shared/types/auth.types";
 import SideNavSkeleton from "../loading-skeletons/SideNavSkeleton";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import AccountIndicator from "../account/AccountIndicator";
 import AccountManagementModal from "../account/AccountManagementModal";
 import ThemeToggle from "../theme/ThemeToggle";
@@ -33,34 +33,65 @@ type PrivateNavLinksProps = {
 	user: User;
 	onOpenNewParty: () => void;
 	onOpenAvatarShop: () => void;
+	closeNav: () => void;
 };
 
 function PrivateNavLinks({
 	user,
 	onOpenNewParty,
 	onOpenAvatarShop,
+	closeNav,
 }: PrivateNavLinksProps) {
 	const {
 		getRecentParties,
 		recentParties,
 		loading: { recent },
 	} = usePartyStore();
-	const logoutHandler = useLogout();
+
+	const isMobile = useMediaQuery("(max-width: 768px)");
+
+	const handleClose = () => {
+		if (isMobile) closeNav();
+	};
+
+	const logoutHandler = () => {
+		useLogout();
+		handleClose();
+	};
 	const [isRecentOpen, setIsRecentOpen] = useState(true);
 
 	useEffect(() => {
 		const fetchRecentParties = async () => {
 			await getRecentParties();
-			// setIsRecentOpen(recentParties.length > 0);
+			setIsRecentOpen(recentParties.length > 0);
 		};
 		fetchRecentParties();
 	}, [recentParties.length]);
 
-	const toggleRecentOpen = () => setIsRecentOpen((prev) => !prev);
+	const toggleRecentOpen = () => {
+		setIsRecentOpen((prev) => !prev);
+		handleClose();
+	};
 	const [
 		accountDetailsOpened,
 		{ open: openAccountDetails, close: closeAccountDetails },
 	] = useDisclosure(false);
+
+	const handleOpenAccountDetails = () => {
+		openAccountDetails();
+		handleClose();
+	};
+
+	const handleOpenNewParty = () => {
+		onOpenNewParty();
+		handleClose();
+	};
+
+	const handleOpenAvatarShop = () => {
+		onOpenAvatarShop();
+		handleClose();
+	};
+
 	return (
 		<>
 			<AccountManagementModal
@@ -75,14 +106,14 @@ function PrivateNavLinks({
 					<Stack gap={8}>
 						<AccountIndicator
 							user={user!}
-							onOpen={openAccountDetails}
+							onOpen={handleOpenAccountDetails}
 						/>
 						<Button
 							color="violet"
 							variant="light"
 							rightSection={<PlusCircle size={20} />}
 							h={40}
-							onClick={onOpenNewParty}
+							onClick={handleOpenNewParty}
 							my={20}
 						>
 							New Party
@@ -94,6 +125,7 @@ function PrivateNavLinks({
 							label="Dashboard"
 							className="rounded-md"
 							color="violet"
+							onClick={handleClose}
 						/>
 						<MantineNavLink
 							component={NavLink}
@@ -102,17 +134,22 @@ function PrivateNavLinks({
 							label="Your Parties"
 							className="rounded-md"
 							color="violet"
+							onClick={handleClose}
 						/>
 						<MantineNavLink
 							label="Most Recent"
 							className="rounded-md"
-							leftSection={isRecentOpen ? <BookOpen size={20} /> : <Book size={20} />}
+							leftSection={
+								isRecentOpen ? <BookOpen size={20} /> : <Book size={20} />
+							}
 							variant="subtle"
 							color="gray"
 							opened={isRecentOpen}
 							onClick={toggleRecentOpen}
 						>
-							{recentParties.length === 0 ? <Text size="xs">No recent parties</Text>: null}
+							{recentParties.length === 0 ? (
+								<Text size="xs">No recent parties</Text>
+							) : null}
 							{recentParties?.map((party) => (
 								<MantineNavLink
 									key={party.id}
@@ -136,6 +173,7 @@ function PrivateNavLinks({
 									color="violet"
 									className="rounded-md"
 									mt={8}
+									onClick={handleClose}
 								/>
 							))}
 						</MantineNavLink>
@@ -147,7 +185,7 @@ function PrivateNavLinks({
 							variant="light"
 							color="violet"
 							h={40}
-							onClick={onOpenAvatarShop}
+							onClick={handleOpenAvatarShop}
 						>
 							Avatar Shop
 						</Button>

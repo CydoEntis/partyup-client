@@ -6,7 +6,7 @@ import PrivateSideNav from "./PrivateSideNav";
 import PrivateWrapper from "./PrivateWrapper";
 
 function PrivateLayout() {
-	const [opened, { toggle }] = useDisclosure();
+	const [opened, { toggle, close }] = useDisclosure();
 
 	return (
 		<PrivateWrapper opened={opened}>
@@ -14,7 +14,7 @@ function PrivateLayout() {
 				opened={opened}
 				toggle={toggle}
 			/>
-			<PrivateSideNav />
+			<PrivateSideNav opened={opened} closeNav={close}/>
 			<AppShell.Main>
 				<Outlet />
 			</AppShell.Main>
