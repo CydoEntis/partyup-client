@@ -58,6 +58,8 @@ function PrivateSideNav({ opened, closeNav }: PrivateSideNavProps) {
 				style={{
 					navbar: {
 						borderColor: isLightMode ? "#DCDEE0" : "#3A3A3A",
+						overflowY: "auto", // Makes the content scrollable
+						height: "100vh", // Full height
 					},
 				}}
 			>

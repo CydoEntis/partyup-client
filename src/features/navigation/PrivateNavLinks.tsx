@@ -70,7 +70,6 @@ function PrivateNavLinks({
 
 	const toggleRecentOpen = () => {
 		setIsRecentOpen((prev) => !prev);
-		handleClose();
 	};
 	const [
 		accountDetailsOpened,
@@ -102,7 +101,13 @@ function PrivateNavLinks({
 			{recent ? (
 				<SideNavSkeleton />
 			) : (
-				<Stack style={{ flexGrow: 1 }}>
+				<Stack
+					style={{
+						flexGrow: 1,
+						overflowY: "auto",
+						maxHeight: "calc(100vh - 120px)",
+					}}
+				>
 					<Stack gap={8}>
 						<AccountIndicator
 							user={user!}
