@@ -67,8 +67,8 @@ function PartyHeader({
 	const currentParams = getSearchParams();
 
 	const dateRangePickerRef = useRef<DateRangePickerHandle>(null);
-
 	const filterRef = useRef<null | (() => void)>(null);
+	const searchResetRef = useRef<null | (() => void)>(null);
 
 	const searchHandler = (search: string) => {
 		updateQueryParams({ ...currentParams, search });
@@ -119,6 +119,10 @@ function PartyHeader({
 
 		if (dateRangePickerRef.current) {
 			dateRangePickerRef.current.reset();
+		}
+
+		if (searchResetRef.current) {
+			searchResetRef.current();
 		}
 
 		clearQueryParams();
@@ -179,6 +183,9 @@ function PartyHeader({
 						<SearchBar
 							form={form}
 							onSearch={searchHandler}
+							resetCallback={(resetFunction) => {
+								searchResetRef.current = resetFunction;
+							}}
 						/>
 						<Filter
 							sortOptions={sortOptions}
