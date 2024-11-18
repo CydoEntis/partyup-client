@@ -21,7 +21,6 @@ function DateRangePicker({
 		onDateChange(stringifiedStartDate, stringifiedEndDate);
 	};
 
-	// Reset date range
 	const resetDateRange = () => {
 		setValue([null, null]);
 		onDateChange("", "");

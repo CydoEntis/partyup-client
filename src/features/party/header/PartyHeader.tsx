@@ -16,9 +16,10 @@ import {
 	dateOptions,
 	orderOptions,
 } from "../../../shared/options/quest-filter.options";
-import usePartyQueryUpdater from "../../../hooks/usePartyQueryUpdater";
 import { useDisclosure } from "@mantine/hooks";
 import FilterModal from "../../filters/FilterModal";
+import useQuestStore from "../../../stores/useQuestStore";
+import useQueryUpdater from "../../../hooks/usePartyQueryUpdater";
 
 type PartyHeaderProps = {
 	party: Party;
@@ -34,6 +35,7 @@ function PartyHeader({
 	openMemberInvite,
 }: PartyHeaderProps) {
 	const { deleteParty } = usePartyStore();
+	const { getQuests } = useQuestStore();
 	const { partyId } = useParams();
 	const navigate = useNavigate();
 
@@ -41,7 +43,14 @@ function PartyHeader({
 		initialValues: { search: "" },
 	});
 
-	const { handleSearch, clearSearchParam } = usePartyQueryUpdater();
+	const getPartiesCallback = async (params: Record<string, any>) => {
+		if (partyId) {
+			await getQuests(partyId, params);
+		}
+	};
+
+	const { handleSearch, clearSearchParam, applyFilters, clearAllFilterParams } =
+		useQueryUpdater({ fetchCallback: getPartiesCallback });
 
 	const callbacksRef = useRef<Record<string, () => void>>({});
 
@@ -50,6 +59,16 @@ function PartyHeader({
 
 	const handleSearchSubmit = () => {
 		handleSearch(form.values.search);
+	};
+
+	const handleApplyFilters = (filters: Record<string, any>) => {
+		applyFilters(filters);
+		closeFilters();
+	};
+
+	const handleClearFilters = () => {
+		clearAllFilterParams();
+		closeFilters();
 	};
 
 	const handleDelete = async () => {
@@ -85,6 +104,8 @@ function PartyHeader({
 				orderOptions={orderOptions}
 				priorityOptions={priorityOptions}
 				handleCloseFilterModal={closeFilters}
+				onApplyFilters={handleApplyFilters}
+				onClearFilters={handleClearFilters}
 			/>
 			<PageHeader
 				title={party.title}
@@ -109,7 +130,6 @@ function PartyHeader({
 								callbacksRef.current.search = reset;
 							}}
 						/>
-
 						<Group align="end">
 							<ActionIcon
 								size="lg"

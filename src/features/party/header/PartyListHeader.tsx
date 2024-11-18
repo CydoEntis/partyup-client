@@ -9,14 +9,23 @@ import FilterModal from "../../filters/FilterModal";
 import { useRef } from "react";
 import { Settings2 } from "lucide-react";
 import usePartyQueryUpdater from "../../../hooks/usePartyQueryUpdater";
-import { dateOptions, orderOptions, sortOptions } from "../../../shared/options/party-filter.options";
+import {
+	dateOptions,
+	orderOptions,
+	sortOptions,
+} from "../../../shared/options/party-filter.options";
+import useQueryUpdater from "../../../hooks/usePartyQueryUpdater";
+import usePartyStore from "../../../stores/usePartyStore";
 
 function PartyListHeader() {
+	const {getParties} = usePartyStore();
+
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
 
-	const { handleSearch, clearSearchParam } = usePartyQueryUpdater();
+	const { handleSearch, clearSearchParam, applyFilters, clearAllFilterParams } =
+		useQueryUpdater({ fetchCallback: getParties });
 
 	const callbacksRef = useRef<Record<string, () => void>>({});
 
@@ -27,6 +36,16 @@ function PartyListHeader() {
 		handleSearch(form.values.search);
 	};
 
+	const handleApplyFilters = (filters: Record<string, any>) => {
+		applyFilters(filters);
+		closeFilters();
+	};
+
+	const handleClearFilters = () => {
+		clearAllFilterParams();
+		closeFilters();
+	};
+
 	return (
 		<>
 			<FilterModal
@@ -35,6 +54,8 @@ function PartyListHeader() {
 				dateOptions={dateOptions}
 				orderOptions={orderOptions}
 				handleCloseFilterModal={closeFilters}
+				onApplyFilters={handleApplyFilters} 
+				onClearFilters={handleClearFilters} 
 			/>
 			<PageHeader title="Joined Parties">
 				<Flex
