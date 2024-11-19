@@ -40,7 +40,7 @@ function PartyListHeader() {
 	const parseQueryParams = () => {
 		const searchParams = new URLSearchParams(location.search);
 
-		const searchQuery = searchParams.get("search");
+		const searchQuery = searchParams.get("search") || "";
 		if (searchQuery) {
 			form.setFieldValue("search", searchQuery);
 			handleSearch(searchQuery);

@@ -47,7 +47,7 @@ function PartyHeader({
 	const parseQueryParams = () => {
 		const searchParams = new URLSearchParams(location.search);
 
-		const searchQuery = searchParams.get("search");
+		const searchQuery = searchParams.get("search") || "";
 		if (searchQuery) {
 			form.setFieldValue("search", searchQuery);
 			handleSearch(searchQuery);
@@ -89,7 +89,7 @@ function PartyHeader({
 		useDisclosure(false);
 
 	const handleSearchSubmit = () => {
-		handleSearch(form.values.search);
+	handleSearch(form.values.search);
 	};
 
 	const handleApplyFilters = (filters: Record<string, any>) => {
