@@ -1,28 +1,13 @@
-import {
-	Card,
-	Indicator,
-	Stack,
-	Title,
-	Flex,
-	Progress,
-	Group,
-	Text,
-	Badge,
-} from "@mantine/core";
+import { Card, Stack, Title, Flex, Progress, Group, Text } from "@mantine/core";
 import { Calendar, ListChecks, MessageCircle } from "lucide-react";
 import Members from "../../components/avatar/Members";
 import { Quest } from "../../shared/types/quest.types";
 import { formatDate } from "../../shared/utils/date.utils";
 import { getPercentage } from "../../shared/utils/progress-bar.utils";
-import {
-	NavLink,
-	useNavigate,
-	useParams,
-	useSearchParams,
-} from "react-router-dom";
-import { PriorityLevel } from "../../shared/types/prioty.types";
+
 import PriortyBadge from "../../components/badge/PriortyBadge";
 import useQuestStore from "../../stores/useQuestStore";
+import { truncateText } from "../../shared/utils/text.utils";
 
 type QuestCardProps = {
 	quest: Quest;
@@ -37,8 +22,6 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 		setQuest(quest);
 		onClick();
 	};
-
-
 
 	return (
 		<Card
@@ -69,20 +52,20 @@ function QuestCard({ quest, onClick }: QuestCardProps) {
 					size="1.5rem"
 					fw={600}
 				>
-					{quest.title}
+					{truncateText(quest.title, 15)}
 				</Title>
 				<Text
 					size="sm"
 					c="dimmed"
 				>
-					{quest.description}
+					{truncateText(quest.description, 35)}
 				</Text>
 
 				<Flex
 					align="center"
 					gap={8}
 				>
-					<Calendar size={20} />
+					<Calendar size={25} />
 					<Text>{formatDate(quest.dueDate)}</Text>
 				</Flex>
 			</Stack>

@@ -7,6 +7,7 @@ import ViewQuest from "./ViewQuest";
 import UpsertQuestForm from "./UpsertQuestForm";
 import MenuOptions from "../../components/menu/MenuOptions";
 import { Edit, Trash2 } from "lucide-react";
+import { truncateText } from "../../shared/utils/text.utils";
 
 export type QuestDrawerType = "create" | "edit" | "view";
 
@@ -88,7 +89,9 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 				h="100%"
 			>
 				<Group justify="space-between">
-					<Title size="2rem">{quest ? quest.title : "Create Quest"}</Title>
+					<Title size="2rem">
+						{quest ? truncateText(quest.title, 20) : "Create Quest"}
+					</Title>
 					{quest && !isEditing && <MenuOptions options={menuOptions} />}
 				</Group>
 				{isEditing && quest ? (

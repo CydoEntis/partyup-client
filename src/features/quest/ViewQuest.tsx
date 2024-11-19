@@ -34,6 +34,7 @@ function ViewQuest() {
 			direction="column"
 			justify="space-between"
 			className="min-h-[calc(100vh-120px)]"
+			style={{ overflow: "hidden" }}
 		>
 			<Box>
 				<Flex
@@ -54,7 +55,15 @@ function ViewQuest() {
 
 				<Stack py={16}>
 					<Title size="xl">Description</Title>
-					<Text>{quest?.description}</Text>
+					<Text
+						style={{
+							whiteSpace: "normal",
+							wordBreak: "break-word",
+							overflowWrap: "break-word",
+						}}
+					>
+						{quest?.description}
+					</Text>
 				</Stack>
 
 				<Stack>
