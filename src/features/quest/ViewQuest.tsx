@@ -5,6 +5,7 @@ import { formatDate } from "../../shared/utils/date.utils";
 import StepList from "../../components/steps/StepList";
 import useUserStore from "../../stores/useUserStore";
 import useQuestStore from "../../stores/useQuestStore";
+import PriortyBadge from "../../components/badge/PriortyBadge";
 
 function ViewQuest() {
 	const { completeQuest, uncompleteQuest, quest } = useQuestStore();
@@ -39,13 +40,7 @@ function ViewQuest() {
 					justify="space-between"
 					py={16}
 				>
-					<Badge
-						variant="light"
-						color="yellow"
-						size="lg"
-					>
-						Urgent
-					</Badge>
+					<PriortyBadge priority={quest!.priority} />
 
 					<Badge
 						size="lg"
