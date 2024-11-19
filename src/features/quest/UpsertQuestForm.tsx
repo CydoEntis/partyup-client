@@ -110,9 +110,10 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 	};
 
 	const updateExistingQuest = async (data: QuestData) => {
-		if (partyId && questId) {
+		if (partyId && quest) {
+			console.log("updating??");
 			const updatedQuest = {
-				id: Number(questId),
+				id: quest.id,
 				partyId: Number(partyId),
 				title: data.title,
 				priority: Number(data.priority), // priority is now correctly passed as number
@@ -127,14 +128,11 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 					} as Step;
 				}),
 			};
-
-			await updateQuest(partyId, questId, updatedQuest);
+			await updateQuest(partyId, quest.id.toString(), updatedQuest);
 		}
 	};
 
 	async function onSubmit(data: QuestData) {
-		console.log(data);
-
 		try {
 			if (quest) {
 				await updateExistingQuest(data);
@@ -177,7 +175,6 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 		getMembers(Number(partyId), { pageSize: 99999999 });
 	}, [partyId]);
 
-	console.log;
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
 			<Stack gap={8}>

@@ -36,7 +36,6 @@ function PartyPage({}: Props) {
 
 	const [page, setPage] = useState(1);
 
-	console.log("Current layout: ", layout);
 
 	useEffect(() => {
 		const fetchQuests = async () => {

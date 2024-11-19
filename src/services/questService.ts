@@ -62,6 +62,9 @@ const updateQuest = async (
 			updatedQuest,
 		)
 	).data;
+
+	console.log(response);
+
 	if (!response.isSuccess) throw new Error();
 
 	return response.result;
