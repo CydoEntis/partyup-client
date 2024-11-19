@@ -6,7 +6,6 @@ import {
 	ActionIcon,
 	Button,
 	Flex,
-	Group,
 	MultiSelect,
 	Select,
 	Stack,
@@ -58,7 +57,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				message: "Due date cannot be in the past",
 			},
 		),
-		priority: z.nativeEnum(PriorityLevel).default(PriorityLevel.LOW),
+		priority: z.string(),
 		members: z
 			.array(z.string())
 			.min(1, "At least one member must be assigned to the quest"),
@@ -76,17 +75,15 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			title: "",
 			description: "",
 			dueDate: new Date(),
-			priority: PriorityLevel.LOW,
+			priority: PriorityLevel.LOW.toString(),
 			members: [],
 			steps: [],
 		},
 	});
 
 	const handleAddTask = () => {
-		if (form.values.steps) {
-			if (form.values.steps.length < 10) {
-				form.insertListItem("steps", "");
-			}
+		if (form.values.steps && form.values.steps.length < 10) {
+			form.insertListItem("steps", "");
 		}
 	};
 
@@ -108,8 +105,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				})) as CreateStep[],
 			};
 
-			const createdQuest = await createQuest(partyId, newQuest);
-			return createdQuest;
+			await createQuest(partyId, newQuest);
 		}
 	};
 
@@ -119,7 +115,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				id: Number(questId),
 				partyId: Number(partyId),
 				title: data.title,
-				priority: Number(data.priority),
+				priority: Number(data.priority), // priority is now correctly passed as number
 				description: data.description,
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
@@ -132,15 +128,16 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				}),
 			};
 
-
 			await updateQuest(partyId, questId, updatedQuest);
 		}
 	};
 
 	async function onSubmit(data: QuestData) {
+		console.log(data);
+
 		try {
 			if (quest) {
-				updateExistingQuest(data);
+				await updateExistingQuest(data);
 			} else {
 				await createNewQuest(data);
 			}
@@ -149,7 +146,6 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			onClose();
 		} catch (error) {
 			if (error instanceof AxiosError && error.response?.data?.errors) {
-				console.error(error.response?.data?.errors);
 				const errors = error.response.data.errors as Record<string, string[]>;
 				const fieldErrors: Record<string, string> = {};
 
@@ -163,29 +159,31 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			}
 		}
 	}
+
 	useEffect(() => {
 		if (quest) {
 			form.setValues({
 				title: quest.title,
 				description: quest.description,
 				dueDate: new Date(quest.dueDate),
-				priority: quest.priority || PriorityLevel.LOW,
+				priority: quest.priority.toString(),
 				members: quest.members.map((member) => member.id.toString()),
-				steps: quest.steps.map((step) => step.description),
+				steps: quest.steps.map((step) => step.description) || [],
 			});
 		}
-	}, [quest, questId]);
+	}, [quest]);
 
 	useEffect(() => {
 		getMembers(Number(partyId), { pageSize: 99999999 });
 	}, [partyId]);
 
+	console.log;
 	return (
 		<form onSubmit={form.onSubmit(onSubmit)}>
 			<Stack gap={8}>
 				<TextInput
 					label="Title"
-					placeholder="Name of your Party?"
+					placeholder="Name of your Quest?"
 					classNames={{
 						input: classes.input,
 					}}
@@ -193,7 +191,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				/>
 				<Textarea
 					label="Description"
-					placeholder="Describe your party"
+					placeholder="Describe your quest"
 					autosize
 					{...form.getInputProps("description")}
 				/>
@@ -205,7 +203,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				/>
 				<MultiSelect
 					label="Member List"
-					placeholder="Assign a Member"
+					placeholder="Assign Members"
 					data={members?.items.map((member) => ({
 						value: member.id.toString(),
 						label: member.displayName,
@@ -217,12 +215,11 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 					label="Priority Level"
 					placeholder="Assign a Priority Level"
 					data={[
-						PriorityLevel.CRITICAL.toString(),
-						PriorityLevel.HIGH.toString(),
-						PriorityLevel.MEDIUM.toString(),
-						PriorityLevel.LOW.toString(),
+						{ value: PriorityLevel.CRITICAL.toString(), label: "Critical" },
+						{ value: PriorityLevel.HIGH.toString(), label: "High" },
+						{ value: PriorityLevel.MEDIUM.toString(), label: "Medium" },
+						{ value: PriorityLevel.LOW.toString(), label: "Low" },
 					]}
-					defaultValue={PriorityLevel.LOW}
 					{...form.getInputProps("priority")}
 				/>
 
@@ -231,45 +228,35 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 					py={8}
 				>
 					<Text size="sm">Steps</Text>
-					{form.values.steps && form.values.steps.length === 0 ? (
-						<Text>You can optionally add up to 10 steps</Text>
-					) : (
-						(form.values.steps || []).map((_, index) => (
-							<Flex
-								key={index}
-								w="100%"
-								gap={8}
-								align="center"
-							>
-								<Text>#{index + 1}.</Text>
-								<TextInput
-									placeholder="Task description"
-									{...form.getInputProps(`steps.${index}`)}
-									classNames={{ input: classes.input }}
-									w="100%"
-								/>
-								<ActionIcon
-									color="red"
-									variant="light"
-									onClick={() => handleRemoveTask(index)}
-									h={37}
-									w={37}
-								>
-									<Trash2 size={16} />
-								</ActionIcon>
-							</Flex>
-						))
-					)}
-					{form.values.steps && form.values.steps.length >= 10 ? null : (
-						<Group justify="flex-start">
-							<Button
-								color="violet"
+					{(form.values.steps ?? []).map((_, index) => (
+						<Flex
+							key={index}
+							gap={8}
+							align="center"
+						>
+							<Text>#{index + 1}.</Text>
+							<TextInput
+								placeholder="Task description"
+								{...form.getInputProps(`steps.${index}`)}
+								classNames={{ input: classes.input }}
+							/>
+							<ActionIcon
+								color="red"
 								variant="light"
-								onClick={handleAddTask}
+								onClick={() => handleRemoveTask(index)}
 							>
-								Add Task
-							</Button>
-						</Group>
+								<Trash2 size={16} />
+							</ActionIcon>
+						</Flex>
+					))}
+					{(form.values.steps ?? []).length < 10 && (
+						<Button
+							color="violet"
+							variant="light"
+							onClick={handleAddTask}
+						>
+							Add Task
+						</Button>
 					)}
 				</Stack>
 			</Stack>
