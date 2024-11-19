@@ -19,7 +19,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import FilterModal from "../../filters/FilterModal";
 import useQuestStore from "../../../stores/useQuestStore";
-import useQueryUpdater from "../../../hooks/usePartyQueryUpdater";
+import useQueryUpdater from "../../../hooks/useQueryUpdater";
 
 type PartyHeaderProps = {
 	party: Party;

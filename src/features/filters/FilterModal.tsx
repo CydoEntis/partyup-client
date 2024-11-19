@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import DateRangePicker from "../../components/input/DateRangePicker";
-import usePartyQueryUpdater from "../../hooks/usePartyQueryUpdater";
 
 type FilterModalProps = {
 	filterOpened: boolean;

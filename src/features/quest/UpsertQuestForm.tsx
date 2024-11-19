@@ -99,7 +99,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 			const newQuest = {
 				partyId: Number(partyId),
 				title: data.title,
-				priority: data.priority,
+				priority: Number(data.priority),
 				description: data.description,
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
@@ -119,7 +119,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				id: Number(questId),
 				partyId: Number(partyId),
 				title: data.title,
-				priority: data.priority,
+				priority: Number(data.priority),
 				description: data.description,
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
@@ -217,10 +217,10 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 					label="Priority Level"
 					placeholder="Assign a Priority Level"
 					data={[
-						PriorityLevel.CRITICAL,
-						PriorityLevel.HIGH,
-						PriorityLevel.MEDIUM,
-						PriorityLevel.LOW,
+						PriorityLevel.CRITICAL.toString(),
+						PriorityLevel.HIGH.toString(),
+						PriorityLevel.MEDIUM.toString(),
+						PriorityLevel.LOW.toString(),
 					]}
 					defaultValue={PriorityLevel.LOW}
 					{...form.getInputProps("priority")}

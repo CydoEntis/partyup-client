@@ -13,9 +13,9 @@ import {
 	orderOptions,
 	sortOptions,
 } from "../../../shared/options/party-filter.options";
-import useQueryUpdater from "../../../hooks/usePartyQueryUpdater";
 import usePartyStore from "../../../stores/usePartyStore";
 import { useLocation } from "react-router-dom";
+import useQueryUpdater from "../../../hooks/useQueryUpdater";
 
 function PartyListHeader() {
 	const { getParties } = usePartyStore();
