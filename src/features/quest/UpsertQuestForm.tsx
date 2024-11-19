@@ -218,6 +218,11 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 						{ value: PriorityLevel.LOW.toString(), label: "Low" },
 					]}
 					{...form.getInputProps("priority")}
+					value={
+						form.values.priority !== undefined
+							? form.values.priority.toString()
+							: PriorityLevel.LOW.toString()
+					}
 				/>
 
 				<Stack
