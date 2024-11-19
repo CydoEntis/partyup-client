@@ -145,6 +145,7 @@ function PartyHeader({
 				title={party.title}
 				optionsComp={partyOptions}
 				actionBtn={newMemberBtn}
+				userRole={party.currentUserRole}
 			>
 				<Stack gap={16}>
 					<Title size="lg">{party.description}</Title>

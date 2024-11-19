@@ -7,18 +7,26 @@ type PageHeaderProps = {
 	optionsComp?: ReactElement;
 	actionBtn?: ReactElement;
 	children?: ReactElement;
+	userRole?: string;
 };
 
-function PageHeader({ title, optionsComp, actionBtn, children }: PageHeaderProps) {
+function PageHeader({
+	title,
+	optionsComp,
+	actionBtn,
+	children,
+	userRole,
+}: PageHeaderProps) {
 	const { isLightMode } = useGetColorTheme();
-
 
 	return (
 		<Box
 			bg="secondary"
 			px={32}
 			py={16}
-			className={`border-b ${isLightMode ? "border-[#DCDEE0]" : "border-[#3A3A3A]"}`}
+			className={`border-b ${
+				isLightMode ? "border-[#DCDEE0]" : "border-[#3A3A3A]"
+			}`}
 		>
 			<Flex
 				justify="space-between"
@@ -31,11 +39,14 @@ function PageHeader({ title, optionsComp, actionBtn, children }: PageHeaderProps
 					w="100%"
 					justify="space-between"
 				>
-					<Group>
-						<Title size="2.5rem">{title}</Title>
-						{optionsComp}
-					</Group>
-					{actionBtn}
+					{(userRole === "Creator" || userRole === "Maintainer") && (
+						<Group>
+							<Title size="2.5rem">{title}</Title>
+							{optionsComp}
+						</Group>
+					)}
+					{(userRole === "Creator" || userRole === "Maintainer") &&
+						actionBtn && <Box>{actionBtn}</Box>}
 				</Group>
 			</Flex>
 			{children}
