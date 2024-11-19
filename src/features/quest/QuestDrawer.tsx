@@ -1,4 +1,4 @@
-import { Box, Drawer, Group, Title } from "@mantine/core";
+import { Box, Drawer, Flex, Group, Title } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
 import { useParams, useSearchParams } from "react-router-dom";
 import useQuestStore from "../../stores/useQuestStore";
@@ -18,14 +18,14 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 	const { quest, deleteQuest, getQuest, setQuest } = useQuestStore();
 
 	const [isDrawerOpen, setIsDrawerOpen] = useState(isOpened);
-	const [isEditing, setIsEditing] = useState(false); 
+	const [isEditing, setIsEditing] = useState(false);
 
 	const fetchQuest = async () => {
 		if (partyId && questId) {
 			const fetchedQuest = await getQuest(partyId, questId);
 			if (fetchedQuest) {
 				setQuest(fetchedQuest);
-				setIsEditing(false); 
+				setIsEditing(false);
 			}
 			setIsDrawerOpen(true);
 		}
@@ -43,7 +43,7 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 
 	const handleClose = () => {
 		setQuest(null);
-		setIsEditing(false); 
+		setIsEditing(false);
 		setIsDrawerOpen(false);
 
 		const newParams = new URLSearchParams(searchParams);
@@ -88,12 +88,25 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 				px={32}
 				h="100%"
 			>
-				<Group justify="space-between">
-					<Title size="2rem">
-						{quest ? truncateText(quest.title, 20) : "Create Quest"}
-					</Title>
-					{quest && !isEditing && <MenuOptions options={menuOptions} />}
-				</Group>
+				<Flex justify="space-between" align="start">
+					<Box w="90%">
+						<Title
+							size="2rem"
+							style={{
+								whiteSpace: "normal",
+								wordBreak: "break-word",
+								overflowWrap: "break-word",
+							}}
+						>
+							{quest ? quest.title : "Create Quest"}
+						</Title>
+					</Box>
+					{quest && !isEditing && (
+						<Box w={"5%"}>
+							<MenuOptions options={menuOptions} />
+						</Box>
+					)}
+				</Flex>
 				{isEditing && quest ? (
 					<UpsertQuestForm
 						onClose={handleClose}

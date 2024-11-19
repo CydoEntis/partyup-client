@@ -1,5 +1,5 @@
 import { ActionIcon, Menu } from "@mantine/core";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, Settings } from "lucide-react";
 import { ReactNode } from "react";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
 
@@ -21,11 +21,12 @@ function MenuOptionss({ options }: MenuOptionsProps) {
 		>
 			<Menu.Target>
 				<ActionIcon
-					variant="transparent"
+					size="lg"
+					variant="light"
+					color="violet"
 					aria-label="Options"
-					color={isLightMode ? "dark.1" : "darkMode.2"}
 				>
-					<Ellipsis size={30} />
+					<Settings size={20} />
 				</ActionIcon>
 			</Menu.Target>
 
