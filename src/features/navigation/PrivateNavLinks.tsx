@@ -18,7 +18,7 @@ import {
 	ShoppingBag,
 	SquareLibrary,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import usePartyStore from "../../stores/usePartyStore";
 import useLogout from "../../hooks/useLogout";
 import { useEffect, useState } from "react";
@@ -28,6 +28,7 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import AccountIndicator from "../account/AccountIndicator";
 import AccountManagementModal from "../account/AccountManagementModal";
 import ThemeToggle from "../theme/ThemeToggle";
+import useUserStore from "../../stores/useUserStore";
 
 type PrivateNavLinksProps = {
 	user: User;
@@ -42,6 +43,8 @@ function PrivateNavLinks({
 	onOpenAvatarShop,
 	closeNav,
 }: PrivateNavLinksProps) {
+	const { logout } = useUserStore();
+	const navigate = useNavigate();
 	const {
 		getRecentParties,
 		recentParties,
@@ -55,7 +58,8 @@ function PrivateNavLinks({
 	};
 
 	const logoutHandler = () => {
-		useLogout();
+		logout();
+		navigate("/login");
 		handleClose();
 	};
 	const [isRecentOpen, setIsRecentOpen] = useState(true);
@@ -90,7 +94,6 @@ function PrivateNavLinks({
 		onOpenAvatarShop();
 		handleClose();
 	};
-
 
 	return (
 		<>

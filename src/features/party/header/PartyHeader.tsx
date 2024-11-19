@@ -20,6 +20,7 @@ import { useDisclosure } from "@mantine/hooks";
 import FilterModal from "../../filters/FilterModal";
 import useQuestStore from "../../../stores/useQuestStore";
 import useQueryUpdater from "../../../hooks/useQueryUpdater";
+import useUserStore from "../../../stores/useUserStore";
 
 type PartyHeaderProps = {
 	party: Party;
@@ -34,6 +35,7 @@ function PartyHeader({
 	handleNewQuest,
 	openMemberInvite,
 }: PartyHeaderProps) {
+	const { user } = useUserStore();
 	const { deleteParty } = usePartyStore();
 	const { getQuests } = useQuestStore();
 	const { partyId } = useParams();
@@ -43,6 +45,8 @@ function PartyHeader({
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
+
+	console.log(user);
 
 	const parseQueryParams = () => {
 		const searchParams = new URLSearchParams(location.search);
@@ -69,7 +73,6 @@ function PartyHeader({
 		parseQueryParams();
 	}, [location.search]);
 
-
 	const getQuestsCallBack = async (params: Record<string, any>) => {
 		if (partyId) {
 			await getQuests(partyId, params);
@@ -89,7 +92,7 @@ function PartyHeader({
 		useDisclosure(false);
 
 	const handleSearchSubmit = () => {
-	handleSearch(form.values.search);
+		handleSearch(form.values.search);
 	};
 
 	const handleApplyFilters = (filters: Record<string, any>) => {
@@ -145,10 +148,12 @@ function PartyHeader({
 			>
 				<Stack gap={16}>
 					<Title size="lg">{party.description}</Title>
-					<InvitePartyMember
-						members={party.members}
-						onOpenHandler={openMemberInvite}
-					/>
+
+						<InvitePartyMember
+							userRole={party.currentUserRole}
+							members={party.members}
+							onOpenHandler={openMemberInvite}
+						/>
 					<Flex
 						align="end"
 						justify="space-between"

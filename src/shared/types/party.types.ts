@@ -14,6 +14,7 @@ export type Party = {
 	updatedAt: Date;
 	dueDate: Date;
 	questStats: QuestStats;
+	currentUserRole: string;
 };
 
 export type PaginatedParties = {
