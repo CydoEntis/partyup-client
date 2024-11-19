@@ -88,7 +88,10 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 				px={32}
 				h="100%"
 			>
-				<Flex justify="space-between" align="start">
+				<Flex
+					justify="space-between"
+					align="start"
+				>
 					<Box w="90%">
 						<Title
 							size="2rem"
@@ -101,11 +104,14 @@ function QuestDrawer({ isOpened, onClose }: DrawerProps) {
 							{quest ? quest.title : "Create Quest"}
 						</Title>
 					</Box>
-					{quest && !isEditing && (
-						<Box w={"5%"}>
-							<MenuOptions options={menuOptions} />
-						</Box>
-					)}
+					{quest &&
+						(quest.currentUserRole === "Creator" ||
+							quest.currentUserRole === "Maintainer") &&
+						!isEditing && (
+							<Box w={"5%"}>
+								<MenuOptions options={menuOptions} />
+							</Box>
+						)}
 				</Flex>
 				{isEditing && quest ? (
 					<UpsertQuestForm

@@ -15,6 +15,7 @@ export type Quest = {
 	members: Member[];
 	steps: Step[];
 	completedSteps: number;
+	currentUserRole: string;
 };
 
 export type PaginatedQuests = {
