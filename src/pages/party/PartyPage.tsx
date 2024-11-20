@@ -136,6 +136,7 @@ function PartyPage({}: Props) {
 			<ManageMembersDrawer
 				isOpened={openedInviteMember}
 				onClose={closeMemberInvite}
+				userRole={party.currentUserRole}
 			/>
 			<QuestDrawer
 				viewType={questViewType}

@@ -19,8 +19,13 @@ import { useEffect, useState } from "react";
 import useMemberStore from "../../stores/useMemberStore";
 import memberService from "../../services/memberService";
 import UserAvatar from "../../components/avatar/UserAvatar";
+import { MEMBER_ROLES } from "../../shared/constants/roles";
 
-function ManageMembersDrawer({ isOpened, onClose }: DrawerProps) {
+type ManageMemberProps = {
+	userRole: string;
+} & DrawerProps;
+
+function ManageMembersDrawer({ userRole, isOpened, onClose }: ManageMemberProps) {
 	const { partyId } = useParams();
 	const { getMembersByRole, members, creator, maintainers, regularMembers } =
 		useMemberStore();
@@ -141,56 +146,48 @@ function ManageMembersDrawer({ isOpened, onClose }: DrawerProps) {
 					Get New Link
 				</Button>
 			</Stack>
-			<Stack p={16}>
+			{userRole === MEMBER_ROLES.CREATOR ||
+			userRole === MEMBER_ROLES.MAINTAINER ? (
+				<Flex
+					justify="space-between"
+					align="center"
+					py={16}
+				>
+					<Title size="xl">Manage Members</Title>
+					<ActionIcon
+						variant="light"
+						color="violet"
+					>
+						<Edit size={20} />
+					</ActionIcon>
+				</Flex>
+			) : null}
+			<Stack gap={8}>
 				<Divider
 					label="Creator"
 					labelPosition="center"
 				/>
 				{creator && (
-					<Stack mb={16}>
-						<Title size="lg">Creator</Title>
-						<Flex
-							align="center"
-							justify="space-between"
-						>
-							<Group>
-								<UserAvatar avatar={creator.avatar} />
-								<Text>{creator.displayName}</Text>
-							</Group>
-							<ActionIcon
-								variant="light"
-								color="violet"
-							>
-								<Edit size={20} />
-							</ActionIcon>
-						</Flex>
+					<Stack>
+						<Group key={creator.id}>
+							<UserAvatar avatar={creator.avatar} />
+							<Text>{creator.displayName}</Text>
+						</Group>
 					</Stack>
 				)}
 
 				{/* Maintainers Section */}
 				{maintainers.length > 0 && (
-					<Stack mb={16}>
+					<Stack>
 						<Divider
 							label="Maintainers"
 							labelPosition="center"
 						/>
 						{maintainers.map((maintainer) => (
-							<Flex
-								key={maintainer.id}
-								align="center"
-								justify="space-between"
-							>
-								<Group>
-									<UserAvatar avatar={maintainer.avatar} />
-									<Text>{maintainer.displayName}</Text>
-								</Group>
-								<ActionIcon
-									variant="light"
-									color="violet"
-								>
-									<Edit size={20} />
-								</ActionIcon>
-							</Flex>
+							<Group key={maintainer.id}>
+								<UserAvatar avatar={maintainer.avatar} />
+								<Text>{maintainer.displayName}</Text>
+							</Group>
 						))}
 					</Stack>
 				)}
@@ -202,22 +199,10 @@ function ManageMembersDrawer({ isOpened, onClose }: DrawerProps) {
 				{regularMembers.length > 0 && (
 					<Stack>
 						{regularMembers.map((member) => (
-							<Flex
-								key={member.id}
-								align="center"
-								justify="space-between"
-							>
-								<Group>
-									<UserAvatar avatar={member.avatar} />
-									<Text>{member.displayName}</Text>
-								</Group>
-								<ActionIcon
-									variant="light"
-									color="violet"
-								>
-									<Edit size={20} />
-								</ActionIcon>
-							</Flex>
+							<Group key={member.id}>
+								<UserAvatar avatar={member.avatar} />
+								<Text>{member.displayName}</Text>
+							</Group>
 						))}
 					</Stack>
 				)}
