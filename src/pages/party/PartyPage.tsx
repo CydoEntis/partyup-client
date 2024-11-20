@@ -1,5 +1,4 @@
 import PartyTabs from "../../features/party/PartyTabs";
-import InviteMemberModal from "../../features/members/InviteMemberModal";
 import QuestDrawer from "../../features/quest/QuestDrawer";
 import useQuestDrawer from "../../hooks/useQuestDrawer";
 import PartyDrawer from "../../features/party/PartyDrawer";
@@ -15,11 +14,11 @@ import PartyFooter from "../../features/party/footer/PartyFooter";
 import QuestListBody from "../../features/quest/body/QuestListBody";
 import useQuestStore from "../../stores/useQuestStore";
 import useUserStore from "../../stores/useUserStore";
+import ManageMembersDrawer from "../../features/members/ManageMembersDrawer";
 
 type Props = {};
 
 function PartyPage({}: Props) {
-	// Update because each page uses a different layout option
 	const { layout } = useUserStore();
 
 	const { partyId } = useParams();
@@ -134,7 +133,7 @@ function PartyPage({}: Props) {
 
 	return (
 		<Box>
-			<InviteMemberModal
+			<ManageMembersDrawer
 				isOpened={openedInviteMember}
 				onClose={closeMemberInvite}
 			/>

@@ -1,7 +1,8 @@
 import { Button, Group, Text } from "@mantine/core";
-import { Users2, Plus } from "lucide-react";
+import { Users2, Plus, UserCog } from "lucide-react";
 import Members from "../../components/avatar/Members";
 import { Member } from "../../shared/types/member.types";
+import { MEMBER_ROLES } from "../../shared/constants/roles";
 
 type InvitePartyMemberProps = {
 	onOpenHandler: () => void;
@@ -25,14 +26,15 @@ function InvitePartyMember({
 				/>
 			</Group>
 
-			{userRole === "Creator" || userRole === "Maintainer" ? (
+			{userRole === MEMBER_ROLES.CREATOR ||
+			userRole === MEMBER_ROLES.MAINTAINER ? (
 				<Button
 					variant="light"
 					color="violet"
-					rightSection={<Plus size={20} />}
+					rightSection={<UserCog size={20}/>}
 					onClick={onOpenHandler}
 				>
-					Invite Member
+					Manage Members
 				</Button>
 			) : null}
 		</Group>

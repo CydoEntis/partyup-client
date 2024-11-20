@@ -19,7 +19,7 @@ type MemberState = {
 		delete: boolean;
 	};
 	error: string | null;
-	getMembers: (partyId: number, queryParams: QueryParams) => Promise<void>;
+	getMembers: (partyId: number, queryParams?: QueryParams) => Promise<void>;
 	getMember: (partyId: number, memberId: number) => Promise<void>;
 	createMember: (member: CreateMember) => Promise<number>;
 	updateMemberRole: (
@@ -41,7 +41,7 @@ export const useMemberStore = create<MemberState>((set) => ({
 	},
 	error: null,
 
-	getMembers: async (partyId: number, queryParams: QueryParams) => {
+	getMembers: async (partyId: number, queryParams?: QueryParams) => {
 		set((state) => ({
 			loading: { ...state.loading, list: true },
 			error: null,

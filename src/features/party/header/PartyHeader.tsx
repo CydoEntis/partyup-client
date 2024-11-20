@@ -35,7 +35,6 @@ function PartyHeader({
 	handleNewQuest,
 	openMemberInvite,
 }: PartyHeaderProps) {
-	const { user } = useUserStore();
 	const { deleteParty } = usePartyStore();
 	const { getQuests } = useQuestStore();
 	const { partyId } = useParams();
@@ -45,8 +44,6 @@ function PartyHeader({
 	const form = useForm<{ search: string }>({
 		initialValues: { search: "" },
 	});
-
-	console.log(user);
 
 	const parseQueryParams = () => {
 		const searchParams = new URLSearchParams(location.search);
@@ -128,6 +125,8 @@ function PartyHeader({
 			New Quest
 		</Button>
 	);
+
+	console.log(party);
 
 	return (
 		<>

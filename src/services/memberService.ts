@@ -14,16 +14,9 @@ const getAllMembers = async (
 ): Promise<PaginatedMembers> => {
 	const queryParams = new URLSearchParams();
 
-	if (params) {
-		if (params.searchValue)
-			queryParams.append("searchValue", params.searchValue);
-		if (params.orderOn) queryParams.append("orderOn", params.orderOn);
-		if (params.orderBy) queryParams.append("orderBy", params.orderBy);
-		if (params.pageNumber)
-			queryParams.append("pageNumber", params.pageNumber.toString());
-		if (params.pageSize)
-			queryParams.append("pageSize", params.pageSize.toString());
-	}
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value) queryParams.append(key, value.toString());
+	});
 
 	const response = (
 		await apiClient.get(
