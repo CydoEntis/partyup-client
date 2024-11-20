@@ -4,6 +4,7 @@ import { Member, UpdateMemberRole } from "../../shared/types/member.types";
 import { useState } from "react";
 import { MEMBER_ROLES } from "../../shared/constants/roles";
 import useMemberStore from "../../stores/useMemberStore";
+import ManageCreator from "./ManageCreator";
 
 type MemberManagementProps = {
 	partyId: number;
@@ -42,20 +43,18 @@ function MemberManagementList({
 
 	const handleUpdateMemberRoles = async () => {
 		await updateMemberRoles(partyId, updatedMemberRoles);
-	}
+	};
 
 	return (
 		<Stack gap={8}>
-			{/* <Divider
+			<Divider
 				label="Creator"
 				labelPosition="center"
 			/>
 			{creator && (
-				<ManageMember
-					member={creator}
-					onUpdateMember={handleMemberRoleChange}
+				<ManageCreator
 				/>
-			)} */}
+			)}
 
 			{/* Maintainers Section */}
 			{maintainers.length > 0 && (

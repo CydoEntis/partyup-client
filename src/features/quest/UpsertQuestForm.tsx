@@ -116,7 +116,7 @@ function UpsertQuestForm({ quest, onClose }: UpsertQuestProps) {
 				id: quest.id,
 				partyId: Number(partyId),
 				title: data.title,
-				priority: Number(data.priority), // priority is now correctly passed as number
+				priority: Number(data.priority), 
 				description: data.description,
 				dueDate: data.dueDate,
 				memberIds: data.members.map(Number),
