@@ -1,8 +1,9 @@
 import { Avatar } from "./avatar.types";
+import { MEMBER_ROLES } from "../constants/roles";
 
 export type Member = {
 	id: number;
-	role: string;
+	role: (typeof MEMBER_ROLES)[keyof typeof MEMBER_ROLES];
 	userId: string;
 	displayName: string;
 	email: string;
@@ -23,4 +24,7 @@ export type PaginatedMembers = {
 
 export type CreateMember = Partial<Pick<Member, "userId" | "id">>;
 
-export type UpdateMemberRole = Partial<Pick<Member, "id" | "role">>;
+export type UpdateMemberRole = {
+	id: number;
+	role: (typeof MEMBER_ROLES)[keyof typeof MEMBER_ROLES];
+};

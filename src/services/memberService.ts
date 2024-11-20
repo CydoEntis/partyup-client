@@ -32,36 +32,45 @@ const getMemberById = async (
 	memberId: number,
 ): Promise<Member> => {
 	const response = (
-		await apiClient.get(
-			`${endpoints.parties}/${partyId}/,members/${memberId}`,
-		)
+		await apiClient.get(`${endpoints.parties}/${partyId}/,members/${memberId}`)
 	).data;
 	if (!response.isSuccess) throw new Error();
 	return response.result;
 };
 
 const createMember = async (member: CreateMember): Promise<Member> => {
-	const response = (await apiClient.post(`${endpoints.parties}`, member))
-		.data;
+	const response = (await apiClient.post(`${endpoints.parties}`, member)).data;
 	if (!response.isSuccess) throw new Error();
 	return response.result;
 };
 
-const updateMemberRole = async (
-	memberId: number,
-	updatedMemberRole: UpdateMemberRole,
-): Promise<Member> => {
+const updateMembersRoles = async (
+	partyId: number,
+	updatedMemberRoles: UpdateMemberRole[],
+): Promise<Member[]> => {
+
+
+	
+	const updatePartyMemberRoles = {
+		partyId,
+		memberRoles: updatedMemberRoles,
+	};
 	const response = (
-		await apiClient.put(`${endpoints.parties}/${memberId}`, updatedMemberRole)
+		await apiClient.put(
+			`${endpoints.parties}/${partyId}/members/update-role`,
+			updatePartyMemberRoles,
+		)
 	).data;
+
+	console.log(response);
+
 	if (!response.isSuccess) throw new Error();
 	return response.result;
 };
 
 const deleteMember = async (memberId: number): Promise<void> => {
-	const response = (
-		await apiClient.delete(`${endpoints.parties}/${memberId}`)
-	).data;
+	const response = (await apiClient.delete(`${endpoints.parties}/${memberId}`))
+		.data;
 	if (!response.isSuccess) throw new Error();
 };
 
@@ -79,7 +88,7 @@ export default {
 	getAllMembers,
 	getMemberById,
 	createMember,
-	updateMemberRole,
+	updateMembersRoles,
 	deleteMember,
 	generateInviteToken,
 };

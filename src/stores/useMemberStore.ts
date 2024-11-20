@@ -24,14 +24,17 @@ type MemberState = {
 	};
 	error: string | null;
 	getMembers: (partyId: number, queryParams?: QueryParams) => Promise<void>;
-	getMembersByRole: (partyId: number, queryParams?: QueryParams) => Promise<void>;
+	getMembersByRole: (
+		partyId: number,
+		queryParams?: QueryParams,
+	) => Promise<void>;
 	getMember: (partyId: number, memberId: number) => Promise<void>;
 	createMember: (member: CreateMember) => Promise<number>;
-	updateMemberRole: (
-		id: number,
-		updatedDetails: UpdateMemberRole,
+	updateMemberRoles: (
+		partyId: number,
+		updatedMemberRoles: UpdateMemberRole[],
 	) => Promise<void>;
-	deleteMember: (id: number) => Promise<void>;
+	deleteMembers: (memberIds: number[]) => Promise<void>;
 };
 
 export const useMemberStore = create<MemberState>((set) => ({
@@ -154,23 +157,34 @@ export const useMemberStore = create<MemberState>((set) => ({
 		}
 	},
 
-	updateMemberRole: async (
-		id: number,
-		updatedMemberRole: UpdateMemberRole,
+	updateMemberRoles: async (
+		partyId: number,
+		updatedMemberRoles: UpdateMemberRole[],
 	): Promise<void> => {
 		set((state) => ({
 			loading: { ...state.loading, update: true },
 			error: null,
 		}));
+
 		try {
-			const updatedMember = await memberService.updateMemberRole(
-				id,
-				updatedMemberRole,
+			const updatedMembers = await memberService.updateMembersRoles(
+				partyId,
+				updatedMemberRoles,
 			);
+
 			set((state) => {
 				const updatedItems =
 					state.members?.items.map((member) =>
-						member.id === id ? { ...member, ...updatedMember } : member,
+						updatedMembers.some(
+							(updatedMember) => updatedMember.id === member.id,
+						)
+							? {
+									...member,
+									...updatedMembers.find(
+										(updatedMember) => updatedMember.id === member.id,
+									),
+							  }
+							: member,
 					) || [];
 
 				return {
@@ -190,7 +204,7 @@ export const useMemberStore = create<MemberState>((set) => ({
 				};
 			});
 		} catch (error) {
-			set({ error: "Failed to update member role" });
+			set({ error: "Failed to update member roles" });
 			throw error;
 		} finally {
 			set((state) => ({
@@ -200,16 +214,21 @@ export const useMemberStore = create<MemberState>((set) => ({
 		}
 	},
 
-	deleteMember: async (memberId: number) => {
+	deleteMembers: async (memberIds: number[]) => {
 		set((state) => ({
 			loading: { ...state.loading, delete: true },
 			error: null,
 		}));
 		try {
-			await memberService.deleteMember(memberId);
+			// Call the delete API for each member in the array
+			await Promise.all(memberIds.map((id) => memberService.deleteMember(id)));
+
 			set((state) => {
 				const updatedItems =
-					state.members?.items.filter((member) => member.id !== memberId) || [];
+					state.members?.items.filter(
+						(member) => !memberIds.includes(member.id),
+					) || [];
+
 				return {
 					members: state.members
 						? { ...state.members, items: updatedItems }
@@ -227,7 +246,7 @@ export const useMemberStore = create<MemberState>((set) => ({
 				};
 			});
 		} catch (error) {
-			set({ error: "Failed to delete member" });
+			set({ error: "Failed to delete members" });
 			throw error;
 		} finally {
 			set((state) => ({

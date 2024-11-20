@@ -11,23 +11,29 @@ import {
 	Group,
 	Title,
 	Divider,
+	Select,
 } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
-import { Check, Copy, Edit, RefreshCcw } from "lucide-react";
+import { Check, Copy, Edit, RefreshCcw, X } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useMemberStore from "../../stores/useMemberStore";
 import memberService from "../../services/memberService";
 import UserAvatar from "../../components/avatar/UserAvatar";
 import { MEMBER_ROLES } from "../../shared/constants/roles";
+import MemberManagementList from "./MemberManagementList";
 
 type ManageMemberProps = {
 	userRole: string;
 } & DrawerProps;
 
-function ManageMembersDrawer({ userRole, isOpened, onClose }: ManageMemberProps) {
+function ManageMembersDrawer({
+	userRole,
+	isOpened,
+	onClose,
+}: ManageMemberProps) {
 	const { partyId } = useParams();
-	const { getMembersByRole, members, creator, maintainers, regularMembers } =
+	const { getMembersByRole, creator, maintainers, regularMembers } =
 		useMemberStore();
 	const [inviteLink, setInviteLink] = useState("");
 	const [countdown, setCountdown] = useState(0);
@@ -71,12 +77,19 @@ function ManageMembersDrawer({ userRole, isOpened, onClose }: ManageMemberProps)
 		};
 	}, [countdown]);
 
+	const [isEditing, setIsEditing] = useState(false);
+
+	const handleEditing = () => {
+		setIsEditing((prevState) => !prevState);
+	};
+
 	return (
 		<Drawer
 			opened={isOpened}
 			onClose={onClose}
 			title="Manage Members"
 			position="right"
+			size={500}
 		>
 			<Stack gap={8}>
 				<Paper
@@ -157,56 +170,68 @@ function ManageMembersDrawer({ userRole, isOpened, onClose }: ManageMemberProps)
 					<ActionIcon
 						variant="light"
 						color="violet"
+						onClick={handleEditing}
 					>
-						<Edit size={20} />
+						{isEditing ? <X size={20} /> : <Edit size={20} />}
 					</ActionIcon>
 				</Flex>
 			) : null}
-			<Stack gap={8}>
-				<Divider
-					label="Creator"
-					labelPosition="center"
-				/>
-				{creator && (
-					<Stack>
-						<Group key={creator.id}>
-							<UserAvatar avatar={creator.avatar} />
-							<Text>{creator.displayName}</Text>
-						</Group>
-					</Stack>
-				)}
+			{isEditing ? (
+				creator && partyId && (
+					<MemberManagementList
+						partyId={+partyId}
+						creator={creator}
+						maintainers={maintainers}
+						regularMembers={regularMembers}
+					/>
+				)
+			) : (
+				<Stack gap={8}>
+					<Divider
+						label="Creator"
+						labelPosition="center"
+					/>
+					{creator && (
+						<Stack>
+							<Group key={creator.id}>
+								<UserAvatar avatar={creator.avatar} />
+								<Text>{creator.displayName}</Text>
+							</Group>
+						</Stack>
+					)}
 
-				{/* Maintainers Section */}
-				{maintainers.length > 0 && (
-					<Stack>
-						<Divider
-							label="Maintainers"
-							labelPosition="center"
-						/>
-						{maintainers.map((maintainer) => (
-							<Group key={maintainer.id}>
-								<UserAvatar avatar={maintainer.avatar} />
-								<Text>{maintainer.displayName}</Text>
-							</Group>
-						))}
-					</Stack>
-				)}
-				<Divider
-					label="Members"
-					labelPosition="center"
-				/>
-				{/* Regular Members Section */}
-				{regularMembers.length > 0 && (
-					<Stack>
-						{regularMembers.map((member) => (
-							<Group key={member.id}>
-								<UserAvatar avatar={member.avatar} />
-								<Text>{member.displayName}</Text>
-							</Group>
-						))}
-					</Stack>
-				)}
-			</Stack>
+					{/* Maintainers Section */}
+					{maintainers.length > 0 && (
+						<Stack>
+							<Divider
+								label="Maintainers"
+								labelPosition="center"
+							/>
+							{maintainers.map((maintainer) => (
+								<Group key={maintainer.id}>
+									<UserAvatar avatar={maintainer.avatar} />
+									<Text>{maintainer.displayName}</Text>
+								</Group>
+							))}
+						</Stack>
+					)}
+					<Divider
+						label="Members"
+						labelPosition="center"
+					/>
+					{/* Regular Members Section */}
+					{regularMembers.length > 0 && (
+						<Stack>
+							{regularMembers.map((member) => (
+								<Group key={member.id}>
+									<UserAvatar avatar={member.avatar} />
+									<Text>{member.displayName}</Text>
+								</Group>
+							))}
+						</Stack>
+					)}
+				</Stack>
+			)}
 		</Drawer>
 	);
 }

@@ -126,7 +126,6 @@ function PartyHeader({
 		</Button>
 	);
 
-	console.log(party);
 
 	return (
 		<>
