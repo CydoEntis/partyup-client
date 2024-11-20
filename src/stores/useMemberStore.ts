@@ -7,8 +7,12 @@ import {
 } from "../shared/types/member.types";
 import memberService from "../services/memberService";
 import { QueryParams } from "../shared/types/query-params.types";
+import { MEMBER_ROLES } from "../shared/constants/roles";
 
 type MemberState = {
+	creator: Member | null;
+	maintainers: Member[];
+	regularMembers: Member[];
 	members: PaginatedMembers | null;
 	member: Member | null;
 	loading: {
@@ -19,6 +23,7 @@ type MemberState = {
 		delete: boolean;
 	};
 	error: string | null;
+	getAllMembers: (partyId: number, queryParams?: QueryParams) => Promise<void>;
 	getMembers: (partyId: number, queryParams?: QueryParams) => Promise<void>;
 	getMember: (partyId: number, memberId: number) => Promise<void>;
 	createMember: (member: CreateMember) => Promise<number>;
@@ -30,6 +35,9 @@ type MemberState = {
 };
 
 export const useMemberStore = create<MemberState>((set) => ({
+	creator: null,
+	maintainers: [],
+	regularMembers: [],
 	members: null,
 	member: null,
 	loading: {
@@ -113,6 +121,40 @@ export const useMemberStore = create<MemberState>((set) => ({
 		}
 	},
 
+	getAllMembers: async (partyId: number, queryParams?: QueryParams) => {
+		set((state) => ({
+			loading: { ...state.loading, list: true },
+			error: null,
+		}));
+		try {
+			const members = await memberService.getAllMembers(partyId, queryParams);
+			set({
+				members,
+				creator:
+					members?.items.find(
+						(member) => member.role === MEMBER_ROLES.CREATOR,
+					) || null,
+				maintainers:
+					members?.items.filter(
+						(member) => member.role === MEMBER_ROLES.MAINTAINER,
+					) || [],
+				regularMembers:
+					members?.items.filter(
+						(member) => member.role === MEMBER_ROLES.MEMBER,
+					) || [],
+			});
+		} catch (error) {
+			set({ error: "Failed to fetch members" });
+			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, list: false },
+				error: null,
+			}));
+		}
+	},
+
+	// Update Member Role
 	updateMemberRole: async (
 		id: number,
 		updatedMemberRole: UpdateMemberRole,
@@ -127,23 +169,29 @@ export const useMemberStore = create<MemberState>((set) => ({
 				updatedMemberRole,
 			);
 			set((state) => {
-				const updatedMembers = state.members
-					? state.members.items.map((member) =>
-							member.id === id ? { ...member, ...updatedMember } : member,
-					  )
-					: [];
+				const updatedItems =
+					state.members?.items.map((member) =>
+						member.id === id ? { ...member, ...updatedMember } : member,
+					) || [];
+
 				return {
 					members: state.members
-						? { ...state.members, items: updatedMembers }
+						? { ...state.members, items: updatedItems }
 						: null,
-					member:
-						state.member?.id === id
-							? { ...state.member, ...updatedMember }
-							: state.member,
+					creator:
+						updatedItems.find(
+							(member) => member.role === MEMBER_ROLES.CREATOR,
+						) || null,
+					maintainers: updatedItems.filter(
+						(member) => member.role === MEMBER_ROLES.MAINTAINER,
+					),
+					regularMembers: updatedItems.filter(
+						(member) => member.role === MEMBER_ROLES.MEMBER,
+					),
 				};
 			});
 		} catch (error) {
-			set({ error: "Failed to update member details" });
+			set({ error: "Failed to update member role" });
 			throw error;
 		} finally {
 			set((state) => ({
@@ -153,6 +201,7 @@ export const useMemberStore = create<MemberState>((set) => ({
 		}
 	},
 
+	// Delete Member
 	deleteMember: async (memberId: number) => {
 		set((state) => ({
 			loading: { ...state.loading, delete: true },
@@ -160,17 +209,25 @@ export const useMemberStore = create<MemberState>((set) => ({
 		}));
 		try {
 			await memberService.deleteMember(memberId);
-			set((state) => ({
-				members: state.members
-					? {
-							...state.members,
-							items: state.members.items.filter(
-								(member) => member.id !== memberId,
-							),
-							totalCount: state.members.totalCount - 1,
-					  }
-					: null,
-			}));
+			set((state) => {
+				const updatedItems =
+					state.members?.items.filter((member) => member.id !== memberId) || [];
+				return {
+					members: state.members
+						? { ...state.members, items: updatedItems }
+						: null,
+					creator:
+						updatedItems.find(
+							(member) => member.role === MEMBER_ROLES.CREATOR,
+						) || null,
+					maintainers: updatedItems.filter(
+						(member) => member.role === MEMBER_ROLES.MAINTAINER,
+					),
+					regularMembers: updatedItems.filter(
+						(member) => member.role === MEMBER_ROLES.MEMBER,
+					),
+				};
+			});
 		} catch (error) {
 			set({ error: "Failed to delete member" });
 			throw error;
