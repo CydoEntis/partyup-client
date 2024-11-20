@@ -6,6 +6,7 @@ import StepList from "../../components/steps/StepList";
 import useUserStore from "../../stores/useUserStore";
 import useQuestStore from "../../stores/useQuestStore";
 import PriortyBadge from "../../components/badge/PriortyBadge";
+import { MEMBER_ROLES } from "../../shared/constants/roles";
 
 function ViewQuest() {
 	const { completeQuest, uncompleteQuest, quest } = useQuestStore();
@@ -94,7 +95,8 @@ function ViewQuest() {
 						</Button>
 					) : null}
 
-					{(memberRole === "Owner" || memberRole === "Captain") &&
+					{(memberRole === MEMBER_ROLES.CREATOR ||
+						memberRole === MEMBER_ROLES.MAINTAINER) &&
 					quest?.isCompleted ? (
 						<Button
 							leftSection={<Check size={20} />}

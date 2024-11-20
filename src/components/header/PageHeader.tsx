@@ -1,12 +1,13 @@
 import { Box, Flex, Group, Title } from "@mantine/core";
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import useGetColorTheme from "../../hooks/useGetColorTheme";
+import { MEMBER_ROLES } from "../../shared/constants/roles";
 
 type PageHeaderProps = {
 	title: string;
 	optionsComp?: ReactElement;
 	actionBtn?: ReactElement;
-	children?: ReactElement;
+	children?: ReactNode;
 	userRole?: string;
 };
 
@@ -39,13 +40,12 @@ function PageHeader({
 					w="100%"
 					justify="space-between"
 				>
-					{(userRole === "Creator" || userRole === "Maintainer") && (
-						<Group>
-							<Title size="2.5rem">{title}</Title>
-							{optionsComp}
-						</Group>
-					)}
-					{(userRole === "Creator" || userRole === "Maintainer") &&
+					<Group>
+						<Title size="2.5rem">{title}</Title>
+						{(userRole === MEMBER_ROLES.CREATOR || userRole === MEMBER_ROLES.MAINTAINER) &&
+							optionsComp}
+					</Group>
+					{(userRole === MEMBER_ROLES.CREATOR || userRole === MEMBER_ROLES.MAINTAINER) &&
 						actionBtn && <Box>{actionBtn}</Box>}
 				</Group>
 			</Flex>
