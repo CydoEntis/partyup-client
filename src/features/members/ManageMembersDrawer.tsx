@@ -8,7 +8,6 @@ import {
 	Tooltip,
 	Flex,
 	Drawer,
-	Avatar,
 	Group,
 	Title,
 	Divider,
@@ -20,11 +19,11 @@ import { useEffect, useState } from "react";
 import useMemberStore from "../../stores/useMemberStore";
 import memberService from "../../services/memberService";
 import UserAvatar from "../../components/avatar/UserAvatar";
-import { MEMBER_ROLES } from "../../shared/constants/roles";
 
 function ManageMembersDrawer({ isOpened, onClose }: DrawerProps) {
 	const { partyId } = useParams();
-	const { getMembers, members } = useMemberStore();
+	const { getMembersByRole, members, creator, maintainers, regularMembers } =
+		useMemberStore();
 	const [inviteLink, setInviteLink] = useState("");
 	const [countdown, setCountdown] = useState(0);
 	const expirationTime = 900; // 15 minutes
@@ -32,12 +31,14 @@ function ManageMembersDrawer({ isOpened, onClose }: DrawerProps) {
 	useEffect(() => {
 		const fetchMembers = async () => {
 			if (partyId) {
-				await getMembers(Number(partyId));
+				await getMembersByRole(Number(partyId));
 			}
 		};
 
-		fetchMembers();
-	}, []);
+		if (isOpened) {
+			fetchMembers();
+		}
+	}, [partyId, isOpened, getMembersByRole]);
 
 	const generateInviteLink = async () => {
 		if (partyId) {
@@ -49,39 +50,21 @@ function ManageMembersDrawer({ isOpened, onClose }: DrawerProps) {
 		}
 	};
 
-	// useEffect(() => {
-	// 	if (isOpened) {
-	// 		generateInviteLink();
-	// 	}
-	// }, [isOpened]);
+	useEffect(() => {
+		let timer: NodeJS.Timeout;
 
-	// useEffect(() => {
-	// 	let timer: NodeJS.Timeout;
+		if (countdown > 0) {
+			timer = setInterval(() => {
+				setCountdown((prev) => prev - 1);
+			}, 1000);
+		} else {
+			setInviteLink("");
+		}
 
-	// 	if (countdown > 0) {
-	// 		timer = setInterval(() => {
-	// 			setCountdown((prev) => prev - 1);
-	// 		}, 1000);
-	// 	} else {
-	// 		setInviteLink("");
-	// 	}
-
-	// 	return () => {
-	// 		clearInterval(timer);
-	// 	};
-	// }, [countdown]);
-
-	// Separate creator, maintainers, and regular members
-	const creator = members?.items?.find(
-		(member) => member.role === MEMBER_ROLES.CREATOR,
-	);
-	const maintainers =
-		members?.items?.filter(
-			(member) => member.role === MEMBER_ROLES.MAINTAINER,
-		) || [];
-	const regularMembers =
-		members?.items?.filter((member) => member.role === MEMBER_ROLES.MEMBER) ||
-		[];
+		return () => {
+			clearInterval(timer);
+		};
+	}, [countdown]);
 
 	return (
 		<Drawer
