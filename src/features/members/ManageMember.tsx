@@ -8,24 +8,29 @@ import {
 	Checkbox,
 	ComboboxItem,
 } from "@mantine/core";
-import { X } from "lucide-react";
 import UserAvatar from "../../components/avatar/UserAvatar";
 import { MEMBER_ROLES } from "../../shared/constants/roles";
 import { Member, UpdateMemberRole } from "../../shared/types/member.types";
-import useMemberStore from "../../stores/useMemberStore"; // Import the store
 import { useState } from "react";
 
 type ManageMemberProps = {
 	member: Member;
 	onUpdateMember: (updatedMember: UpdateMemberRole) => void;
+	onToggleRemove: (memberId: number) => void;
+	membersToRemove: number[];
 };
 
-function ManageMember({ member, onUpdateMember }: ManageMemberProps) {
-	// const handleRemove = () => {
-	// 	onRemove(member.id);
-	// };
+function ManageMember({
+	member,
+	onUpdateMember,
+	onToggleRemove,
+	membersToRemove
+}: ManageMemberProps) {
+	const handleCheckboxChange = () => {
+		onToggleRemove(member.id);
+	};
 
-	const [value, setValue] = useState<ComboboxItem | null>(null);
+	const [_, setValue] = useState<ComboboxItem | null>(null);
 
 	const handleUpdatedRole = (option: ComboboxItem) => {
 		setValue(option);
@@ -49,7 +54,7 @@ function ManageMember({ member, onUpdateMember }: ManageMemberProps) {
 
 			<Group align="center">
 				<Select
-					label="Role"
+					size="xs"
 					placeholder="Select Role"
 					data={[
 						{ value: MEMBER_ROLES.MAINTAINER, label: "Maintainer" },
@@ -60,13 +65,13 @@ function ManageMember({ member, onUpdateMember }: ManageMemberProps) {
 					allowDeselect={false}
 				/>
 
-				{/* <Tooltip label="Remove">
+				<Tooltip label="Remove">
 					<Checkbox
-						checked={selectedMembers.includes(member.id)}
-						onClick={handleRemove}
+					size="sm"
+						checked={membersToRemove.includes(member.id)}
+						onChange={handleCheckboxChange}
 					/>
-	
-				</Tooltip> */}
+				</Tooltip>
 			</Group>
 		</Flex>
 	);

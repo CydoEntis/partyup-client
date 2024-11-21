@@ -45,15 +45,25 @@ function MemberManagementList({
 		await updateMemberRoles(partyId, updatedMemberRoles);
 	};
 
+	const handleToggleRemove = (memberId: number) => {
+		setMembersToRemove((prevState) => {
+			if (prevState.includes(memberId)) {
+				return prevState.filter((id) => id !== memberId);
+			} else {
+				return [...prevState, memberId];
+			}
+		});
+	};
+
+	console.log(membersToRemove);
+
 	return (
 		<Stack gap={8}>
 			<Divider
 				label="Creator"
 				labelPosition="center"
 			/>
-			{creator && (
-				<ManageCreator partyId={partyId}				/>
-			)}
+			{creator && <ManageCreator partyId={partyId} />}
 
 			{/* Maintainers Section */}
 			{maintainers.length > 0 && (
@@ -64,9 +74,11 @@ function MemberManagementList({
 					/>
 					{maintainers.map((maintainer) => (
 						<ManageMember
+							membersToRemove={membersToRemove}
 							key={maintainer.id}
 							member={maintainer}
 							onUpdateMember={handleMemberRoleChange}
+							onToggleRemove={handleToggleRemove}
 						/>
 					))}
 				</Stack>
@@ -81,9 +93,11 @@ function MemberManagementList({
 				<Stack>
 					{regularMembers.map((member) => (
 						<ManageMember
+							membersToRemove={membersToRemove}
 							key={member.id}
 							member={member}
 							onUpdateMember={handleMemberRoleChange}
+							onToggleRemove={handleToggleRemove}
 						/>
 					))}
 				</Stack>
