@@ -38,5 +38,5 @@ export type UpdateCreator = {
 
 export type MembersToRemove = {
 	partyId: number;
-	memberIds: number[] 
+	memberIds: number[],
 }

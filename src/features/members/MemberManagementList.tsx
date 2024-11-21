@@ -1,10 +1,11 @@
-import { Stack, Divider, Button, Group, Flex } from "@mantine/core";
+import { Stack, Divider, Button, Flex } from "@mantine/core";
 import ManageMember from "./ManageMember";
 import { Member, UpdateMemberRole } from "../../shared/types/member.types";
 import { useState } from "react";
 import useMemberStore from "../../stores/useMemberStore";
 import ManageCreator from "./ManageCreator";
 import usePartyStore from "../../stores/usePartyStore";
+import useUserStore from "../../stores/useUserStore";
 
 type MemberManagementProps = {
 	partyId: number;
@@ -21,6 +22,7 @@ function MemberManagementList({
 }: MemberManagementProps) {
 	const { updateMemberRoles, deleteMembers } = useMemberStore();
 	const { deleteMembersFromParty } = usePartyStore();
+	const { user } = useUserStore();
 	const [updatedMemberRoles, setUpdatedMemberRoles] = useState<
 		UpdateMemberRole[]
 	>([]);
@@ -46,7 +48,11 @@ function MemberManagementList({
 		await updateMemberRoles(partyId, updatedMemberRoles);
 	};
 
-	const handleToggleRemove = (memberId: number) => {
+	const handleToggleRemove = (memberId: number, userId: string) => {
+		if (userId === user!.id) {
+			return; 
+		}
+
 		setMembersToRemove((prevState) => {
 			if (prevState.includes(memberId)) {
 				return prevState.filter((id) => id !== memberId);

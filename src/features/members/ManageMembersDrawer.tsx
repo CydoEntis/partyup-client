@@ -83,10 +83,15 @@ function ManageMembersDrawer({
 		setIsEditing((prevState) => !prevState);
 	};
 
+	const handleClose = () => {
+		setIsEditing(false);
+		onClose();
+	}
+
 	return (
 		<Drawer
 			opened={isOpened}
-			onClose={onClose}
+			onClose={handleClose}
 			title="Manage Members"
 			position="right"
 			size={500}
@@ -177,7 +182,8 @@ function ManageMembersDrawer({
 				</Flex>
 			) : null}
 			{isEditing ? (
-				creator && partyId && (
+				creator &&
+				partyId && (
 					<MemberManagementList
 						partyId={+partyId}
 						creator={creator}

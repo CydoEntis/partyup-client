@@ -12,11 +12,12 @@ import UserAvatar from "../../components/avatar/UserAvatar";
 import { MEMBER_ROLES } from "../../shared/constants/roles";
 import { Member, UpdateMemberRole } from "../../shared/types/member.types";
 import { useState } from "react";
+import useUserStore from "../../stores/useUserStore"; // Import user store
 
 type ManageMemberProps = {
 	member: Member;
 	onUpdateMember: (updatedMember: UpdateMemberRole) => void;
-	onToggleRemove: (memberId: number) => void;
+	onToggleRemove: (memberId: number, userId: string) => void;
 	membersToRemove: number[];
 };
 
@@ -24,10 +25,12 @@ function ManageMember({
 	member,
 	onUpdateMember,
 	onToggleRemove,
-	membersToRemove
+	membersToRemove,
 }: ManageMemberProps) {
+	const { user } = useUserStore(); // Get the logged-in user from the store
+
 	const handleCheckboxChange = () => {
-		onToggleRemove(member.id);
+		onToggleRemove(member.id, member.userId);
 	};
 
 	const [_, setValue] = useState<ComboboxItem | null>(null);
@@ -67,10 +70,11 @@ function ManageMember({
 
 				<Tooltip label="Remove">
 					<Checkbox
-					size="sm"
+						size="sm"
 						checked={membersToRemove.includes(member.id)}
 						onChange={handleCheckboxChange}
 						color="red"
+						disabled={member.userId === user!.id} 
 					/>
 				</Tooltip>
 			</Group>
