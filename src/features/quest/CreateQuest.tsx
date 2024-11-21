@@ -20,7 +20,7 @@ import { DateInput } from "@mantine/dates";
 import useMemberStore from "../../stores/useMemberStore";
 import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
-import { PriorityLevel } from "../../shared/types/prioty.types";
+import { PriorityLevel } from "../../shared/types/priority.types";
 import { CreateStep } from "../../shared/types/step.types";
 
 type CreateQuestProps = {

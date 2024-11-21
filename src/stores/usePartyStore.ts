@@ -10,7 +10,7 @@ import partyService from "../services/partyService";
 import { QueryParams } from "../shared/types/query-params.types";
 import { MembersToRemove } from "../shared/types/member.types";
 
-type Partiestate = {
+type PartyState = {
 	recentParties: Party[];
 	parties: PaginatedParties | null;
 	party: Party | null;
@@ -33,7 +33,7 @@ type Partiestate = {
 	deleteMembersFromParty: (membersToRemove: MembersToRemove) => Promise<void>;
 };
 
-export const usePartyStore = create<Partiestate>((set, get) => ({
+export const usePartyStore = create<PartyState>((set, get) => ({
 	recentParties: [],
 	parties: null,
 	party: null,

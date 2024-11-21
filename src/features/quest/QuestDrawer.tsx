@@ -7,7 +7,6 @@ import ViewQuest from "./ViewQuest";
 import UpsertQuestForm from "./UpsertQuestForm";
 import MenuOptions from "../../components/menu/MenuOptions";
 import { Edit, Trash2 } from "lucide-react";
-import { truncateText } from "../../shared/utils/text.utils";
 
 export type QuestDrawerType = "create" | "edit" | "view";
 

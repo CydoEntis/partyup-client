@@ -4,17 +4,13 @@ import Members from "../../components/avatar/Members";
 import { Member } from "../../shared/types/member.types";
 import { MEMBER_ROLES } from "../../shared/constants/roles";
 
-type InvitePartyMemberProps = {
+type PartyMembersProps = {
 	onOpenHandler: () => void;
 	members: Member[];
 	userRole: string;
 };
 
-function InvitePartyMember({
-	onOpenHandler,
-	members,
-	userRole,
-}: InvitePartyMemberProps) {
+function PartyMembers({ onOpenHandler, members, userRole }: PartyMembersProps) {
 	return (
 		<Group pb={16}>
 			<Group align="center">
@@ -26,19 +22,19 @@ function InvitePartyMember({
 				/>
 			</Group>
 
-			{userRole === MEMBER_ROLES.CREATOR ||
-			userRole === MEMBER_ROLES.MAINTAINER ? (
-				<Button
-					variant="light"
-					color="violet"
-					rightSection={<UserCog size={20}/>}
-					onClick={onOpenHandler}
-				>
-					Manage Members
-				</Button>
-			) : null}
+			<Button
+				variant="light"
+				color="violet"
+				rightSection={<UserCog size={20} />}
+				onClick={onOpenHandler}
+			>
+				{userRole === MEMBER_ROLES.CREATOR ||
+				userRole === MEMBER_ROLES.MAINTAINER
+					? "Manage Members"
+					: "View Members"}
+			</Button>
 		</Group>
 	);
 }
 
-export default InvitePartyMember;
+export default PartyMembers;

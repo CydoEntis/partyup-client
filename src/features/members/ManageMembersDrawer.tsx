@@ -54,8 +54,11 @@ function ManageMembersDrawer({
 	const generateInviteLink = async () => {
 		if (partyId) {
 			const token = await memberService.generateInviteToken(partyId);
+
+			console.log(token);
+
 			setInviteLink(
-				`http://localhost:5173/parties/1/accept-invite?invite=${token}`,
+				`http://localhost:5173/parties/${partyId}/accept-invite?invite=${token}`,
 			);
 			setCountdown(expirationTime);
 		}

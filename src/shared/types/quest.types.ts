@@ -1,5 +1,5 @@
 import { Member } from "./member.types";
-import { PriorityLevel } from "./prioty.types";
+import { PriorityLevel } from "./priority.types";
 import { CreateStep, Step } from "./step.types";
 
 export type Quest = {

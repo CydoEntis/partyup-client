@@ -1,4 +1,4 @@
-import InvitePartyMember from "../InvitePartyMember";
+import PartyMembers from "../PartyMembers";
 import { ActionIcon, Button, Flex, Group, Stack, Title } from "@mantine/core";
 import { Edit, Plus, Settings2, Trash2 } from "lucide-react";
 import MenuOptions from "../../../components/menu/MenuOptions";
@@ -147,8 +147,7 @@ function PartyHeader({
 			>
 				<Stack gap={16}>
 					<Title size="lg">{party.description}</Title>
-						<p>{party.creatorId}</p>
-						<InvitePartyMember
+						<PartyMembers
 							userRole={party.currentUserRole}
 							members={party.members}
 							onOpenHandler={openMemberInvite}

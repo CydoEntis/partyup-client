@@ -8,6 +8,7 @@ import PrivateLayout from "../components/layout/PrivateLayout";
 import PublicLayout from "../components/layout/PublicLayout";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 import QuestPage from "../pages/quest/QuestPage";
+import AcceptInvite from "../pages/auth/AcceptInvite";
 
 const publicRoutes = [
 	{
@@ -28,7 +29,7 @@ const publicRoutes = [
 
 const protectedRoutes = [
 	{
-		path: "dashboard",
+		path: "/",
 		element: <DashboardPage />,
 	},
 	{
@@ -42,6 +43,10 @@ const protectedRoutes = [
 	{
 		path: "parties/:partyId/quests/:questId",
 		element: <QuestPage />,
+	},
+	{
+		path: "parties/:partyId/accept-invite",
+		element: <AcceptInvite />,
 	},
 ];
 

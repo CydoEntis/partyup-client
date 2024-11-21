@@ -1,4 +1,4 @@
-import { PriorityLevel } from "../../shared/types/prioty.types";
+import { PriorityLevel } from "../../shared/types/priority.types";
 import { Badge } from "@mantine/core";
 
 type PriorityBadgeProps = {
