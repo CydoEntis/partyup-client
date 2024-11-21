@@ -65,17 +65,17 @@ const updateMembersRoles = async (
 };
 
 const changeCreator = async (
-	partyId: number,
 	updatedCreator: UpdateCreator,
 ): Promise<Member[]> => {
-	const newCreator = {
-		partyId,
-		updatedCreator,
-	};
+	console.log(updatedCreator);
+	console.log(
+		`${endpoints.parties}/${updatedCreator.partyId}/members/change-creator`,
+	);
+
 	const response = (
 		await apiClient.put(
-			`${endpoints.parties}/${partyId}/members/change-creator`,
-			newCreator,
+			`${endpoints.parties}/${updatedCreator.partyId}/members/change-creator`,
+			updatedCreator,
 		)
 	).data;
 

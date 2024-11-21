@@ -9,37 +9,32 @@ import {
 } from "@mantine/core";
 import UserAvatar from "../../components/avatar/UserAvatar";
 import { MEMBER_ROLES } from "../../shared/constants/roles";
-import { Member, UpdateMemberRole } from "../../shared/types/member.types";
 import { useState } from "react";
-import { Crown } from "lucide-react";
 import useMemberStore from "../../stores/useMemberStore";
 
-type ManageCreatorProps = {partyId: number};
+type ManageCreatorProps = { partyId: number };
 
-function ManageCreator({partyId}: ManageCreatorProps) {
-	const { creator, members,  } = useMemberStore();
+function ManageCreator({ partyId }: ManageCreatorProps) {
+	const { creator, members, changeCreator } = useMemberStore();
 	const [newCreator, setNewCreator] = useState<ComboboxItem | null>(null);
 	const [oldCreatorRole, setOldCreatorRole] = useState<ComboboxItem | null>(
 		null,
 	);
 
-	const handleUpdatedRole = (option: ComboboxItem) => {
-		const updatedCreator = {
-			partyId,
-			newCreatorId: newCreator?.value,
-			oldCreatorId: creator?.id,
-			oldCreatorRole: oldCreatorRole?.value,
-		};
-		// const updatedMemberRole: UpdateMemberRole = {
-		// 	id: creator.id,
-		// 	role: option.value as "creator" | "maintainer" | "member",
-		// };
+	//TODO: Add logic to also update the parties creator to the new creator.
+	const handleUpdateCreator = async () => {
+		if (newCreator && oldCreatorRole && creator) {
+			const updatedCreator = {
+				partyId,
+				newCreatorId: +newCreator.value,
+				oldCreatorId: +creator.id,
+				oldCreatorRole: oldCreatorRole.value as "member" | "maintainer",
+			};
 
-		// onUpdateMember(updatedMemberRole);
+			console.log("UPDATE: ", updatedCreator);
+			await changeCreator(updatedCreator);
+		}
 	};
-
-	console.log(newCreator);
-	console.log(oldCreatorRole);
 
 	return (
 		<Stack>
@@ -52,7 +47,10 @@ function ManageCreator({partyId}: ManageCreatorProps) {
 				)}
 			</Group>
 
-			<Flex gap={8} justify="center">
+			<Flex
+				gap={8}
+				justify="center"
+			>
 				{members && members.items && (
 					<Select
 						label="New Creator"
@@ -82,6 +80,7 @@ function ManageCreator({partyId}: ManageCreatorProps) {
 			<Button
 				variant="light"
 				color="violet"
+				onClick={handleUpdateCreator}
 			>
 				Change Creator
 			</Button>

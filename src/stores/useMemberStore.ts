@@ -37,7 +37,6 @@ type MemberState = {
 	) => Promise<void>;
 	deleteMembers: (memberIds: number[]) => Promise<void>;
 	changeCreator: (
-		partyId: number,
 		updatedCreator: UpdateCreator,
 	) => Promise<void>;
 };
@@ -262,7 +261,6 @@ export const useMemberStore = create<MemberState>((set) => ({
 	},
 
 	changeCreator: async (
-		partyId: number,
 		updatedCreator: UpdateCreator,
 	): Promise<void> => {
 		set((state) => ({
@@ -272,7 +270,6 @@ export const useMemberStore = create<MemberState>((set) => ({
 
 		try {
 			const updatedMembers = await memberService.changeCreator(
-				partyId,
 				updatedCreator,
 			);
 
