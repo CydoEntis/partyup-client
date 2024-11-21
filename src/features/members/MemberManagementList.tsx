@@ -2,9 +2,9 @@ import { Stack, Divider, Button, Group, Flex } from "@mantine/core";
 import ManageMember from "./ManageMember";
 import { Member, UpdateMemberRole } from "../../shared/types/member.types";
 import { useState } from "react";
-import { MEMBER_ROLES } from "../../shared/constants/roles";
 import useMemberStore from "../../stores/useMemberStore";
 import ManageCreator from "./ManageCreator";
+import usePartyStore from "../../stores/usePartyStore";
 
 type MemberManagementProps = {
 	partyId: number;
@@ -19,7 +19,8 @@ function MemberManagementList({
 	maintainers,
 	regularMembers,
 }: MemberManagementProps) {
-	const { updateMemberRoles } = useMemberStore();
+	const { updateMemberRoles, deleteMembers } = useMemberStore();
+	const { deleteMembersFromParty } = usePartyStore();
 	const [updatedMemberRoles, setUpdatedMemberRoles] = useState<
 		UpdateMemberRole[]
 	>([]);
@@ -55,7 +56,15 @@ function MemberManagementList({
 		});
 	};
 
-	console.log(membersToRemove);
+	const handleRemovingMembers = async () => {
+		const toBeRemoved = {
+			partyId,
+			memberIds: membersToRemove,
+		};
+
+		await deleteMembers(toBeRemoved);
+		await deleteMembersFromParty(toBeRemoved);
+	};
 
 	return (
 		<Stack gap={8}>
@@ -114,7 +123,7 @@ function MemberManagementList({
 				<Button
 					variant="light"
 					color="red"
-					onClick={handleUpdateMemberRoles}
+					onClick={handleRemovingMembers}
 					fullWidth
 				>
 					Remove Members

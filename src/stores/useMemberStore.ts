@@ -5,6 +5,7 @@ import {
 	UpdateMemberRole,
 	PaginatedMembers,
 	UpdateCreator,
+	MembersToRemove,
 } from "../shared/types/member.types";
 import memberService from "../services/memberService";
 import { QueryParams } from "../shared/types/query-params.types";
@@ -35,10 +36,8 @@ type MemberState = {
 		partyId: number,
 		updatedMemberRoles: UpdateMemberRole[],
 	) => Promise<void>;
-	deleteMembers: (memberIds: number[]) => Promise<void>;
-	changeCreator: (
-		updatedCreator: UpdateCreator,
-	) => Promise<void>;
+	deleteMembers: (membersToRemove: MembersToRemove) => Promise<void>;
+	changeCreator: (updatedCreator: UpdateCreator) => Promise<void>;
 };
 
 export const useMemberStore = create<MemberState>((set) => ({
@@ -218,19 +217,19 @@ export const useMemberStore = create<MemberState>((set) => ({
 		}
 	},
 
-	deleteMembers: async (memberIds: number[]) => {
+	deleteMembers: async (membersToRemove: MembersToRemove) => {
 		set((state) => ({
 			loading: { ...state.loading, delete: true },
 			error: null,
 		}));
 		try {
-			// Call the delete API for each member in the array
-			await Promise.all(memberIds.map((id) => memberService.deleteMember(id)));
+			// Call the delete API to remove the members
+			await memberService.deleteMembers(membersToRemove);
 
 			set((state) => {
 				const updatedItems =
 					state.members?.items.filter(
-						(member) => !memberIds.includes(member.id),
+						(member) => !membersToRemove.memberIds.includes(member.id),
 					) || [];
 
 				return {
@@ -260,18 +259,14 @@ export const useMemberStore = create<MemberState>((set) => ({
 		}
 	},
 
-	changeCreator: async (
-		updatedCreator: UpdateCreator,
-	): Promise<void> => {
+	changeCreator: async (updatedCreator: UpdateCreator): Promise<void> => {
 		set((state) => ({
 			loading: { ...state.loading, update: true },
 			error: null,
 		}));
 
 		try {
-			const updatedMembers = await memberService.changeCreator(
-				updatedCreator,
-			);
+			const updatedMembers = await memberService.changeCreator(updatedCreator);
 
 			set((state) => {
 				const updatedItems =

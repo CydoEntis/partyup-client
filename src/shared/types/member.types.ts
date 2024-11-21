@@ -35,3 +35,8 @@ export type UpdateCreator = {
 	oldCreatorId: number;
 	oldCreatorRole:(typeof MEMBER_ROLES)[keyof typeof MEMBER_ROLES];
 };
+
+export type MembersToRemove = {
+	partyId: number;
+	memberIds: number[] 
+}

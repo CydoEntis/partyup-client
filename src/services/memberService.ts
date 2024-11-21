@@ -6,6 +6,7 @@ import {
 	UpdateMemberRole,
 	PaginatedMembers,
 	UpdateCreator,
+	MembersToRemove,
 } from "../shared/types/member.types";
 import { QueryParams } from "../shared/types/query-params.types";
 
@@ -85,9 +86,15 @@ const changeCreator = async (
 	return response.result;
 };
 
-const deleteMember = async (memberId: number): Promise<void> => {
-	const response = (await apiClient.delete(`${endpoints.parties}/${memberId}`))
-		.data;
+const deleteMembers = async (
+	membersToRemove: MembersToRemove,
+): Promise<void> => {
+	const response = (
+		await apiClient.delete(
+			`${endpoints.parties}/${membersToRemove.partyId}/members`,
+			{ data: membersToRemove },
+		)
+	).data;
 	if (!response.isSuccess) throw new Error();
 };
 
@@ -107,6 +114,7 @@ export default {
 	createMember,
 	updateMembersRoles,
 	changeCreator,
-	deleteMember,
+	// deleteMember,
+	deleteMembers,
 	generateInviteToken,
 };

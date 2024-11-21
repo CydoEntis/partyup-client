@@ -8,6 +8,7 @@ import {
 } from "../shared/types/party.types";
 import partyService from "../services/partyService";
 import { QueryParams } from "../shared/types/query-params.types";
+import { MembersToRemove } from "../shared/types/member.types";
 
 type Partiestate = {
 	recentParties: Party[];
@@ -29,6 +30,7 @@ type Partiestate = {
 	updateParty: (partyId: string, updatedDetails: UpdateParty) => Promise<void>;
 	deleteParty: (id: string) => Promise<void>;
 	changePartyCreator: (newPartyCreator: NewPartyCreator) => Promise<void>;
+	deleteMembersFromParty: (membersToRemove: MembersToRemove) => Promise<void>;
 };
 
 export const usePartyStore = create<Partiestate>((set, get) => ({
@@ -289,6 +291,40 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 			throw error;
 		} finally {
 			set((state) => ({ loading: { ...state.loading, update: false } }));
+		}
+	},
+
+	deleteMembersFromParty: async (membersToRemove: MembersToRemove) => {
+		set((state) => ({
+			loading: { ...state.loading, delete: true },
+			error: null,
+		}));
+		try {
+			const currentParty = get().party;
+			if (currentParty?.id === Number(membersToRemove.partyId)) {
+				const updatedMembers = currentParty.members.filter(
+					(member) => !membersToRemove.memberIds.includes(member.id),
+				);
+
+				set((state) => ({
+					party: {
+						...currentParty,
+						members: updatedMembers,
+					},
+					recentParties: state.recentParties.map((party) =>
+						party.id === Number(membersToRemove.partyId)
+							? { ...party, members: updatedMembers }
+							: party,
+					),
+				}));
+			}
+		} catch (error) {
+			set({ error: "Failed to remove members" });
+			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, delete: false },
+			}));
 		}
 	},
 }));
