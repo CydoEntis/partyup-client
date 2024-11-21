@@ -52,8 +52,7 @@ function MemberManagementList({
 				labelPosition="center"
 			/>
 			{creator && (
-				<ManageCreator
-				/>
+				<ManageCreator partyId={partyId}				/>
 			)}
 
 			{/* Maintainers Section */}

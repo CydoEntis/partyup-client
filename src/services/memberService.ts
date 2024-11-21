@@ -5,6 +5,7 @@ import {
 	CreateMember,
 	UpdateMemberRole,
 	PaginatedMembers,
+	UpdateCreator,
 } from "../shared/types/member.types";
 import { QueryParams } from "../shared/types/query-params.types";
 
@@ -48,9 +49,6 @@ const updateMembersRoles = async (
 	partyId: number,
 	updatedMemberRoles: UpdateMemberRole[],
 ): Promise<Member[]> => {
-
-
-	
 	const updatePartyMemberRoles = {
 		partyId,
 		memberRoles: updatedMemberRoles,
@@ -59,6 +57,25 @@ const updateMembersRoles = async (
 		await apiClient.put(
 			`${endpoints.parties}/${partyId}/members/update-role`,
 			updatePartyMemberRoles,
+		)
+	).data;
+
+	if (!response.isSuccess) throw new Error();
+	return response.result;
+};
+
+const changeCreator = async (
+	partyId: number,
+	updatedCreator: UpdateCreator,
+): Promise<Member[]> => {
+	const newCreator = {
+		partyId,
+		updatedCreator,
+	};
+	const response = (
+		await apiClient.put(
+			`${endpoints.parties}/${partyId}/members/change-creator`,
+			newCreator,
 		)
 	).data;
 
@@ -89,6 +106,7 @@ export default {
 	getMemberById,
 	createMember,
 	updateMembersRoles,
+	changeCreator,
 	deleteMember,
 	generateInviteToken,
 };

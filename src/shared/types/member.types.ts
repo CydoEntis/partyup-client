@@ -28,3 +28,10 @@ export type UpdateMemberRole = {
 	id: number;
 	role: (typeof MEMBER_ROLES)[keyof typeof MEMBER_ROLES];
 };
+
+export type UpdateCreator = {
+	partyId: number;
+	newCreatorId: number;
+	oldCreatorId: number;
+	oldCreatorRole:(typeof MEMBER_ROLES)[keyof typeof MEMBER_ROLES];
+};

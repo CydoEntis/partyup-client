@@ -14,7 +14,7 @@ import {
 	Select,
 } from "@mantine/core";
 import { DrawerProps } from "../../shared/types/drawer.types";
-import { Check, Copy, Edit, RefreshCcw, X } from "lucide-react";
+import { Check, Copy, Crown, Edit, RefreshCcw, X } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useMemberStore from "../../stores/useMemberStore";

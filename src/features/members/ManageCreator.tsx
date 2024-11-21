@@ -1,4 +1,12 @@
-import { Flex, Select, Group, Text, ComboboxItem, Stack } from "@mantine/core";
+import {
+	Flex,
+	Select,
+	Group,
+	Text,
+	ComboboxItem,
+	Stack,
+	Button,
+} from "@mantine/core";
 import UserAvatar from "../../components/avatar/UserAvatar";
 import { MEMBER_ROLES } from "../../shared/constants/roles";
 import { Member, UpdateMemberRole } from "../../shared/types/member.types";
@@ -6,10 +14,10 @@ import { useState } from "react";
 import { Crown } from "lucide-react";
 import useMemberStore from "../../stores/useMemberStore";
 
-type ManageCreatorProps = {};
+type ManageCreatorProps = {partyId: number};
 
-function ManageCreator() {
-	const { creator, members } = useMemberStore();
+function ManageCreator({partyId}: ManageCreatorProps) {
+	const { creator, members,  } = useMemberStore();
 	const [newCreator, setNewCreator] = useState<ComboboxItem | null>(null);
 	const [oldCreatorRole, setOldCreatorRole] = useState<ComboboxItem | null>(
 		null,
@@ -17,6 +25,7 @@ function ManageCreator() {
 
 	const handleUpdatedRole = (option: ComboboxItem) => {
 		const updatedCreator = {
+			partyId,
 			newCreatorId: newCreator?.value,
 			oldCreatorId: creator?.id,
 			oldCreatorRole: oldCreatorRole?.value,
@@ -33,12 +42,8 @@ function ManageCreator() {
 	console.log(oldCreatorRole);
 
 	return (
-		<Flex
-			justify="space-between"
-			align="center"
-		>
+		<Stack>
 			<Group>
-				<Crown color="yellow" />
 				{creator && (
 					<>
 						<UserAvatar avatar={creator.avatar} />
@@ -47,7 +52,7 @@ function ManageCreator() {
 				)}
 			</Group>
 
-			<Stack>
+			<Flex gap={8} justify="center">
 				{members && members.items && (
 					<Select
 						label="New Creator"
@@ -73,8 +78,14 @@ function ManageCreator() {
 						allowDeselect={false}
 					/>
 				)}
-			</Stack>
-		</Flex>
+			</Flex>
+			<Button
+				variant="light"
+				color="violet"
+			>
+				Change Creator
+			</Button>
+		</Stack>
 	);
 }
 

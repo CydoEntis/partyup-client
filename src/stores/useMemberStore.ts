@@ -4,6 +4,7 @@ import {
 	CreateMember,
 	UpdateMemberRole,
 	PaginatedMembers,
+	UpdateCreator,
 } from "../shared/types/member.types";
 import memberService from "../services/memberService";
 import { QueryParams } from "../shared/types/query-params.types";
@@ -35,6 +36,10 @@ type MemberState = {
 		updatedMemberRoles: UpdateMemberRole[],
 	) => Promise<void>;
 	deleteMembers: (memberIds: number[]) => Promise<void>;
+	changeCreator: (
+		partyId: number,
+		updatedCreator: UpdateCreator,
+	) => Promise<void>;
 };
 
 export const useMemberStore = create<MemberState>((set) => ({
@@ -251,6 +256,60 @@ export const useMemberStore = create<MemberState>((set) => ({
 		} finally {
 			set((state) => ({
 				loading: { ...state.loading, delete: false },
+				error: null,
+			}));
+		}
+	},
+
+	changeCreator: async (
+		partyId: number,
+		updatedCreator: UpdateCreator,
+	): Promise<void> => {
+		set((state) => ({
+			loading: { ...state.loading, update: true },
+			error: null,
+		}));
+
+		try {
+			const updatedMembers = await memberService.changeCreator(
+				partyId,
+				updatedCreator,
+			);
+
+			set((state) => {
+				const updatedItems =
+					state.members?.items.map((member) =>
+						updatedMembers.some((updated) => updated.id === member.id)
+							? {
+									...member,
+									...updatedMembers.find((updated) => updated.id === member.id),
+							  }
+							: member,
+					) || [];
+
+				return {
+					...state, // Keep the rest of the state intact
+					members: state.members
+						? { ...state.members, items: updatedItems }
+						: null,
+					creator:
+						updatedItems.find(
+							(member) => member.role === MEMBER_ROLES.CREATOR,
+						) || null,
+					maintainers: updatedItems.filter(
+						(member) => member.role === MEMBER_ROLES.MAINTAINER,
+					),
+					regularMembers: updatedItems.filter(
+						(member) => member.role === MEMBER_ROLES.MEMBER,
+					),
+				};
+			});
+		} catch (error) {
+			set({ error: "Failed to change creator" });
+			throw error;
+		} finally {
+			set((state) => ({
+				loading: { ...state.loading, update: false },
 				error: null,
 			}));
 		}
