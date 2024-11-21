@@ -46,3 +46,8 @@ export type UpdatePartyLeader = {
 	partyId: number;
 	userId: string;
 };
+
+export type NewPartyCreator = {
+	partyId: number;
+	memberId: number;
+}

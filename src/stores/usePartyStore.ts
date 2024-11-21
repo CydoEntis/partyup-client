@@ -4,6 +4,7 @@ import {
 	CreateParty,
 	PaginatedParties,
 	UpdateParty,
+	NewPartyCreator,
 } from "../shared/types/party.types";
 import partyService from "../services/partyService";
 import { QueryParams } from "../shared/types/query-params.types";
@@ -27,6 +28,7 @@ type Partiestate = {
 	createParty: (party: CreateParty) => Promise<Party>;
 	updateParty: (partyId: string, updatedDetails: UpdateParty) => Promise<void>;
 	deleteParty: (id: string) => Promise<void>;
+	changePartyCreator: (newPartyCreator: NewPartyCreator) => Promise<void>;
 };
 
 export const usePartyStore = create<Partiestate>((set, get) => ({
@@ -235,6 +237,58 @@ export const usePartyStore = create<Partiestate>((set, get) => ({
 			throw error;
 		} finally {
 			set((state) => ({ loading: { ...state.loading, delete: false } }));
+		}
+	},
+
+	changePartyCreator: async (
+		newPartyCreator: NewPartyCreator,
+	): Promise<void> => {
+		set((state) => ({
+			loading: { ...state.loading, update: true },
+			error: null,
+		}));
+		try {
+			const updatedParty = await partyService.updatePartyCreator(
+				newPartyCreator,
+			);
+
+			const currentItems = get().parties?.items || [];
+			const updatedParties = currentItems.map((party) =>
+				party.id === newPartyCreator.partyId
+					? {
+							...party,
+							...updatedParty,
+							members: party.members,
+					  }
+					: party,
+			);
+
+			const updatedRecentParties = get().recentParties.map((party) =>
+				party.id === newPartyCreator.partyId
+					? {
+							...party,
+							...updatedParty,
+					  }
+					: party,
+			);
+
+			set((state) => ({
+				party: {
+					...state.party,
+					...updatedParty,
+					members: state.party?.members || [],
+				},
+				parties: {
+					...state.parties!,
+					items: updatedParties,
+				},
+				recentParties: updatedRecentParties,
+			}));
+		} catch (error) {
+			set({ error: "Failed to update party creator" });
+			throw error;
+		} finally {
+			set((state) => ({ loading: { ...state.loading, update: false } }));
 		}
 	},
 }));

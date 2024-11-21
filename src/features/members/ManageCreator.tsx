@@ -11,17 +11,18 @@ import UserAvatar from "../../components/avatar/UserAvatar";
 import { MEMBER_ROLES } from "../../shared/constants/roles";
 import { useState } from "react";
 import useMemberStore from "../../stores/useMemberStore";
+import usePartyStore from "../../stores/usePartyStore";
 
 type ManageCreatorProps = { partyId: number };
 
 function ManageCreator({ partyId }: ManageCreatorProps) {
 	const { creator, members, changeCreator } = useMemberStore();
+	const {changePartyCreator} = usePartyStore();
 	const [newCreator, setNewCreator] = useState<ComboboxItem | null>(null);
 	const [oldCreatorRole, setOldCreatorRole] = useState<ComboboxItem | null>(
 		null,
 	);
 
-	//TODO: Add logic to also update the parties creator to the new creator.
 	const handleUpdateCreator = async () => {
 		if (newCreator && oldCreatorRole && creator) {
 			const updatedCreator = {
@@ -31,8 +32,13 @@ function ManageCreator({ partyId }: ManageCreatorProps) {
 				oldCreatorRole: oldCreatorRole.value as "member" | "maintainer",
 			};
 
-			console.log("UPDATE: ", updatedCreator);
+			const newPartyCreator = {
+				partyId,
+				memberId: +newCreator.value
+			}
+
 			await changeCreator(updatedCreator);
+			await changePartyCreator(newPartyCreator);
 		}
 	};
 

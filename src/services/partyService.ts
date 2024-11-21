@@ -6,6 +6,7 @@ import {
 	PaginatedParties,
 	UpdateParty,
 	UpdatePartyLeader,
+	NewPartyCreator,
 } from "../shared/types/party.types";
 import { QueryParams } from "../shared/types/query-params.types";
 
@@ -17,7 +18,6 @@ const getAllParties = async (
 	Object.entries(params || {}).forEach(([key, value]) => {
 		if (value) queryParams.append(key, value.toString());
 	});
-
 
 	const response = (
 		await apiClient.get(`${endpoints.parties}?${queryParams.toString()}`)
@@ -58,14 +58,13 @@ const updateParty = async (
 	return response.result;
 };
 
-const updatePartyLeader = async (
-	partyId: number,
-	newPartyLeader: UpdatePartyLeader,
-): Promise<UpdatePartyLeader> => {
+const updatePartyCreator = async (
+	newPartyCreator: NewPartyCreator,
+): Promise<Party> => {
 	const response = (
 		await apiClient.put(
-			`${endpoints.parties}/${partyId}/leader`,
-			newPartyLeader,
+			`${endpoints.parties}/${newPartyCreator.partyId}/change-creator`,
+			newPartyCreator,
 		)
 	).data;
 	if (!response.isSuccess) throw new Error();
@@ -83,6 +82,6 @@ export default {
 	getPartyById,
 	createParty,
 	updateParty,
-	updatePartyLeader,
+	updatePartyCreator,
 	deleteParty,
 };

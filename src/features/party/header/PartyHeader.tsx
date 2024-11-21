@@ -147,7 +147,7 @@ function PartyHeader({
 			>
 				<Stack gap={16}>
 					<Title size="lg">{party.description}</Title>
-
+						<p>{party.creatorId}</p>
 						<InvitePartyMember
 							userRole={party.currentUserRole}
 							members={party.members}
