@@ -56,9 +56,11 @@ function ManageCreator({ partyId }: ManageCreatorProps) {
 			<Flex
 				gap={8}
 				justify="center"
+				align="end"
 			>
 				{members && members.items && (
 					<Select
+						size="xs"
 						label="New Creator"
 						placeholder="Select a Member"
 						data={members.items.map((member) => ({
@@ -71,6 +73,7 @@ function ManageCreator({ partyId }: ManageCreatorProps) {
 				)}
 				{creator && (
 					<Select
+						size="xs"
 						label="Old Creators New Role"
 						placeholder="Select Role"
 						data={[
@@ -82,14 +85,15 @@ function ManageCreator({ partyId }: ManageCreatorProps) {
 						allowDeselect={false}
 					/>
 				)}
+				<Button
+					variant="light"
+					color="violet"
+					onClick={handleUpdateCreator}
+					w={150}
+				>
+					Change
+				</Button>
 			</Flex>
-			<Button
-				variant="light"
-				color="violet"
-				onClick={handleUpdateCreator}
-			>
-				Change Creator
-			</Button>
 		</Stack>
 	);
 }

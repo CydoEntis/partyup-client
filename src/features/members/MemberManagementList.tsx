@@ -1,4 +1,4 @@
-import { Stack, Divider, Button, Group } from "@mantine/core";
+import { Stack, Divider, Button, Group, Flex } from "@mantine/core";
 import ManageMember from "./ManageMember";
 import { Member, UpdateMemberRole } from "../../shared/types/member.types";
 import { useState } from "react";
@@ -102,13 +102,24 @@ function MemberManagementList({
 					))}
 				</Stack>
 			)}
-			<Button
-				variant="light"
-				color="violet"
-				onClick={handleUpdateMemberRoles}
-			>
-				Update Roles
-			</Button>
+			<Flex gap={8}>
+				<Button
+					variant="light"
+					color="violet"
+					onClick={handleUpdateMemberRoles}
+					fullWidth
+				>
+					Update Roles
+				</Button>
+				<Button
+					variant="light"
+					color="red"
+					onClick={handleUpdateMemberRoles}
+					fullWidth
+				>
+					Remove Members
+				</Button>
+			</Flex>
 		</Stack>
 	);
 }

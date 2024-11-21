@@ -70,6 +70,7 @@ function ManageMember({
 					size="sm"
 						checked={membersToRemove.includes(member.id)}
 						onChange={handleCheckboxChange}
+						color="red"
 					/>
 				</Tooltip>
 			</Group>
